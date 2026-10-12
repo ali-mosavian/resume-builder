@@ -3,6 +3,7 @@
 # dependencies = ["python-docx~=1.1", "pyyaml~=6.0", "typer~=0.12"]
 # ///
 """Self-check: builds cv_en.yaml with each template and checks what the reader sees. Run: uv run test_build_cv.py"""
+import re
 import tempfile
 from pathlib import Path
 
@@ -44,4 +45,12 @@ with tempfile.TemporaryDirectory() as tmp:
         assert "reading &amp; learning" in html, "YAML text is not HTML-escaped"
         # Brief roles are not contiguous (Watty sits between them): the caption must appear once.
         assert html.count("data-earlier=") == 1, "earlier-roles caption repeated or missing"
+    # One page, both languages: the second starts hidden, the theme script is inlined.
+    out = Path(tmp) / "cv_both.html"
+    build_html(here / "cv_en.yaml", out, "aurora-v3", also=[here / "cv_sv.yaml"])
+    html = out.read_text(encoding="utf-8")
+    assert '<div class="page" lang="en"' in html and '<div class="page" lang="sv"' in html
+    assert re.search(r'<div class="page" lang="sv" data-ui="[^"]*" hidden>', html), "second language not hidden"
+    assert not re.search(r'<div class="page" lang="en" data-ui="[^"]*" hidden>', html), "first language hidden"
+    assert html.count("<script>") == 1 and 'data-aka="GCP"' in html
 print("ok")

@@ -16,6 +16,8 @@ highlights:
 links:
 - label: LinkedIn
   url: https://www.linkedin.com/in/ali-mosavian-7a27457
+- label: GitHub
+  url: https://github.com/ali-mosavian
 - label: Webbplats
   url: https://www.42labs.ai/
 - label: Twitter
@@ -23,8 +25,10 @@ links:
 skills:
 - name: Stora språkmodeller (LLM)
   level: 5
+  aka: [LLM, language models, språkmodeller, GPT-3, GPT-4, GPT-4o, RAG]
 - name: Generativ AI
   level: 5
+  aka: [generative AI, generativa AI, RAG]
 - name: Maskininlärning/AI
   level: 5
 - name: Python
@@ -45,8 +49,10 @@ skills:
   level: 4
 - name: Google Cloud Platform
   level: 3
+  aka: [GCP]
 - name: Amazon Web Services
   level: 3
+  aka: [AWS]
 languages:
 - name: Svenska
   level: Modersmål
@@ -405,6 +411,13 @@ labels:
   at: på
   earlier: Tidigare roller
   print: Ladda ner PDF
+  ui:
+    lang_name: SV
+    filtering: Roller med
+    clear: Rensa filter
+    show_details: Visa detaljer
+    hide_details: Dölj detaljer
+    no_match: Inga roller nämner detta
   present: Nu
   months: [jan, feb, mar, apr, maj, jun, jul, aug, sep, okt, nov, dec]
   levels:
