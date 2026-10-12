@@ -4,6 +4,8 @@
 # ///
 """Self-check: builds cv_en.yaml with each template and checks what the reader sees. Run: uv run test_build_cv.py"""
 import re
+import shutil
+import subprocess
 import tempfile
 from pathlib import Path
 
@@ -37,7 +39,7 @@ assert grid[2].w > Cm(12), "template_pro main column is not sized in the table g
 with tempfile.TemporaryDirectory() as tmp:
     from build_html import build as build_html
 
-    for theme in ("pro", "aurora", "aurora-v2"):
+    for theme in sorted(p.stem for p in (here / "themes").glob("*.css")):
         out = Path(tmp) / f"cv_{theme}.html"
         build_html(here / "cv_en.yaml", out, theme)
         html = out.read_text(encoding="utf-8")
@@ -53,4 +55,30 @@ with tempfile.TemporaryDirectory() as tmp:
     assert re.search(r'<div class="page" lang="sv" data-ui="[^"]*" hidden>', html), "second language not hidden"
     assert not re.search(r'<div class="page" lang="en" data-ui="[^"]*" hidden>', html), "first language hidden"
     assert html.count("<script>") == 1 and 'data-aka="GCP"' in html
+    # Printing during the headline count-up once put partial numbers ("2+", "7M") in the PDF.
+    chrome = Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+    if chrome.exists() and shutil.which("pdftotext"):
+        page, pdf = Path(tmp) / "cv_print.html", Path(tmp) / "cv.pdf"
+        build_html(here / "cv_en.yaml", page, "aurora-v3")
+        subprocess.run([chrome, "--headless=new", "--disable-gpu", "--virtual-time-budget=300", "--no-pdf-header-footer",
+                        f"--print-to-pdf={pdf}", page.as_uri()], capture_output=True, check=True)
+        text = subprocess.run(["pdftotext", "-l", "1", pdf, "-"], capture_output=True, text=True, check=True).stdout.split()
+        assert {"20+", "17", "74M"} <= set(text), f"printed headline numbers are partial: {text[:30]}"
+    else:
+        print("skipped print check: needs Google Chrome and pdftotext")
+
+    # "Show details" on earlier roles once turned their tool tags into a plain block (display:block beat flex):
+    # expanded, they must lay out like any other role's tags.
+    if chrome.exists():
+        probe = ("<script>addEventListener('load',()=>{const d=e=>getComputedStyle(e).display;"
+                 "document.querySelector('.page:not([hidden]) .details-toggle').click();"
+                 "document.title=d(document.querySelector('.item:not(.brief) .tools'))+'|'+d(document.querySelector('.brief .tools'))})</script>")
+        for theme in sorted(p.stem for p in (here / "themes").glob("*.js") if "." not in p.stem):
+            page = Path(tmp) / f"cv_expand_{theme}.html"
+            build_html(here / "cv_en.yaml", page, theme)
+            page.write_text(page.read_text(encoding="utf-8").replace("</body>", probe + "</body>"), encoding="utf-8")
+            dom = subprocess.run([chrome, "--headless=new", "--disable-gpu", "--virtual-time-budget=1000", "--dump-dom", page.as_uri()],
+                                 capture_output=True, text=True, check=True).stdout
+            normal, brief = re.search("<title>(.*?)</title>", dom)[1].split("|")
+            assert normal == brief, f"{theme}: expanded earlier-role tools are {brief}, other roles' are {normal}"
 print("ok")
