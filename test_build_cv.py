@@ -33,4 +33,13 @@ for template in ("template.docx", "template_pro.docx"):
 # squeezing the main column to a third and doubling the page count.
 grid = Document(here / "template_pro.docx").tables[0]._tbl.tblGrid.gridCol_lst
 assert grid[2].w > Cm(12), "template_pro main column is not sized in the table grid"
+with tempfile.TemporaryDirectory() as tmp:
+    from build_html import build as build_html
+
+    for theme in ("pro", "aurora"):
+        out = Path(tmp) / f"cv_{theme}.html"
+        build_html(here / "cv_en.yaml", out, theme)
+        html = out.read_text(encoding="utf-8")
+        assert "<strong>store capacity optimization engine</strong>" in html and "**" not in html
+        assert "reading &amp; learning" in html, "YAML text is not HTML-escaped"
 print("ok")
