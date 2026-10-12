@@ -35,3 +35,4 @@ blockquote { margin:0 0 4px; color:#374151; font-style:italic; }
   header { padding:0 0 12px; } aside { padding:16px; } main { padding:0 0 0 20px; }
   .grid { grid-template-columns:62mm 1fr; } a { text-decoration:none; }
 }
+.contact, .highlights { display:none; }
