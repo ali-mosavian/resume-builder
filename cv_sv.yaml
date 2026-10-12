@@ -4,6 +4,15 @@ title: Senior konsult inom maskininlärning/AI
 location: Stockholm, Sverige
 born: 1982
 nationality: Svensk
+highlights:
+- value: "20+"
+  label: år av programmering
+- value: "17"
+  label: år inom maskininlärning
+- value: "74 milj."
+  label: rader i en produktionsmodell
+- value: "f.d. CTO"
+  label: ledde fem team
 links:
 - label: LinkedIn
   url: https://www.linkedin.com/in/ali-mosavian-7a27457
@@ -183,6 +192,7 @@ experience:
   tools: [Python, OpenCV, RNN, CNN, Keras, TensorFlow, Linux]
 - title: Senior Machine Learning/AI Engineer (konsult)
   company: Schibsted Enterprise Technology
+  brief: true
   city: Stockholm
   bullets:
   - Tog fram en prototyp på en NLP-baserad lösning för automatisk dirigering av supportärenden, vilket
@@ -194,6 +204,7 @@ experience:
   tools: [Python, Keras, RNN, fastText, Docker, AWS]
 - title: Senior Machine Learning/AI Engineer (konsult)
   company: Hedvig AB
+  brief: true
   city: Stockholm
   bullets:
   - Byggde och driftsatte ett system för avsiktsklassificering av kundtjänstchattar, vilket förbättrade
@@ -205,6 +216,7 @@ experience:
   tools: [Python, Keras, RNN, fastText, Javascript, AWS, Docker]
 - title: Konsult inom maskininlärning/data science
   company: Volvo Car Mobility AB
+  brief: true
   city: Stockholm
   bullets:
   - Genomförde detaljerade dataanalyser som beslutsunderlag och hjälpte till att förfina bilpoolstjänsten
@@ -220,6 +232,7 @@ experience:
   tools: [Python, Flask, Docker, GCP, Google BigQuery, Google Kubernetes Engine, Linux]
 - title: Machine Learning Lead
   company: Epidemic Sound
+  brief: true
   city: Stockholm
   bullets:
   - Utvecklade ett djupt faltningsnätverk (CNN) för automatisk multietikettklassificering av låtar efter
@@ -246,6 +259,7 @@ experience:
   tools: [C/C++, Python, Docker, AWS, Kubernetes, CoreOS]
 - title: Senior Software Engineer
   company: Gavagai
+  brief: true
   city: Stockholm
   bullets:
   - Bidrog till Gavagais centrala textanalysprodukt genom storskalig databehandling av sociala medier
@@ -261,6 +275,7 @@ experience:
   tools: [Java, J2EE, Python, NodeJS, Coffeescript, GPU-baserade beräkningar, Linux]
 - title: Senior Software Engineer
   company: Euroling AB
+  brief: true
   city: Stockholm
   bullets:
   - Ledde den arkitektoniska omdesignen av Siteseeker, en sökmotor för företag, för att göra den skalbar
@@ -388,6 +403,8 @@ labels:
   achievements: Resultat
   tools: Verktyg
   at: på
+  earlier: Tidigare roller
+  print: Ladda ner PDF
   present: Nu
   months: [jan, feb, mar, apr, maj, jun, jul, aug, sep, okt, nov, dec]
   levels:
