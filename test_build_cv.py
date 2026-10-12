@@ -36,10 +36,12 @@ assert grid[2].w > Cm(12), "template_pro main column is not sized in the table g
 with tempfile.TemporaryDirectory() as tmp:
     from build_html import build as build_html
 
-    for theme in ("pro", "aurora"):
+    for theme in ("pro", "aurora", "aurora-v2"):
         out = Path(tmp) / f"cv_{theme}.html"
         build_html(here / "cv_en.yaml", out, theme)
         html = out.read_text(encoding="utf-8")
         assert "<strong>store capacity optimization engine</strong>" in html and "**" not in html
         assert "reading &amp; learning" in html, "YAML text is not HTML-escaped"
+        # Brief roles are not contiguous (Watty sits between them): the caption must appear once.
+        assert html.count("data-earlier=") == 1, "earlier-roles caption repeated or missing"
 print("ok")

@@ -38,26 +38,40 @@ def sidebar(cv: dict, lb: dict) -> str:
 </aside>"""
 
 
-def job(j: dict, lb: dict) -> str:
+def job(j: dict, lb: dict, first_brief: bool) -> str:
     bullets = "".join(f"<li>{md(b)}</li>" for b in j["bullets"])
     tools = "".join(f"<li>{escape(t)}</li>" for t in j["tools"])
-    return f"""<div class="item"><h3>{escape(j["title"])} {lb["at"]} {escape(j["company"])}, {escape(j["city"])}</h3>
+    # brief: a theme may collapse the role to one line; the first one carries the "earlier roles" caption.
+    brief = ' brief' if j.get("brief") else ''
+    caption = f' data-earlier="{lb["earlier"]}"' if first_brief else ''
+    return f"""<div class="item{brief}"{caption}><h3><span class="title">{escape(j["title"])}</span> <span class="at">{lb["at"]}</span> \
+<span class="company">{escape(j["company"])}</span><span class="city">, {escape(j["city"])}</span></h3>
 <div class="when">{span(j, lb)}</div><ul>{bullets}</ul><ul class="tools" aria-label="{lb["tools"]}">{tools}</ul></div>"""
 
 
 def body(cv: dict, lb: dict) -> str:
     summary = "".join(f"<p>{md(p)}</p>" for p in cv["summary"])
-    jobs = "".join(job(j, lb) for j in cv["experience"])
+    first_brief = next((i for i, j in enumerate(cv["experience"]) if j.get("brief")), None)
+    jobs = "".join(job(j, lb, i == first_brief) for i, j in enumerate(cv["experience"]))
     edu = "".join(f"""<div class="item"><h3>{escape(e["degree"])}, {escape(e["school"])}, {escape(e["city"])}</h3>
 <div class="when">{span(e, lb)}</div><p>{escape(e.get("notes", ""))}</p></div>""" for e in cv["education"])
-    words = "".join(f"""<div class="item"><h3>{escape(t["name"])}</h3><div class="when">{escape(t["role"])} · {when(t["date"], lb)}</div>
-{"".join(f"<blockquote>{md(q)}</blockquote>" for q in t["quote"])}</div>""" for t in cv["testimonials"])
+    words = "".join(f"""<div class="item" tabindex="0"><h3>{escape(t["name"])}</h3><div class="when">{escape(t["role"])} · {when(t["date"], lb)}</div>
+<div class="quote">{"".join(f"<blockquote>{md(q)}</blockquote>" for q in t["quote"])}</div></div>""" for t in cv["testimonials"])
     return f"""<main>
 <section class="summary"><h2>{lb["summary"]}</h2>{summary}</section>
 <section class="experience"><h2>{lb["experience"]}</h2>{jobs}</section>
 <section class="education"><h2>{lb["education"]}</h2>{edu}</section>
 <section class="testimonials"><h2>{lb["testimonials"]}</h2>{words}</section>
 </main>"""
+
+
+def header(cv: dict, lb: dict) -> str:
+    stats = "".join(f'<div><b>{escape(h["value"])}</b><span>{escape(h["label"])}</span></div>' for h in cv.get("highlights", []))
+    links = "".join(f'<a href="{escape(l["url"])}">{escape(l["label"])}</a>' for l in cv["links"])
+    return f"""<header><h1>{escape(cv["name"])}</h1><div class="role">{escape(cv["title"])}</div>
+<div class="where">{escape(cv["location"])}</div>
+<nav class="contact">{links}<button type="button" onclick="print()">{lb["print"]}</button></nav>
+<div class="highlights">{stats}</div></header>"""
 
 
 def build(cv_path: Path, out: Path, theme: str = "pro") -> None:
@@ -67,8 +81,7 @@ def build(cv_path: Path, out: Path, theme: str = "pro") -> None:
 <html lang="{cv["lang"]}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{escape(cv["name"])} – CV</title><style>{(THEMES / f"{theme}.css").read_text(encoding="utf-8")}</style></head>
 <body><div class="page">
-<header><h1>{escape(cv["name"])}</h1><div class="role">{escape(cv["title"])}</div>
-<div class="where">{escape(cv["location"])}</div></header>
+{header(cv, lb)}
 <div class="grid">{sidebar(cv, lb)}{body(cv, lb)}</div>
 </div></body></html>
 """, encoding="utf-8")
