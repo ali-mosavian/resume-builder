@@ -81,10 +81,14 @@ def span(item: dict, labels: dict) -> str:
     return f"{when(item['start'], labels)} — {when(item['end'], labels)}".upper()
 
 
+def header(paragraphs, cv: dict) -> None:
+    """Fill the template's Name / JobTitle placeholders, wherever the template puts them."""
+    for p in paragraphs:
+        if p._p.style in ("Name", "JobTitle"):
+            p.runs[0].text = cv["name"] if p._p.style == "Name" else cv["title"].upper()
+
+
 def sidebar(cell, cv: dict, lb: dict) -> None:
-    for p in cell.paragraphs:
-        if p.style.name in ("Name", "Job Title"):
-            p.runs[0].text = cv["name"] if p.style.name == "Name" else cv["title"].upper()
     section(cell, "SidebarSectionsSpacing", "Heading3", lb["details"])
     para(cell, "SidebarText", cv["location"])
     for key in ("born", "nationality"):
@@ -138,6 +142,7 @@ def build(cv_path: Path, out: Path, template: Path = Path(__file__).with_name("t
     cv = yaml.safe_load(cv_path.read_text(encoding="utf-8"))
     doc = Document(template)
     side, _, main = doc.tables[0].rows[0].cells
+    header([*doc.paragraphs, *side.paragraphs], cv)
     sidebar(side, cv, cv["labels"])
     main_body(main, cv, cv["labels"], bullet_num_id(doc))
     doc.save(out)
