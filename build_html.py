@@ -6,9 +6,11 @@
 
 The look is a theme: themes/<name>.css, inlined into the page. Each theme prints to A4.
 """
+import json
 import re
 from html import escape
 from pathlib import Path
+from typing import Annotated
 
 import typer
 import yaml
@@ -22,9 +24,14 @@ def md(text: str) -> str:
     return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", escape(text))
 
 
+def aka(skill: dict) -> str:
+    """Other spellings the job text uses for a skill (e.g. GCP), for theme scripts that match skills to roles."""
+    return f' data-aka="{escape("|".join(skill["aka"]))}"' if skill.get("aka") else ""
+
+
 def sidebar(cv: dict, lb: dict) -> str:
     links = "".join(f'<dd><a href="{escape(l["url"])}">{escape(l["label"])}</a></dd>' for l in cv["links"])
-    skills = "".join(f'<div class="kv" style="--level:{s["level"]}"><span>{escape(s["name"])}</span><span>{lb["levels"][s["level"]]}</span></div>'
+    skills = "".join(f'<div class="kv" style="--level:{s["level"]}"{aka(s)}><span>{escape(s["name"])}</span><span>{lb["levels"][s["level"]]}</span></div>'
                      for s in cv["skills"])
     langs = "".join(f'<div class="kv"><span>{escape(l["name"])}</span><span>{escape(l["level"])}</span></div>'
                     for l in cv["languages"])
@@ -74,16 +81,24 @@ def header(cv: dict, lb: dict) -> str:
 <div class="highlights">{stats}</div></header>"""
 
 
-def build(cv_path: Path, out: Path, theme: str = "pro") -> None:
-    cv = yaml.safe_load(cv_path.read_text(encoding="utf-8"))
+def page(cv: dict, hidden: bool) -> str:
     lb = cv["labels"]
-    out.write_text(f"""<!doctype html>
-<html lang="{cv["lang"]}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{escape(cv["name"])} – CV</title><style>{(THEMES / f"{theme}.css").read_text(encoding="utf-8")}</style></head>
-<body><div class="page">
+    ui = escape(json.dumps(lb.get("ui", {}), ensure_ascii=False))  # strings for theme scripts
+    return f"""<div class="page" lang="{cv["lang"]}" data-ui="{ui}"{" hidden" * hidden}>
 {header(cv, lb)}
 <div class="grid">{sidebar(cv, lb)}{body(cv, lb)}</div>
-</div></body></html>
+</div>"""
+
+
+def build(cv_path: Path, out: Path, theme: str = "pro",
+          also: Annotated[list[Path] | None, typer.Option(help="More YAMLs (other languages); a theme script may switch.")] = None) -> None:
+    cvs = [yaml.safe_load(p.read_text(encoding="utf-8")) for p in (cv_path, *(also or ()))]
+    script = THEMES / f"{theme}.js"
+    js = f"<script>{script.read_text(encoding='utf-8')}</script>" if script.exists() else ""
+    out.write_text(f"""<!doctype html>
+<html lang="{cvs[0]["lang"]}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{escape(cvs[0]["name"])} – CV</title><style>{(THEMES / f"{theme}.css").read_text(encoding="utf-8")}</style></head>
+<body>{"".join(page(cv, i > 0) for i, cv in enumerate(cvs))}{js}</body></html>
 """, encoding="utf-8")
     print(f"wrote {out}")
 
