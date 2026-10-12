@@ -132,6 +132,7 @@ aside h2 + .kv[style], .kv[style] + .kv[style] { display:inline-flex; }
 .experience.filtering .item:not(.match) { opacity:.25; filter:saturate(.2); }
 .experience.filtering .item.match::after { background:var(--teal); border-color:var(--teal); box-shadow:0 0 0 6px #19c3b133; }
 .experience.filtering .brief.match ul, .experience.expanded .brief ul { display:block; }
+.experience.filtering .brief.match .tools, .experience.expanded .brief .tools { display:flex; }
 mark { background:#5eead455; color:inherit; border-radius:3px; padding:0 2px; }
 
 .details-toggle { margin:-4px 0 14px; font:500 .75rem var(--sans); color:var(--accent); background:none; border:0; padding:0; cursor:pointer; }

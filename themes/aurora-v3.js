@@ -109,12 +109,15 @@
         const m = target.textContent.match(/^(\D*)(\d+(?:[.,]\d+)?)(.*)$/);
         if (!m || calm) continue;
         const [, pre, num, post] = m;
+        target.dataset.final = target.textContent;
         const end = parseFloat(num.replace(",", ".")), dec = (num.split(/[.,]/)[1] || "").length;
         const t0 = performance.now(), dur = 1100;
         const step = (t) => {
           const k = Math.min(1, (t - t0) / dur), v = end * (1 - Math.pow(1 - k, 3));
           target.textContent = pre + v.toFixed(dec).replace(".", num.includes(",") ? "," : ".") + post;
+          if (target.dataset.final === undefined) return;  // finished early (print)
           if (k < 1) requestAnimationFrame(step);
+          else delete target.dataset.final;
         };
         requestAnimationFrame(step);
       }
@@ -123,6 +126,16 @@
   }
 
   pages.forEach(wire);
+
+  // Printing mid count-up would put partial numbers on paper: jump to the final values.
+  const finish = () => {
+    for (const b of document.querySelectorAll(".highlights b[data-final]")) {
+      b.textContent = b.dataset.final;
+      delete b.dataset.final;
+    }
+  };
+  addEventListener("beforeprint", finish);
+  matchMedia("print").addEventListener("change", (e) => e.matches && finish());
 
   // Language switch, when the page holds more than one language.
   if (pages.length > 1) {
