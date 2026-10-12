@@ -4,7 +4,7 @@
 # ///
 """Build a self-contained CV web page from the same YAML as build_cv.py.
 
-The look is a theme: themes/<name>.css, inlined into the page. Each theme prints to A4.
+The look is a theme: themes/<name>.css, plus optional <name>.js and <name>.*.js, inlined. Each theme prints to A4.
 """
 import json
 import re
@@ -93,8 +93,9 @@ def page(cv: dict, hidden: bool) -> str:
 def build(cv_path: Path, out: Path, theme: str = "pro",
           also: Annotated[list[Path] | None, typer.Option(help="More YAMLs (other languages); a theme script may switch.")] = None) -> None:
     cvs = [yaml.safe_load(p.read_text(encoding="utf-8")) for p in (cv_path, *(also or ()))]
-    script = THEMES / f"{theme}.js"
-    js = f"<script>{script.read_text(encoding='utf-8')}</script>" if script.exists() else ""
+    # <theme>.js (often a link to the shared interactions), then any <theme>.*.js extras, in name order.
+    scripts = [p for p in [THEMES / f"{theme}.js", *sorted(THEMES.glob(f"{theme}.*.js"))] if p.exists()]
+    js = "".join(f"<script>{p.read_text(encoding='utf-8')}</script>" for p in scripts)
     out.write_text(f"""<!doctype html>
 <html lang="{cvs[0]["lang"]}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{escape(cvs[0]["name"])} – CV</title><style>{(THEMES / f"{theme}.css").read_text(encoding="utf-8")}</style></head>
