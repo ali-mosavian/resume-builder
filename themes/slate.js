@@ -98,14 +98,51 @@
       return [...made, unit.node];
     }
 
+    // Cut a placed bullet between words so the first part fits; returns the rest as a new <li class="cont">,
+    // or null (bullet restored) when too little would stay or move: under MIN words either side.
+    const MIN = 6;
+    function split(li, fits) {
+      const full = li.cloneNode(true), cuts = [];
+      const walker = document.createTreeWalker(full, NodeFilter.SHOW_TEXT);
+      for (let t; (t = walker.nextNode()); ) for (const m of t.data.matchAll(/\s+/g)) cuts.push([t, m.index + m[0].length]);
+      const part = (from, to) => {
+        const r = document.createRange();
+        from ? r.setStart(...from) : r.setStart(full, 0);
+        to ? r.setEnd(...to) : r.setEnd(full, full.childNodes.length);
+        return r.cloneContents();
+      };
+      let lo = -1, hi = cuts.length - 1;  // the most words that fit: fitting shrinks as words are added
+      while (lo < hi) {
+        const k = (lo + hi + 1) >> 1;
+        li.replaceChildren(part(null, cuts[k]));
+        if (fits()) lo = k; else hi = k - 1;
+      }
+      if (lo < MIN - 1 || cuts.length - lo <= MIN) {
+        li.replaceChildren(...full.childNodes);
+        return null;
+      }
+      li.replaceChildren(part(null, cuts[lo]));
+      const rest = li.cloneNode(false);
+      rest.classList.add("cont");
+      rest.append(part(cuts[lo], null));
+      return rest;
+    }
+
     function fill(gs, box, place) {
       let i = 0;
-      for (const g of gs) {
+      for (let g of gs) {
         for (;;) {
           const st = sheet(i), target = box(st), hadContent = target.childElementCount > 0;
           const made = g.flatMap((u) => place(u, st));
           // Fits, or nothing else is on this sheet (too tall for any sheet: let it overflow rather than loop).
           if (!over(target) || !hadContent) break;
+          // A bullet ending the group may break between words, as text does on paper; the rest starts the next sheet.
+          const last = g.at(-1), rest = last.kind === "li" && split(last.node, () => !over(target));
+          if (rest) {
+            g = [{ ...last, node: rest }];
+            i++;
+            continue;
+          }
           for (const n of made.reverse()) n.remove();
           st.sec = st.item = st.ul = st.itemOf = null;
           i++;

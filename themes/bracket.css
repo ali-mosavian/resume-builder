@@ -4,7 +4,7 @@
 
 :root { --accent:#f6b92b; --ink:#262626; --muted:#7a7a7a; --line:#d9d9d9; --side:#f4f3ef; }
 * { box-sizing:border-box; }
-body { margin:0; background:#e9e8e3; color:var(--ink); font:13px/1.55 "Montserrat", "Helvetica Neue", Arial, sans-serif; }
+body { margin:0; background:#e9e8e3; color:var(--ink); font:13px/1.6 "Montserrat", "Helvetica Neue", Arial, sans-serif; }
 .page { --header-top:1; max-width:1000px; margin:40px auto; background:#fff; box-shadow:0 4px 30px #0000001a; position:relative; overflow:hidden; }
 
 /* Header: photo | role over name | contact; headline numbers below. */
@@ -99,7 +99,7 @@ blockquote { margin:0 0 1.5mm; color:#3a3a3a; font-style:italic; }
 }
 
 /* A4 sheets, built by the shared paginator (slate.js); sized in pt/mm so screen and paper match. */
-.page.paged { max-width:none; margin:40px auto; background:none; box-shadow:none; overflow:visible; font-size:9.5pt; line-height:1.5; }
+.page.paged { max-width:none; margin:40px auto; background:none; box-shadow:none; overflow:visible; font-size:9.5pt; line-height:1.6; }
 .sheet { position:relative; width:210mm; height:297mm; margin:0 auto 28px; display:grid; grid-template-columns:64mm 1fr;
          grid-template-rows:auto 1fr; background:#fff; box-shadow:0 4px 30px #0000001a; overflow:hidden; }
 .sheet::after { content:""; position:absolute; right:0; bottom:0; width:22mm; height:5mm; background:var(--accent); }
@@ -108,6 +108,9 @@ blockquote { margin:0 0 1.5mm; color:#3a3a3a; font-style:italic; }
 .sheet main { grid-column:2; grid-row:2; overflow:hidden; }
 .sheet:not(:first-child) main, .sheet:not(:first-child) aside { padding-top:14mm; }
 .sheet section > h2:first-child { margin-top:0; }
+/* Nothing follows the last role on a sheet: its trailing spacing must not push it to the next one. */
+.sheet main > section:last-child > .item:last-child { padding-bottom:0; }
+.sheet main > section:last-child > .item:last-child > ul:last-child, .sheet main > section:last-child > .item:last-child li:last-child { margin-bottom:0; }
 .sheet .item.cont { padding-top:0; }
 @media print {
   @page { size:A4; margin:0; }
@@ -117,3 +120,5 @@ blockquote { margin:0 0 1.5mm; color:#3a3a3a; font-style:italic; }
   .page, .page.paged { margin:0; box-shadow:none; }
   .sheet { margin:0; box-shadow:none; break-after:page; }
 }
+.sheet li.cont { list-style:none; }  /* a bullet continued from the previous sheet */
+.sheet .experience .item.cont::before { content:none; }  /* the ring marks where a role starts, not where it continues */
