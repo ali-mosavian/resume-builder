@@ -11,6 +11,7 @@ as tool chips), CVKeyValue, CVQuote.
 The CV prefix keeps them from matching a template's own styles (Word has a built-in Quote).
 """
 
+from io import BytesIO
 from pathlib import Path
 from collections.abc import Iterable
 from collections.abc import Iterator
@@ -38,6 +39,7 @@ from resume.data import when
 from resume.ooxml import xml
 from resume.data import Labels
 from resume.ooxml import shading
+from resume.photo import portrait
 
 
 def add_text(p: Paragraph, text: str) -> None:
@@ -126,7 +128,7 @@ def photo(p: Paragraph, cv: CV) -> None:
         p._p.remove(r._r)
     if "photo" in cv:
         run = p.add_run()
-        run.add_picture(str(cv["dir"] / cv["photo"]), width=Cm(float(spec[1])))
+        run.add_picture(BytesIO(portrait(cv["dir"] / cv["photo"])), width=Cm(float(spec[1])))
         if "gray" in spec:
             run._r.xpath(".//a:blip")[0].append(OxmlElement("a:grayscl"))
 
