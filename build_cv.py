@@ -240,9 +240,10 @@ def main_body(cell, cv: dict, lb: dict, num_id: str) -> None:
         if chips:
             p = para(cell, "CVTools")
             for tool in job["tools"]:
-                styled(p.add_run("▍"), "CVAccent")
+                # A shaded narrow no-break space draws the edge; a bar glyph made Word break chips mid-word.
+                styled(p.add_run("\u202f"), "CVToolMark")
                 styled(p.add_run(f"\u00a0{tool}\u00a0"), "CVTool")
-                p.add_run(" ")
+                p.add_run(" \u200b")  # Word won't break at a space next to a no-break space; a zero-width space breaks
         else:
             p = para(cell, "Normal")
             p.add_run(f"{lb['tools']}: ").italic = True

@@ -57,6 +57,21 @@ for template, color in (("pro", "1F3A5F"), ("bracket", "F6B92B")):
         used = numbering.xpath(f"./w:abstractNum[@w:abstractNumId='{abstract}']/w:lvl[@w:ilvl='0']/w:rPr/w:color/@w:val")
         assert used == [color], f"{template}: bullets coloured {used}, template says {color}"
 
+# Word glues a no-break space to the spaces around it, so tool chips (padded with no-break spaces) had no break
+# point between them and Word broke chips mid-word ("SQLAlchem|y"). Each separator carries a zero-width space.
+with tempfile.TemporaryDirectory() as tmp:
+    build(here / "cv" / "cv_en.yaml", Path(tmp) / "cv.docx", here / "templates" / "bracket.docx")
+    chips = next(p for p in Document(Path(tmp) / "cv.docx").tables[-1].rows[0].cells[-1].paragraphs if p._p.style == "CVTools")
+    assert chips.text.count("\u200b") == chips.text.count("\u202f"), "tool chips have no break point between them"
+
+# In Word (LibreOffice hid both): the Word 2010 layout mode aligned the layout table's text, not its edge, with the
+# margin, pushing the sidebar off the page; and two heading styles sharing one list lost the sidebar's diamonds.
+bracket = Document(here / "templates" / "bracket.docx")
+mode = bracket.settings.element.xpath("./w:compat/w:compatSetting[@w:name='compatibilityMode']/@w:val")
+assert mode == ["15"], f"bracket.docx compatibility mode {mode}"
+lists = [s.element.xpath("./w:pPr/w:numPr/w:numId/@w:val")[0] for s in bracket.styles if s.element.xpath("./w:pPr/w:numPr/w:numId")]
+assert len(lists) == len(set(lists)), f"bracket.docx styles share a list: {lists}"
+
 # bracket.docx once set its headings in Calibri: Word's heading styles name a theme font, which beats the named one.
 # And Montserrat travels inside the file, for readers who don't have it.
 bracket = Document(here / "templates" / "bracket.docx")
