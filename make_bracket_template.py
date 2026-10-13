@@ -74,7 +74,9 @@ def char_style(doc, name: str, *, color: str | None = None, fill: str | None = N
 def marks(doc) -> dict[str, str]:
     """Bullet list first (build_cv.py takes the first bullet numbering), then the diamond and ring marks."""
     numbering = doc.part.numbering_part.element
-    defs = {"list": ("•", ACCENT, 624, 284, 10), "diamond": ("◆", ACCENT, 400, 400, 11), "ring": ("○", INK, 340, 340, 12)}
+    # One list per style: Word links a list to a single style and drops the marks of any other.
+    defs = {"list": ("•", ACCENT, 624, 284, 10), "diamond": ("◆", ACCENT, 400, 400, 11), "diamond side": ("◆", ACCENT, 400, 400, 11),
+            "ring": ("○", INK, 340, 340, 12)}
     for i, (key, (glyph, color, left, hanging, size)) in enumerate(defs.items()):
         n = 90 + i
         numbering.insert(i, parse_xml(
@@ -214,7 +216,7 @@ def main() -> None:
     role_date.element.rPr.find(qn("w:u")).set(qn("w:color"), ACCENT)
     role_date.paragraph_format.left_indent = Cm(0.6)  # under the role title, past the ring
     h3 = font(doc=doc, name="Heading 3", base="Normal", size=10.6, bold=True, before=0, after=6, line=1.2)
-    numbered(h3, ids["diamond"])
+    numbered(h3, ids["diamond side"])
     font(doc=doc, name="Heading 4", base="Normal", size=6.6, color=MUTED, bold=True, caps=True, spacing=1.1, before=6, after=0)
     font(doc=doc, name="Sidebar Text", base="Normal", size=8.7, after=1)
     kv = font(doc=doc, name="CV Key Value", base="Normal", size=8.7, after=3)
@@ -234,6 +236,7 @@ def main() -> None:
     char_style(doc, "CV Accent", color=ACCENT)
     char_style(doc, "CV Muted", color=MUTED, size=7.5)
     char_style(doc, "CV Tool", fill=SIDE, size=7.2)
+    char_style(doc, "CV Tool Mark", fill=ACCENT, size=7.2)  # a chip's yellow left edge
     char_style(doc, "CV Skill Fill", fill=ACCENT)
     char_style(doc, "CV Skill Track", fill=TRACK)
     for s in ("CV Contact", "CV Role", "CV Company", "Date", "CV Role Date", "Heading 1", "Heading 3"):
@@ -284,6 +287,9 @@ def main() -> None:
         rect(later, x, y, w, h, color, 1101 + i)
     zoom = doc.settings.element.find(qn("w:zoom"))
     zoom.set(qn("w:percent"), "100")  # python-docx's blank document omits this required attribute
+    # Word 2013+ layout. In the blank document's Word 2010 mode, a table's first-cell text aligns with the margin,
+    # so the cell padding pushes the table, the sidebar text and its marks off the page's left edge.
+    doc.settings.element.xpath("./w:compat/w:compatSetting[@w:name='compatibilityMode']")[0].set(qn("w:val"), "15")
     fonts = Path(__file__).parent / "assets" / "fonts"
     embed_font(doc, FONT, {kind: fonts / f"{FONT}-{kind}.ttf" for kind in ("Regular", "Bold", "Italic", "BoldItalic")})
     doc.save(Path(__file__).parent / "templates" / "bracket.docx")
