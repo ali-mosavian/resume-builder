@@ -1,6 +1,6 @@
 // The item in view is marked as you scroll: the role, school or quote nearest the middle of the window gets the
-// card highlight a mouse-over gives, and the rest recede. Scrolling itself stays native, so trackpad momentum is
-// kept; the CSS only lets the page settle onto an item when a scroll comes to rest.
+// card highlight a mouse-over gives, and the rest recede. Scrolling itself is left to the browser, so wheel and
+// trackpad momentum are untouched.
 (() => {
   const wide = matchMedia("(min-width:900px)");
   const calm = matchMedia("(prefers-reduced-motion:reduce)");
