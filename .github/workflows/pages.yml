@@ -40,16 +40,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
-      - run: |
-          uv run build_html.py cv/cv.yaml --theme bracket --out _site/index.html
-          # Downloads named by the CV's `download:`; the PDF is the page itself, printed in that language.
-          for lang in $(uv run cvdata.py langs cv/cv.yaml); do
-            name=$(uv run cvdata.py get cv/cv.yaml $lang download)
-            google-chrome --headless=new --disable-gpu --window-size=1280,1000 --virtual-time-budget=6000 \
-              --no-pdf-header-footer --print-to-pdf=_site/$name.pdf "file://$PWD/_site/index.html#$lang"
-            uv run build_cv.py cv/cv.yaml --lang $lang --template templates/bracket.docx --out _site/$name.docx
-          done
-          ls -l _site
+      # index.html, and per language its PDF (the page, printed) and .docx, named by the CV's `download:`.
+      - run: uv run --no-dev resume build --out _site && ls -l _site
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

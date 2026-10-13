@@ -1,34 +1,34 @@
-# /// script
-# requires-python = ">=3.12"
-# dependencies = ["python-docx~=1.1", "pyyaml~=6.0", "typer~=0.12"]
-# ///
-"""Build a CV .docx from a YAML file, styled by a .docx template.
+"""Build a CV .docx from the YAML, styled by a .docx template.
 
 The template's last top-level table is the layout: first column the sidebar, last column the main body.
 Restyle the template in Word; paragraph styles are referenced by style id below.
 
-Optional parts, used when the template has them (see make_bracket_template.py):
+Optional parts, used when the template has them (see docx_templates/bracket.py):
 placeholders CVPhoto ("{Photo <width cm> [gray]}"), CVContact and CVHighlights; styles CVRole + CVCompany
 (role timeline), CVTool + CVTools (tool chips, no labels), CVSkill + CVSkillBar (level bars), CVKeyValue, CVQuote.
 The CV prefix keeps them from matching a template's own styles (Word has a built-in Quote).
 """
-import re
+
+from collections.abc import Iterable, Iterator
 from pathlib import Path
 
-import typer
 from docx import Document
+from docx.document import Document as Doc
 from docx.enum.table import WD_ROW_HEIGHT_RULE
 from docx.opc.constants import RELATIONSHIP_TYPE
-from docx.oxml import OxmlElement, parse_xml
-from docx.oxml.ns import nsdecls, qn
-from docx.shared import Cm, Twips
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
+from docx.oxml.styles import CT_Style
+from docx.shared import Cm, Emu, Length, Twips
+from docx.table import Table, _Cell
+from docx.text.paragraph import Paragraph
+from docx.text.run import Run
 
-from cvdata import load
+from resume.data import BOLD, CV, Labels, span, when
+from resume.ooxml import shading, xml
 
-BOLD = re.compile(r"\*\*(.+?)\*\*")
 
-
-def add_text(p, text: str) -> None:
+def add_text(p: Paragraph, text: str) -> None:
     """Append text with **bold** markup as runs."""
     for i, part in enumerate(BOLD.split(text)):
         if part:
@@ -36,7 +36,7 @@ def add_text(p, text: str) -> None:
             p.add_run(part).bold = True if i % 2 else None
 
 
-def para(cell, style_id: str, text: str = ""):
+def para(cell: _Cell, style_id: str, text: str = "") -> Paragraph:
     # By style id, not name: the default template has duplicate style names.
     p = cell.add_paragraph()
     p._p.style = style_id
@@ -44,38 +44,35 @@ def para(cell, style_id: str, text: str = ""):
     return p
 
 
-def has(block, style_id: str) -> bool:
+def style(block: _Cell, style_id: str) -> CT_Style | None:
+    return block.part.package.main_document_part.styles.element.get_by_id(style_id)
+
+
+def has(block: _Cell, style_id: str) -> bool:
     """Whether the block's document defines the style: optional parts follow the template."""
-    return block.part.styles.element.get_by_id(style_id) is not None
+    return style(block, style_id) is not None
 
 
-def section(cell, spacing_id: str, heading_id: str, title: str) -> None:
+def section(cell: _Cell, spacing_id: str, heading_id: str, title: str) -> None:
     para(cell, spacing_id)
     para(cell, heading_id, title)
 
 
-def bullet_num_id(doc) -> str:
+def bullet_num_id(doc: Doc) -> str:
     """numId of the template's first bullet list, so bullets match the template."""
     numbering = doc.part.numbering_part.element
     # The first bullet definition, not the first instance of any bullet definition: a template's own list is
     # often registered after python-docx's built-in ones.
-    first = next(a.get(qn("w:abstractNumId")) for a in numbering.findall(qn("w:abstractNum"))
-                 if a.find(f"{qn('w:lvl')}/{qn('w:numFmt')}").get(qn("w:val")) == "bullet")
-    return next(n.get(qn("w:numId")) for n in numbering.findall(qn("w:num"))
-                if n.find(qn("w:abstractNumId")).get(qn("w:val")) == first)
+    first = numbering.xpath("./w:abstractNum[w:lvl[1]/w:numFmt/@w:val='bullet']/@w:abstractNumId")[0]
+    return str(numbering.xpath(f"./w:num[w:abstractNumId/@w:val='{first}']/@w:numId")[0])
 
 
-def bullet(cell, text: str, num_id: str) -> None:
+def bullet(cell: _Cell, text: str, num_id: str) -> None:
     p = para(cell, "ListParagraph", text)
-    num_pr = OxmlElement("w:numPr")
-    for tag, val in (("w:ilvl", "0"), ("w:numId", num_id)):
-        el = OxmlElement(tag)
-        el.set(qn("w:val"), val)
-        num_pr.append(el)
-    p._p.get_or_add_pPr().append(num_pr)
+    p._p.get_or_add_pPr().append(xml(f'<w:numPr><w:ilvl w:val="0"/><w:numId w:val="{num_id}"/></w:numPr>'))
 
 
-def hyperlink(p, label: str, url: str, underline: bool = True) -> None:
+def hyperlink(p: Paragraph, label: str, url: str, underline: bool = True) -> None:
     link = OxmlElement("w:hyperlink")
     link.set(qn("r:id"), p.part.relate_to(url, RELATIONSHIP_TYPE.HYPERLINK, is_external=True))
     run = p.add_run(label)
@@ -84,50 +81,39 @@ def hyperlink(p, label: str, url: str, underline: bool = True) -> None:
     p._p.append(link)
 
 
-def styled(run, style_id: str):
+def styled(run: Run, style_id: str) -> Run:
     run._r.style = style_id
     return run
 
 
-def when(ym: str | None, labels: dict) -> str:
-    if ym is None:
-        return labels["present"]
-    year, month = str(ym).split("-")
-    return f"{labels['months'][int(month) - 1]} {year}"
-
-
-def span(item: dict, labels: dict) -> str:
-    return f"{when(item['start'], labels)} - {when(item['end'], labels)}".upper()
-
-
-def cells(tables):
+def cells(tables: Iterable[Table]) -> Iterator[_Cell]:
     """Every cell, nested ones included; a merged cell once."""
-    seen = []
+    seen = set()
     for t in tables:
         for row in t.rows:
             for c in row.cells:
                 if c._tc not in seen:
-                    seen.append(c._tc)
+                    seen.add(c._tc)
                     yield c
                     yield from cells(c.tables)
 
 
-def drop(p) -> None:
+def drop(p: Paragraph) -> None:
     p._p.getparent().remove(p._p)
 
 
-def photo(p, cv: dict) -> None:
+def photo(p: Paragraph, cv: CV) -> None:
     spec = p.text.strip("{}").split()
     for r in p.runs:
-        r._r.getparent().remove(r._r)
-    if cv.get("photo"):
+        p._p.remove(r._r)
+    if "photo" in cv:
         run = p.add_run()
-        run.add_picture(str(Path(cv["_dir"]) / cv["photo"]), width=Cm(float(spec[1])))
+        run.add_picture(str(cv["dir"] / cv["photo"]), width=Cm(float(spec[1])))
         if "gray" in spec:
             run._r.xpath(".//a:blip")[0].append(OxmlElement("a:grayscl"))
 
 
-def contact(p, cv: dict) -> None:
+def contact(p: Paragraph, cv: CV) -> None:
     for link in cv["links"]:
         q = p.insert_paragraph_before()
         q._p.style = "CVContact"
@@ -136,17 +122,17 @@ def contact(p, cv: dict) -> None:
     drop(p)
 
 
-def inner_width(cell):
+def inner_width(cell: _Cell) -> Length:
     """The cell's width less its left and right margins: what a nested table may fill."""
     pad = sum(int(w) for w in cell._tc.xpath("./w:tcPr/w:tcMar/*[self::w:left or self::w:right]/@w:w"))
-    return cell.width - Twips(pad)
+    return Emu((cell.width or 0) - Twips(pad))
 
 
-def highlights(p, cell, cv: dict) -> None:
+def highlights(p: Paragraph, cell: _Cell, cv: CV) -> None:
     items = cv.get("highlights", [])
     t = cell.add_table(rows=2, cols=len(items))
-    for col, c in zip(t._tbl.tblGrid.gridCol_lst, t.columns):
-        col.w = int(inner_width(cell) / len(items))
+    for col, c in zip(t._tbl.tblGrid.gridCol_lst, t.columns, strict=True):
+        col.w = Emu(inner_width(cell) // len(items))
         for x in c.cells:
             x.width = col.w
     for i, h in enumerate(items):
@@ -157,9 +143,11 @@ def highlights(p, cell, cv: dict) -> None:
     drop(p)
 
 
-def header(doc, cv: dict) -> None:
+def header(doc: Doc, cv: CV) -> None:
     """Fill the template's placeholders, wherever the template puts them."""
-    for p, cell in [(p, None) for p in doc.paragraphs] + [(p, c) for c in cells(doc.tables) for p in c.paragraphs]:
+    found: list[tuple[Paragraph, _Cell | None]] = [(p, None) for p in doc.paragraphs]
+    found += [(p, c) for c in cells(doc.tables) for p in c.paragraphs]
+    for p, cell in found:
         match p._p.style:
             case "Name":
                 p.runs[0].text = cv["name"]
@@ -169,31 +157,38 @@ def header(doc, cv: dict) -> None:
                 photo(p, cv)
             case "CVContact" if p.text == "{Contact}":
                 contact(p, cv)
-            case "CVHighlights" if p.text == "{Highlights}":
+            case "CVHighlights" if cell and p.text == "{Highlights}":
                 highlights(p, cell, cv)
 
 
-def bar(cell, level: int) -> None:
+def fill(cell: _Cell, style_id: str) -> str:
+    """The shading colour a character style defines."""
+    found = style(cell, style_id)
+    assert found is not None, f"template lacks {style_id}"
+    return str(found.xpath(".//w:shd/@w:fill")[0])
+
+
+def bar(cell: _Cell, level: int) -> None:
     """A skill level as a bar: SkillFill's shading over level/5 of the text width, SkillTrack's over the rest."""
-    fill, track = (cell.part.styles.element.get_by_id(s).xpath(".//w:shd/@w:fill")[0] for s in ("CVSkillFill", "CVSkillTrack"))
     inner = inner_width(cell)
-    parts = [(level, fill)] + [(5 - level, track)] * (level < 5)
+    parts = [(level, fill(cell, "CVSkillFill"))] + [(5 - level, fill(cell, "CVSkillTrack"))] * (level < 5)
     t = cell.add_table(rows=1, cols=len(parts))
     t._tbl.tblPr.get_or_add_tblLayout().set(qn("w:type"), "fixed")
     t.rows[0].height, t.rows[0].height_rule = Cm(0.12), WD_ROW_HEIGHT_RULE.EXACTLY
-    for col, c, (share, color) in zip(t._tbl.tblGrid.gridCol_lst, t.rows[0].cells, parts):
-        col.w = c.width = int(inner * share / 5)
-        c._tc.get_or_add_tcPr().append(parse_xml(f'<w:shd {nsdecls("w")} w:val="clear" w:color="auto" w:fill="{color}"/>'))
+    for col, c, (share, color) in zip(t._tbl.tblGrid.gridCol_lst, t.rows[0].cells, parts, strict=True):
+        col.w = c.width = Emu(inner * share // 5)
+        c._tc.get_or_add_tcPr().append(shading(color))
         c.paragraphs[0]._p.style = "CVSkillBar"
     cell.paragraphs[-1]._p.style = "CVSkillBar"  # the paragraph Word needs after a table
 
 
-def sidebar(cell, cv: dict, lb: dict) -> None:
+def sidebar(cell: _Cell, cv: CV, lb: Labels) -> None:
     section(cell, "SidebarSectionsSpacing", "Heading3", lb["details"])
     para(cell, "SidebarText", cv["location"])
-    for key in ("born", "nationality"):
-        para(cell, "Heading4", lb[key].upper())
-        para(cell, "SidebarText", str(cv[key]))
+    para(cell, "Heading4", lb["born"].upper())
+    para(cell, "SidebarText", str(cv["born"]))
+    para(cell, "Heading4", lb["nationality"].upper())
+    para(cell, "SidebarText", cv["nationality"])
     if not has(cell, "CVContact"):  # otherwise the header lists the links
         section(cell, "SidebarSectionsSpacing", "Heading3", lb["links"])
         for link in cv["links"]:
@@ -215,7 +210,21 @@ def sidebar(cell, cv: dict, lb: dict) -> None:
     para(cell, "SidebarText", cv["hobbies"])
 
 
-def main_body(cell, cv: dict, lb: dict, num_id: str) -> None:
+def tools(cell: _Cell, names: list[str], lb: Labels) -> None:
+    if not has(cell, "CVTool"):
+        p = para(cell, "Normal")
+        p.add_run(f"{lb['tools']}: ").italic = True
+        p.add_run(", ".join(names))
+        return
+    p = para(cell, "CVTools")
+    for name in names:
+        # A shaded narrow no-break space draws the edge; a bar glyph made Word break chips mid-word.
+        styled(p.add_run("\u202f"), "CVToolMark")
+        styled(p.add_run(f"\u00a0{name}\u00a0"), "CVTool")
+        p.add_run(" \u200b")  # Word won't break at a space next to a no-break space; a zero-width space breaks
+
+
+def main_body(cell: _Cell, cv: CV, lb: Labels, num_id: str) -> None:
     cell._tc.remove(cell.paragraphs[0]._p)  # template placeholder
     para(cell, "Heading1", lb["summary"])
     for text in cv["summary"]:
@@ -226,7 +235,6 @@ def main_body(cell, cv: dict, lb: dict, num_id: str) -> None:
         para(cell, "Date", span(ed, lb))
         para(cell, "Normal", ed.get("notes", ""))
     section(cell, "MainSectionsSpacing", "Heading1", lb["experience"])
-    chips = has(cell, "CVTool")
     for job in cv["experience"]:
         if has(cell, "CVRole"):
             para(cell, "CVRole", job["title"])
@@ -234,21 +242,11 @@ def main_body(cell, cv: dict, lb: dict, num_id: str) -> None:
         else:
             para(cell, "Heading2", f"{job['title']} {lb['at']} {job['company']}, {job['city']}")
         para(cell, "CVRoleDate" if has(cell, "CVRoleDate") else "Date", span(job, lb))
-        if not chips:
+        if not has(cell, "CVTool"):
             para(cell, "Normal").add_run(lb["achievements"]).italic = True
         for text in job["bullets"]:
             bullet(cell, text, num_id)
-        if chips:
-            p = para(cell, "CVTools")
-            for tool in job["tools"]:
-                # A shaded narrow no-break space draws the edge; a bar glyph made Word break chips mid-word.
-                styled(p.add_run("\u202f"), "CVToolMark")
-                styled(p.add_run(f"\u00a0{tool}\u00a0"), "CVTool")
-                p.add_run(" \u200b")  # Word won't break at a space next to a no-break space; a zero-width space breaks
-        else:
-            p = para(cell, "Normal")
-            p.add_run(f"{lb['tools']}: ").italic = True
-            p.add_run(", ".join(job["tools"]))
+        tools(cell, job["tools"], lb)
     section(cell, "MainSectionsSpacing", "Heading1", lb["testimonials"])
     for t in cv["testimonials"]:
         para(cell, "Heading2", f"{t['name']} | {t['role']}")
@@ -260,22 +258,10 @@ def main_body(cell, cv: dict, lb: dict, num_id: str) -> None:
             para(cell, "CVQuote" if has(cell, "CVQuote") else "Normal", text)
 
 
-ROOT = Path(__file__).parent
-
-
-def build(cv_path: Path, out: Path | None = None, template: Path = ROOT / "templates" / "default.docx", lang: str = "en") -> None:
-    out = out or ROOT / "build" / f"{cv_path.stem}_{lang}_{template.stem}.docx"
-    out.parent.mkdir(exist_ok=True)
-    cv = load(cv_path, lang)
-    doc = Document(template)
+def render(cv: CV, template: Path) -> Doc:
+    doc = Document(str(template))
     row = doc.tables[-1].rows[0].cells
-    side, main = row[0], row[-1]
     header(doc, cv)
-    sidebar(side, cv, cv["labels"])
-    main_body(main, cv, cv["labels"], bullet_num_id(doc))
-    doc.save(out)
-    print(f"wrote {out}")
-
-
-if __name__ == "__main__":
-    typer.run(build)
+    sidebar(row[0], cv, cv["labels"])
+    main_body(row[-1], cv, cv["labels"], bullet_num_id(doc))
+    return doc
