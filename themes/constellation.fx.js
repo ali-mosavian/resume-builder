@@ -15,7 +15,7 @@
 
   function collect(page) {
     const roles = [...page.querySelectorAll(".experience .item")].map((el) => {
-      const [a, b] = el.querySelector(".when").textContent.split(/\s[—–-]\s/);
+      const [a, b] = el.querySelector(".when").textContent.split(/\s-\s/);
       const t0 = dateOf(a), t1 = dateOf(b || "") ?? new Date().getFullYear() + new Date().getMonth() / 12;
       const name = el.querySelector(".company").textContent.split(",")[0].trim(), brief = el.classList.contains("brief");
       return { el, name, label: brief ? name.split(" ").slice(0, 2).join(" ") : name, t0, t1, brief,
@@ -61,7 +61,7 @@
     const kicker = document.createElement("div");
     kicker.className = "kicker";
     const years = [Math.floor(Math.min(...roles.map((r) => r.t0))), Math.floor(Math.max(...roles.map((r) => r.t1)))];
-    kicker.textContent = `${years[0]} — ${years[1]}`;
+    kicker.textContent = `${years[0]} - ${years[1]}`;
     header.prepend(kicker);
 
     const ctx = canvas.getContext("2d");

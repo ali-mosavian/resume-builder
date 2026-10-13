@@ -119,7 +119,7 @@ def build(cv_path: Path, out: Path | None = None, theme: str = "pro",
     js = "".join(f"<script>{p.read_text(encoding='utf-8')}</script>" for p in scripts)
     out.write_text(f"""<!doctype html>
 <html lang="{cvs[0]["lang"]}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{escape(cvs[0]["name"])} – CV</title><style>{(THEMES / f"{theme}.css").read_text(encoding="utf-8")}</style></head>
+<title>{escape(cvs[0]["name"])} - CV</title><style>{(THEMES / f"{theme}.css").read_text(encoding="utf-8")}</style></head>
 <body>{"".join(page(cv, i > 0) for i, cv in enumerate(cvs))}{js}</body></html>
 """, encoding="utf-8")
     print(f"wrote {out}")

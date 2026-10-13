@@ -177,7 +177,7 @@ experience:
     **42+ marknader** är flera gånger lägre än för andra team som använder Google Recommendation API för
     en enda marknad.
   - 'Refaktorerade och **delade upp en monolitisk backend i mindre tjänster**, vilket förbättrade underhållbarhet
-    och prestanda. Minskade den genomsnittliga svarstiden från ~800 ms (p99: 3–4 s) till **~200 ms** (p99:
+    och prestanda. Minskade den genomsnittliga svarstiden från ~800 ms (p99: 3-4 s) till **~200 ms** (p99:
     ~500 ms), vilket gav en markant bättre användarupplevelse och lägre driftkostnader.'
   - Kortade iterationscyklerna för data **från timmar till minuter**, vilket möjliggjorde snabba experiment
     med olika modellarkitekturer.
@@ -284,7 +284,7 @@ experience:
   city: Stockholm
   bullets:
   - Ledde **omdesignen av arkitekturen i Siteseeker**, en enterprise search-motor, för att göra den skalbar
-    och modulär – från en monolit till mindre tjänster som kunde skalas horisontellt.
+    och modulär - från en monolit till mindre tjänster som kunde skalas horisontellt.
   - Refaktorerade legacy-kod enligt **modern C++ (C++11)** och best practices, vilket förbättrade kodbasens
     prestanda och underhållbarhet.
   - Införde **Python-baserade microservices** för att snabba upp utveckling och driftsättning av nya funktioner,

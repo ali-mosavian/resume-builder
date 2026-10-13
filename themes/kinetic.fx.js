@@ -108,7 +108,7 @@
   const eraOf = (y) => (y >= 2025 ? "now" : y >= 2018 ? "mid" : "early");
   for (const page of pages) {
     const exp = page.querySelector(".experience");
-    const present = (JSON.parse(page.dataset.ui || "{}").present) || page.querySelector(".experience .when")?.textContent.split("—")[1]?.trim() || "";
+    const present = (JSON.parse(page.dataset.ui || "{}").present) || page.querySelector(".experience .when")?.textContent.split(" - ")[1]?.trim() || "";
     const kids = [...exp.children].filter((el) => el.tagName !== "H2");
     const groups = [];
     let cur = null, pending = [];
@@ -126,10 +126,10 @@
       const lab = document.createElement("div");
       lab.className = "era-label";
       const lo = Math.min(...g.years), hi = Math.max(...g.years);
-      lab.textContent = g.open ? `${lo}→` : lo === hi ? `${lo}` : `${lo}–${hi}`;
+      lab.textContent = g.open ? `${lo}→` : lo === hi ? `${lo}` : `${lo}-${hi}`;
       const n = g.els.filter((e) => e.classList.contains("item")).length;
       const small = document.createElement("small");
-      small.textContent = g.open ? `${lo} — ${present}`.toUpperCase() : `${n} ${n === 1 ? "role" : "roles"}`;
+      small.textContent = g.open ? `${lo} - ${present}`.toUpperCase() : `${n} ${n === 1 ? "role" : "roles"}`;
       lab.append(small);
       wrap.append(lab, ...g.els);
       exp.append(wrap);
