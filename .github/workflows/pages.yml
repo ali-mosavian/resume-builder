@@ -15,7 +15,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  dashes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use "-", never em or en dashes
+        run: |
+          if git grep -n -I -e '—' -e '–'; then
+            echo "::error::Em/en dashes found above; use '-'"
+            exit 1
+          fi
+
   deploy:
+    needs: dashes
     runs-on: ubuntu-latest
     environment:
       name: github-pages

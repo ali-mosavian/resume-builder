@@ -73,7 +73,7 @@ aside dl, aside p { margin:0; } dd { margin:0; } dt { color:var(--muted); font-s
 .kv { display:flex; justify-content:space-between; gap:8px; padding:5px 0; border-bottom:1px dashed var(--line); }
 .kv span:last-child { color:var(--muted); font-size:.78rem; }
 .kv[style] { flex-wrap:wrap; }
-.kv[style]::after {  /* skill level meter, from --level (3–5) */
+.kv[style]::after {  /* skill level meter, from --level (3-5) */
   content:""; flex-basis:100%; height:3px; border-radius:2px; margin-top:4px;
   background:linear-gradient(90deg, var(--violet), var(--teal)) 0/calc(var(--level) * 20%) 100% no-repeat, var(--line);
 }

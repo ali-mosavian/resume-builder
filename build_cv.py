@@ -96,7 +96,7 @@ def when(ym: str | None, labels: dict) -> str:
 
 
 def span(item: dict, labels: dict) -> str:
-    return f"{when(item['start'], labels)} — {when(item['end'], labels)}".upper()
+    return f"{when(item['start'], labels)} - {when(item['end'], labels)}".upper()
 
 
 def cells(tables):

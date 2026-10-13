@@ -40,7 +40,7 @@ h1 { grid-area:name; margin:0; padding-top:52px; border-top:1px solid var(--rule
      letter-spacing:-.025em; text-indent:-.05em; }
 .role { grid-area:role; margin-top:18px; font:italic 400 clamp(1.3rem, 2.6vw, 2rem)/1.25 var(--serif); color:var(--accent); letter-spacing:-.005em; }
 .where { grid-area:where; margin-top:14px; font:500 .68rem/1 var(--sans); letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
-.where::before { content:"—"; margin-right:10px; color:var(--rule-2); }
+.where::before { content:"-"; margin-right:10px; color:var(--rule-2); }
 
 .contact { grid-area:contact; display:flex; align-items:center; gap:22px; font-size:.78rem; }
 .contact a, .contact button { font:500 .78rem/1 var(--sans); color:var(--ink); letter-spacing:.02em; cursor:pointer;
@@ -100,7 +100,7 @@ strong { font-weight:600; }
 
 ul { margin:14px 0 0; padding:0; list-style:none; }
 .item > ul:not(.tools) li { position:relative; padding-left:22px; margin-bottom:9px; font-size:.98rem; }
-.item > ul:not(.tools) li::before { content:"—"; position:absolute; left:0; color:var(--accent); }
+.item > ul:not(.tools) li::before { content:"-"; position:absolute; left:0; color:var(--accent); }
 .tools { display:flex; flex-wrap:wrap; column-gap:0; row-gap:4px; margin-top:16px; align-items:baseline; font-size:.76rem; color:var(--muted); }
 .tools::before { content:attr(aria-label); margin-right:10px; color:var(--accent); }
 .tools li { margin:0; }
@@ -108,11 +108,11 @@ ul { margin:14px 0 0; padding:0; list-style:none; }
 
 /* Earlier roles: one line each under a caption */
 .experience .brief { padding:12px 0; border-top:1px solid var(--rule); }
-/* Brief: "Company — Title" on one line (title wraps whole to the next); the city waits for the expanded view */
+/* Brief: "Company - Title" on one line (title wraps whole to the next); the city waits for the expanded view */
 .experience .brief h3 { display:flex; flex-wrap:wrap; column-gap:10px; }
 .experience .brief h3 .company { order:-1; font-size:1.08rem; font-weight:500; }
 .experience .brief h3 .title { flex:1 1 220px; font-size:.96rem; margin-top:0; }
-.experience .brief h3 .title::before { content:"—"; margin-right:10px; color:var(--rule-2); font-style:normal; }
+.experience .brief h3 .title::before { content:"-"; margin-right:10px; color:var(--rule-2); font-style:normal; }
 .experience .brief h3 .city { display:none; }
 .experience .brief .when { grid-row:1; padding-top:.5em; } .experience .brief .when::after { display:none; }
 .experience .brief ul { display:none; }
