@@ -54,6 +54,21 @@ def test_paginated_print_keeps_everything(chrome: Path, tmp_path: Path, theme: s
     assert "(A4)" in info
 
 
+def test_split_prints_one_column(chrome: Path, tmp_path: Path) -> None:
+    """split is two halves on screen and one column on paper: every role and testimonial reaches the A4 PDF, the
+    body comes before the sidebar's sections (as split.docx), and earlier roles print in full."""
+    printed = pdf(chrome, html(tmp_path / "cv.html", "split", ["en"]))
+    text = re.sub(r"\s", "", pdftotext("-raw", printed))
+    cv = data.load(CV, "en")
+    names = [*(j["company"] for j in cv["experience"]), *(t["name"] for t in cv["testimonials"])]
+    assert not [n for n in names if re.sub(r"\s", "", n) not in text]
+    assert text.index("PROFESSIONALSUMMARY") < text.index("AREASOFEXPERTISE")
+    brief = next(j for j in cv["experience"] if j.get("brief"))
+    assert re.sub(r"\s|\*", "", brief["bullets"][0])[:30] in text
+    info = subprocess.run(["pdfinfo", printed], capture_output=True, text=True, check=True).stdout
+    assert "(A4)" in info
+
+
 def test_bracket_sidebar_on_every_sheet(chrome: Path, tmp_path: Path) -> None:
     """bracket once dropped the sidebar column on sheets after its content ran out."""
     probe = (
@@ -98,7 +113,7 @@ def test_expanded_brief_roles_keep_tool_layout(chrome: Path, tmp_path: Path, the
     assert normal == brief
 
 
-@pytest.mark.parametrize("theme", sharing("aurora-v3.js"))
+@pytest.mark.parametrize("theme", sorted(set(sharing("aurora-v3.js")) & set(sharing("slate.js"))))
 def test_skill_filter_after_pagination(chrome: Path, tmp_path: Path, theme: str) -> None:
     """Pagination into sheets replaced the roles the filter had captured: clicking a skill marked nothing on the
     page and the pill counted 0 roles."""

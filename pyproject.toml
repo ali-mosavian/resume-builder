@@ -3,7 +3,12 @@ name = "resume"
 version = "0.1.0"
 description = "A CV as a web page, PDF and .docx from one multilingual YAML."
 requires-python = ">=3.12"
-dependencies = ["python-docx~=1.2", "pyyaml~=6.0", "typer~=0.12"]
+dependencies = [
+    "opencv-python-headless>=4.10,<5",
+    "python-docx~=1.2",
+    "pyyaml~=6.0",
+    "typer~=0.12",
+]
 
 [project.scripts]
 resume = "resume.cli:app"
