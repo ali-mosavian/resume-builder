@@ -129,7 +129,7 @@ experience:
     to customers.
   - Developed a (construction) **role predictor** for a projects.
   start: 2024-06
-  end: null
+  end: 2025-01
   tools: [Python, Langchain, Chainlit, GPT-4o, function calling, Catboost (gradient boosted decision trees),
     FastAPI, DuckDB, SQL Server, Azure, Docker]
 - title: Senior AI Engineer (Contractor)

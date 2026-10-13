@@ -23,6 +23,9 @@ for path in (here / "cv").glob("*.yaml"):
     for j in yaml.safe_load(path.read_text(encoding="utf-8"))["experience"]:
         for b in j["bullets"]:
             assert b.endswith("."), f"{path.name}, {j['company']}: bullet ends {b[-12:]!r}"
+    # Byggfakta once read "JUN 2024 - NU" long after it ended: only the latest role may be ongoing.
+    ongoing = [j["company"] for j in yaml.safe_load(path.read_text(encoding="utf-8"))["experience"][1:] if j["end"] is None]
+    assert not ongoing, f"{path.name}: earlier roles still ongoing: {ongoing}"
 for template in sorted((here / "templates").glob("*.docx")):
     with tempfile.TemporaryDirectory() as tmp:
         out = Path(tmp) / "cv.docx"
