@@ -11,6 +11,19 @@
     const q = ".education .item, .experience .item, .testimonials .item";
     items = page ? [...page.querySelectorAll(q)].filter((el) => el.offsetParent && el.offsetHeight) : [];
   };
+  // Heights the folds open to, measured so that CSS can animate them
+  const measure = () => {
+    const page = document.querySelector(".page:not([hidden])");
+    if (!page) return;
+    for (const ul of page.querySelectorAll(".experience .brief ul")) ul.style.setProperty("--h", `${ul.scrollHeight}px`);
+    for (const q of page.querySelectorAll(".testimonials .quote")) {
+      const lh = parseFloat(getComputedStyle(q).lineHeight) || parseFloat(getComputedStyle(q).fontSize) * 1.5;
+      const full = q.scrollHeight;
+      q.style.setProperty("--full", `${full}px`);
+      q.style.setProperty("--clamp", `${Math.min(full, Math.round(lh * 4))}px`);
+      q.classList.toggle("short", full <= lh * 4 + 8);
+    }
+  };
   const mark = () => {
     raf = 0;
     const on = wide.matches;
@@ -28,8 +41,9 @@
   };
   const queue = () => raf || (raf = requestAnimationFrame(mark));
   addEventListener("scroll", queue, { passive: true });
-  addEventListener("resize", () => { collect(); queue(); });
-  addEventListener("langchange", () => { collect(); queue(); });
+  addEventListener("resize", () => { collect(); measure(); queue(); });
+  addEventListener("langchange", () => { collect(); measure(); queue(); });
+  document.fonts?.ready.then(measure);
   document.addEventListener("click", (e) => {
     const item = e.target.closest?.(".education .item, .experience .item, .testimonials .item");
     // a click on another item brings it to the middle, without cancelling what the click itself does
@@ -37,5 +51,6 @@
     setTimeout(() => { collect(); queue(); }, 400);
   });
   collect();
+  measure();
   queue();
 })();
