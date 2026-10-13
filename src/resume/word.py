@@ -39,11 +39,17 @@ from resume.ooxml import shading
 
 
 def add_text(p: Paragraph, text: str) -> None:
-    """Append text with **bold** markup as runs."""
+    """Append text with **bold** markup as runs: in the template's CVStrong style if it has one, else bold."""
+    strong = has(p, "CVStrong")
     for i, part in enumerate(BOLD.split(text)):
-        if part:
+        if not part:
+            continue
+        run = p.add_run(part)
+        if i % 2 and strong:
+            styled(run, "CVStrong")
+        else:
             # None, not False, outside markup: False would override bold paragraph styles.
-            p.add_run(part).bold = True if i % 2 else None
+            run.bold = True if i % 2 else None
 
 
 def para(cell: _Cell, style_id: str, text: str = "") -> Paragraph:
@@ -54,11 +60,11 @@ def para(cell: _Cell, style_id: str, text: str = "") -> Paragraph:
     return p
 
 
-def style(block: _Cell, style_id: str) -> CT_Style | None:
+def style(block: _Cell | Paragraph, style_id: str) -> CT_Style | None:
     return block.part.package.main_document_part.styles.element.get_by_id(style_id)
 
 
-def has(block: _Cell, style_id: str) -> bool:
+def has(block: _Cell | Paragraph, style_id: str) -> bool:
     """Whether the block's document defines the style: optional parts follow the template."""
     return style(block, style_id) is not None
 

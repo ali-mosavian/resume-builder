@@ -7,6 +7,8 @@ from docx.shared import Cm
 from support import docx
 from resume.word import cells
 from support import TEMPLATES
+from resume.docx_templates import names
+from resume.docx_templates import bold_font
 
 TEMPLATE_FILES = sorted(p.stem for p in TEMPLATES.glob("*.docx"))
 
@@ -20,15 +22,17 @@ def test_template_fills_in(template: str) -> None:
     # **markup** becomes a bold run without the asterisks.
     first = next(p for p in main.paragraphs if "store capacity optimization engine" in p.text)
     assert "**" not in first.text
-    assert any(r.bold and r.text == "store capacity optimization engine" for r in first.runs)
+    assert any(
+        (r.bold or r._r.style == "CVStrong") and r.text == "store capacity optimization engine" for r in first.runs
+    )
     assert "SEP 2025 - PRESENT" in [p.text for p in main.paragraphs]
     everywhere = [*doc.paragraphs, *(p for c in cells(doc.tables) for p in c.paragraphs)]
     assert any(p.text == "Ali Mosavian" for p in everywhere), "name placeholder not filled"
     assert not [p.text for p in everywhere if p.text.startswith("{")], "placeholders left"
     # Optional parts once keyed on common style names (SkillBar, Quote) that other templates also have:
-    # the resume.io template crashed and pro restyled its testimonials. Only bracket opts in.
+    # the resume.io template crashed and pro restyled its testimonials. Neither opts in.
     quote = next(p for p in main.paragraphs if p.text.startswith("“It is rare"))
-    assert (quote._p.style == "CVQuote") == (template == "bracket")
+    assert (quote._p.style == "CVQuote") == (template not in ("default", "pro"))
 
 
 @pytest.mark.parametrize(("template", "color"), [("pro", "1F3A5F"), ("bracket", "F6B92B")])
@@ -79,7 +83,7 @@ def test_bracket_font() -> None:
     ]
     assert bracket.styles["Normal"].element.xpath("./w:rPr/w:color/@w:val") == ["262626"]
     embedded = [p.partname for p in docx("bracket", "sv").part.package.iter_parts() if p.partname.endswith(".odttf")]
-    assert len(embedded) == 4
+    assert len(embedded) == 6  # Montserrat's four faces, and Montserrat Bold's two (see test_bold_is_a_real_bold_face)
 
 
 def test_pro_grid_widths() -> None:
@@ -87,3 +91,19 @@ def test_pro_grid_widths() -> None:
     squeezing the main column to a third and doubling the page count."""
     grid = Document(str(TEMPLATES / "pro.docx")).tables[0]._tbl.tblGrid.gridCol_lst
     assert (grid[2].w or 0) > Cm(12)
+
+
+@pytest.mark.parametrize("template", names())
+def test_bold_is_a_real_bold_face(template: str) -> None:
+    """Word for Mac ignores embedded bold faces and fakes bold from the regular one: thin "bold" in every theme whose
+    font Office doesn't ship. Bold styles use the font's bold family instead, and **bold** text uses CVStrong."""
+    styles = Document(str(TEMPLATES / f"{template}.docx")).styles
+    faked = [
+        s.style_id
+        for s in styles
+        if s.element.xpath("./w:rPr/w:b[not(@w:val) or @w:val='1' or @w:val='true']")
+        and (font := s.font.name)
+        and bold_font(font)
+    ]
+    assert not faked, f"styles faking bold: {faked}"
+    assert "CV Strong" in [s.name for s in styles]

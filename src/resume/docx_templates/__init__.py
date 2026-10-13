@@ -3,8 +3,11 @@
 Shared here: styles, bullet lists, borders, cells and tables as the generators build them.
 """
 
+import uuid
 import pkgutil
+from typing import Any
 from typing import cast
+from pathlib import Path
 from typing import NamedTuple
 from collections.abc import Sequence
 
@@ -13,22 +16,29 @@ from docx.shared import Pt
 from docx.oxml.ns import qn
 from docx.table import Table
 from docx.table import _Cell
+from docx.opc.part import Part
+from docx.oxml import parse_xml
 from docx.shared import RGBColor
 from docx.oxml import OxmlElement
 from docx.document import Document as Doc
 from docx.enum.style import WD_STYLE_TYPE
+from docx.text.paragraph import Paragraph
+from docx.opc.oxml import serialize_part_xml
 from docx.styles.style import CharacterStyle
 from docx.styles.style import ParagraphStyle
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
+from docx.opc.constants import RELATIONSHIP_TYPE as RT
 
+from resume import ROOT
 from resume.ooxml import CM
 from resume.ooxml import xml
 from resume.ooxml import shading
 
 
 def names() -> list[str]:
-    return [m.name for m in pkgutil.iter_modules(__path__)]
+    """Template names, as their themes are named: module aurora_v2 makes aurora-v2.docx."""
+    return [m.name.replace("_", "-") for m in pkgutil.iter_modules(__path__)]
 
 
 def style(
@@ -229,3 +239,137 @@ def table(
         "w:tblDescription",
     )
     return t
+
+
+FONTS = ROOT / "assets" / "fonts"
+FACES = ("Regular", "Bold", "Italic", "BoldItalic")
+
+
+def embed_font(doc: Doc, family: str) -> None:
+    """Embed the family's faces from assets/fonts (<Family>-{Regular,Bold,Italic,BoldItalic}.ttf, see tools/fonts.py)
+    so Word shows the font without it installed. Call once per family.
+
+    Word stores each as an obfuscated .odttf: the first 32 bytes XORed with its GUID key, bytes reversed.
+    """
+    files = {f: p for f in FACES if (p := FONTS / f"{family.replace(' ', '')}-{f}.ttf").exists()}
+    assert files, f"no faces of {family} in {FONTS}"
+    font_table = doc.part.part_related_by(RT.FONT_TABLE)
+    root = parse_xml(font_table.blob)
+    for old in root.findall(qn("w:font")):  # a font table isn't an oxml class: no w: prefix in xpath
+        if old.get(qn("w:name")) == family:
+            root.remove(old)
+    font = xml(
+        f'<w:font w:name="{family}"><w:charset w:val="00"/><w:family w:val="swiss"/><w:pitch w:val="variable"/></w:font>'
+    )
+    for kind, path in files.items():
+        guid = str(uuid.uuid4()).upper()
+        key = bytes.fromhex(guid.replace("-", ""))[::-1]
+        data = bytearray(path.read_bytes())
+        for j in range(32):
+            data[j] ^= key[j % 16]
+        part = Part(
+            doc.part.package.next_partname("/word/fonts/font%d.odttf"),
+            "application/vnd.openxmlformats-officedocument.obfuscatedFont",
+            bytes(data),
+            doc.part.package,
+        )
+        font.append(
+            xml(f'<w:embed{kind} r:id="{font_table.relate_to(part, RT.FONT)}" w:fontKey="{{{guid}}}"/>', "w", "r")
+        )
+    root.append(font)
+    font_table._blob = serialize_part_xml(root)
+    settings = doc.settings.element
+    if not settings.xpath("./w:embedTrueTypeFonts"):
+        settings.xpath("./w:zoom")[0].addnext(xml("<w:embedTrueTypeFonts/>"))  # schema: right after zoom
+
+
+WPS = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
+
+
+type Box = tuple[float, float, float, float, str]  # x, y, width, height in mm; colour
+
+
+def rect(p: Paragraph, box: Box, shape_id: int) -> None:
+    """A filled rectangle behind the text, placed on the page: what CSS draws with positioned boxes."""
+    x, y, w, h, color = box
+
+    def emu(mm: float) -> int:
+        return int(mm * 36000)
+
+    p._p.append(
+        xml(
+            f'<w:r xmlns:wps="{WPS}"><w:drawing>'
+            f'<wp:anchor distT="0" distB="0" distL="0" distR="0" simplePos="0" relativeHeight="{shape_id}" behindDoc="1" '
+            f'locked="1" layoutInCell="0" allowOverlap="1"><wp:simplePos x="0" y="0"/>'
+            f'<wp:positionH relativeFrom="page"><wp:posOffset>{emu(x)}</wp:posOffset></wp:positionH>'
+            f'<wp:positionV relativeFrom="page"><wp:posOffset>{emu(y)}</wp:posOffset></wp:positionV>'
+            f'<wp:extent cx="{emu(w)}" cy="{emu(h)}"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:wrapNone/>'
+            f'<wp:docPr id="{shape_id}" name="Shape {shape_id}"/><wp:cNvGraphicFramePr/>'
+            f'<a:graphic><a:graphicData uri="{WPS}"><wps:wsp><wps:cNvSpPr/><wps:spPr>'
+            f'<a:xfrm><a:off x="0" y="0"/><a:ext cx="{emu(w)}" cy="{emu(h)}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom>'
+            f'<a:solidFill><a:srgbClr val="{color}"/></a:solidFill><a:ln><a:noFill/></a:ln></wps:spPr><wps:bodyPr/></wps:wsp>'
+            f"</a:graphicData></a:graphic></wp:anchor></w:drawing></w:r>",
+            "w",
+            "wp",
+            "a",
+        )
+    )
+
+
+def bold_font(family: str) -> str | None:
+    """The family's bold faces as a family of their own (tools/fonts.py), if there are any."""
+    return f"{family} Bold" if (FONTS / f"{family.replace(' ', '')}Bold-Regular.ttf").exists() else None
+
+
+def real_bold(doc: Doc) -> set[str]:
+    """Bold styles switch to the font's bold family, not bold: Word for Mac ignores embedded bold faces and fakes bold
+    from the regular one. Adds CVStrong, which word.py uses for **bold** text. Returns the bold families used."""
+    styles = doc.styles.element
+    by_id = {s.get(qn("w:styleId")): s for s in styles.findall(qn("w:style"))}
+
+    def font_of(s: Any) -> str | None:
+        while s is not None:
+            if found := s.xpath("./w:rPr/w:rFonts/@w:ascii"):
+                return str(found[0])
+            base = s.xpath("./w:basedOn/@w:val")
+            s = by_id.get(base[0]) if base else None
+        return None
+
+    used = set()
+    for s in by_id.values():
+        b = s.find(f"{qn('w:rPr')}/{qn('w:b')}")
+        if b is None or b.get(qn("w:val")) in ("0", "false"):
+            continue
+        family = font_of(s)
+        if not family or not (bold := bold_font(family)):
+            continue
+        rpr = s.find(qn("w:rPr"))
+        fonts = rpr.find(qn("w:rFonts"))
+        if fonts is None:
+            fonts = OxmlElement("w:rFonts")
+            rpr.insert(0, fonts)
+        for attr in ("w:ascii", "w:hAnsi", "w:eastAsia", "w:cs"):
+            fonts.set(qn(attr), bold)
+        for tag in ("w:b", "w:bCs"):
+            for el in rpr.findall(qn(tag)):
+                rpr.remove(el)
+        used.add(bold)
+    # ponytail: CVStrong is in the body font's bold family; **bold** inside a heading font would switch to it too.
+    if (body := font_of(by_id.get("Normal"))) and (bold := bold_font(body)):
+        char_style(doc, "CV Strong", font=bold)
+        used.add(bold)
+    return used
+
+
+def finish(doc: Doc, out: Path, *fonts: str) -> None:
+    """Settings every template needs, real bold, the fonts embedded, then save."""
+    settings = doc.settings.element
+    settings.xpath("./w:zoom")[0].set(
+        qn("w:percent"), "100"
+    )  # python-docx's blank document omits this required attribute
+    # Word 2013+ layout. In the blank document's Word 2010 mode, a table's first-cell text aligns with the margin,
+    # so the cell padding pushes the table, the sidebar text and its marks off the page's left edge.
+    settings.xpath("./w:compat/w:compatSetting[@w:name='compatibilityMode']")[0].set(qn("w:val"), "15")
+    for family in [*fonts, *sorted(real_bold(doc) - set(fonts))]:
+        embed_font(doc, family)
+    doc.save(str(out))
