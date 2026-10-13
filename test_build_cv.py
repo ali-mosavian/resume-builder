@@ -55,14 +55,14 @@ with tempfile.TemporaryDirectory() as tmp:
         assert "reading &amp; learning" in html, "YAML text is not HTML-escaped"
         # Brief roles are not contiguous (Watty sits between them): the caption must appear once.
         assert html.count("data-earlier=") == 1, "earlier-roles caption repeated or missing"
-    # One page, both languages: the second starts hidden, the theme script is inlined.
+    # One page, both languages: the second starts hidden; the theme script and the language switch are inlined.
     out = Path(tmp) / "cv_both.html"
     build_html(here / "cv" / "cv_en.yaml", out, "aurora-v3", also=[here / "cv" / "cv_sv.yaml"])
     html = out.read_text(encoding="utf-8")
     assert '<div class="page" lang="en"' in html and '<div class="page" lang="sv"' in html
     assert re.search(r'<div class="page" lang="sv" data-ui="[^"]*" hidden>', html), "second language not hidden"
     assert not re.search(r'<div class="page" lang="en" data-ui="[^"]*" hidden>', html), "first language hidden"
-    assert html.count("<script>") == 1 and 'data-aka="GCP"' in html
+    assert html.count("<script>") == 2 and 'data-aka="GCP"' in html
     # Printing during the headline count-up once put partial numbers ("2+", "7M") in the PDF.
     chrome = Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
     if chrome.exists() and shutil.which("pdftotext"):
@@ -105,6 +105,24 @@ with tempfile.TemporaryDirectory() as tmp:
                               "--dump-dom", page.as_uri()], capture_output=True, text=True, check=True).stdout
         widths = [int(w) for w in re.search("<title>(.*?)</title>", dom)[1].split(",")]
         assert len(widths) > 1 and min(widths) > 100, f"bracket sidebar widths per sheet: {widths}"
+
+    # Language switch on a paginated theme: the language opened by #sv is cut into sheets, and so is
+    # the one switched to; the download links follow the YAML.
+    if chrome.exists():
+        probe = ("<script>addEventListener('load',()=>setTimeout(()=>{const n=()=>[...document.querySelectorAll('.page')]"
+                 ".map(p=>p.lang+(p.hidden?'-':'+')+p.querySelectorAll('.sheet').length).join(' ');const a=n();"
+                 "document.querySelector('.page:not([hidden]) .lang-switch [data-lang=en]').click();"
+                 "setTimeout(()=>{document.title=a+'|'+n()},1000)},1500))</script>")
+        page = Path(tmp) / "cv_switch.html"
+        build_html(here / "cv" / "cv_en.yaml", page, "bracket", also=[here / "cv" / "cv_sv.yaml"])
+        html = page.read_text(encoding="utf-8")
+        assert 'href="Ali_Mosavian_CV_SV.docx" download' in html and "onclick=\"print()\"" not in html
+        page.write_text(html.replace("</body>", probe + "</body>"), encoding="utf-8")
+        dom = subprocess.run([chrome, "--headless=new", "--disable-gpu", "--window-size=1280,1000", "--virtual-time-budget=6000",
+                              "--dump-dom", page.as_uri() + "#sv"], capture_output=True, text=True, check=True).stdout
+        before, after = re.search("<title>(.*?)</title>", dom)[1].split("|")
+        assert before.startswith("en-0 sv+") and not before.endswith("+0"), f"opened #sv: {before}"
+        assert after.startswith("en+") and not after.startswith("en+0"), f"switched to en: {after}"
 
     # "Show details" on earlier roles once turned their tool tags into a plain block (display:block beat flex):
     # expanded, they must lay out like any other role's tags.

@@ -202,7 +202,7 @@ mark { background:var(--gold-soft); color:inherit; border-radius:2px; padding:0 
   h1 { font-size:30pt; }
   .role { font-size:13pt; color:var(--ink-2); margin-top:6px; }
   .where { color:var(--muted); margin-top:8px; }
-  .highlights { grid-column:1 / -1; grid-template-columns:repeat(4, 1fr); gap:0 16px; margin-top:10px; padding:0; }
+  .highlights { grid-column:1 / -1; grid-auto-flow:column; grid-auto-columns:1fr; gap:0 16px; margin-top:10px; padding:0; }
   .highlights div { padding:6px 0 0; border-top:1px solid var(--line); }
   .highlights b { font-size:16pt; color:var(--ink); } .highlights b::first-letter { color:var(--ink); } .highlights span { font-size:7.5pt; color:var(--muted); }
   .grid { grid-template-columns:1fr 52mm; gap:22px; padding:16px 0 0; }
