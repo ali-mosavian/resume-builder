@@ -20,5 +20,5 @@ uv run pytest
 ```
 
 ```bash
-uv run ruff format && uv run ruff check && uv run ty check
+uv run isort . && uv run ruff format && uv run ruff check && uv run ty check
 ```

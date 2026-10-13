@@ -5,12 +5,15 @@ import subprocess
 from pathlib import Path
 
 import pytest
-from support import CV, ROOT, html, title
 from typer.testing import CliRunner
 
-from resume import chrome as browser
+from support import CV
 from resume import data
+from support import ROOT
+from support import html
+from support import title
 from resume.cli import app
+from resume import chrome as browser
 
 THEMES = ROOT / "themes"
 
@@ -99,5 +102,7 @@ def test_build_writes_every_output(chrome: Path, tmp_path: Path) -> None:
     result = CliRunner().invoke(app, ["build", "--out", str(tmp_path)])
     assert result.exit_code == 0, result.output
     names = [data.load(CV, lang)["download"] for lang in data.langs(CV)]
-    assert sorted(p.name for p in tmp_path.iterdir()) == sorted(["index.html", *(f"{n}.{ext}" for n in names for ext in ("pdf", "docx"))])
+    assert sorted(p.name for p in tmp_path.iterdir()) == sorted(
+        ["index.html", *(f"{n}.{ext}" for n in names for ext in ("pdf", "docx"))]
+    )
     assert all(p.stat().st_size for p in tmp_path.iterdir())

@@ -7,8 +7,10 @@ taking the mapping's place otherwise (`title: {en: ..., sv: ...}`). `{lang}` in 
 """
 
 import re
+from typing import cast
 from pathlib import Path
-from typing import NotRequired, TypedDict, cast
+from typing import TypedDict
+from typing import NotRequired
 
 import yaml
 

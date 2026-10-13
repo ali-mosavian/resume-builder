@@ -3,9 +3,10 @@ import re
 import pytest
 from docx import Document
 from docx.shared import Cm
-from support import TEMPLATES, docx
 
+from support import docx
 from resume.word import cells
+from support import TEMPLATES
 
 TEMPLATE_FILES = sorted(p.stem for p in TEMPLATES.glob("*.docx"))
 
@@ -37,7 +38,9 @@ def test_bullets_use_the_template_list(template: str, color: str) -> None:
     num_id = doc.element.body.xpath(".//w:numPr/w:numId/@w:val")[0]
     numbering = doc.part.numbering_part.element
     abstract = numbering.xpath(f"./w:num[@w:numId='{num_id}']/w:abstractNumId/@w:val")[0]
-    assert numbering.xpath(f"./w:abstractNum[@w:abstractNumId='{abstract}']/w:lvl[@w:ilvl='0']/w:rPr/w:color/@w:val") == [color]
+    assert numbering.xpath(
+        f"./w:abstractNum[@w:abstractNumId='{abstract}']/w:lvl[@w:ilvl='0']/w:rPr/w:color/@w:val"
+    ) == [color]
 
 
 def test_no_dashes() -> None:
@@ -59,7 +62,11 @@ def test_bracket_word_layout() -> None:
     bracket = Document(str(TEMPLATES / "bracket.docx"))
     mode = bracket.settings.element.xpath("./w:compat/w:compatSetting[@w:name='compatibilityMode']/@w:val")
     assert mode == ["15"]
-    lists = [s.element.xpath("./w:pPr/w:numPr/w:numId/@w:val")[0] for s in bracket.styles if s.element.xpath("./w:pPr/w:numPr/w:numId")]
+    lists = [
+        s.element.xpath("./w:pPr/w:numPr/w:numId/@w:val")[0]
+        for s in bracket.styles
+        if s.element.xpath("./w:pPr/w:numPr/w:numId")
+    ]
     assert len(lists) == len(set(lists)), f"styles share a list: {lists}"
 
 
@@ -67,7 +74,9 @@ def test_bracket_font() -> None:
     """bracket.docx once set its headings in Calibri: Word's heading styles name a theme font, which beats the named one.
     Its text was 222222 while bracket.css inks 262626. And Montserrat travels inside the file, for readers without it."""
     bracket = Document(str(TEMPLATES / "bracket.docx"))
-    assert not [s.style_id for s in bracket.styles if s.element.xpath("./w:rPr/w:rFonts[@w:ascii='Montserrat'][@w:asciiTheme]")]
+    assert not [
+        s.style_id for s in bracket.styles if s.element.xpath("./w:rPr/w:rFonts[@w:ascii='Montserrat'][@w:asciiTheme]")
+    ]
     assert bracket.styles["Normal"].element.xpath("./w:rPr/w:color/@w:val") == ["262626"]
     embedded = [p.partname for p in docx("bracket", "sv").part.package.iter_parts() if p.partname.endswith(".odttf")]
     assert len(embedded) == 4
