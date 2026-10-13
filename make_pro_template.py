@@ -2,7 +2,7 @@
 # requires-python = ">=3.12"
 # dependencies = ["python-docx~=1.1"]
 # ///
-"""Generate template_pro.docx: name banner on top, light sidebar left, main column right.
+"""Generate templates/pro.docx: name banner on top, light sidebar left, main column right.
 
 Defines the style ids build_cv.py expects. Tweak here and regenerate, or edit the .docx in Word.
 """
@@ -105,7 +105,7 @@ def main() -> None:
     cell_props(gap, widths[1])
     cell_props(body, widths[2])
     side.paragraphs[0]._p.style = "SidebarSectionsSpacing"
-    doc.save(Path(__file__).with_name("template_pro.docx"))
+    doc.save(Path(__file__).parent / "templates" / "pro.docx")
 
 
 if __name__ == "__main__":

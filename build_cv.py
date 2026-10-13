@@ -138,7 +138,12 @@ def main_body(cell, cv: dict, lb: dict, num_id: str) -> None:
             para(cell, "Normal", text)
 
 
-def build(cv_path: Path, out: Path, template: Path = Path(__file__).with_name("template.docx")) -> None:
+ROOT = Path(__file__).parent
+
+
+def build(cv_path: Path, out: Path | None = None, template: Path = ROOT / "templates" / "default.docx") -> None:
+    out = out or ROOT / "build" / f"{cv_path.stem}_{template.stem}.docx"
+    out.parent.mkdir(exist_ok=True)
     cv = yaml.safe_load(cv_path.read_text(encoding="utf-8"))
     doc = Document(template)
     side, _, main = doc.tables[0].rows[0].cells
