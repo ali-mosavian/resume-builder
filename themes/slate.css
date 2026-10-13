@@ -20,7 +20,15 @@ main { grid-column:2; grid-row:1 / span 2; padding:56px 52px 56px; min-width:0; 
 h1 { margin:0; font-size:1.55rem; font-weight:700; letter-spacing:.01em; }
 h1::after { content:""; display:block; width:18px; height:1px; margin:14px auto 16px; background:var(--side-muted); }
 .role { font-size:.66rem; letter-spacing:.2em; text-transform:uppercase; line-height:2; color:#d9dce4; }
-.where, .contact, .highlights { display:none; }
+.where, .highlights { display:none; }
+.page[hidden] { display:none; }  /* the grid above would otherwise show every language at once */
+/* On screen the header keeps only the language switch and the downloads; the sidebar lists the links. */
+.contact { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin-top:16px; }
+.contact a:not(.download) { display:none; }
+.contact .lang-switch { display:flex; flex-basis:100%; justify-content:center; gap:6px; }
+.contact button, .contact a.download { padding:2px 9px; border:1px solid var(--side-muted); border-radius:3px; background:none; color:var(--side-ink);
+                                       font:700 .62rem/1.6 "Lato", sans-serif; letter-spacing:.14em; text-decoration:none; cursor:pointer; }
+.contact button[aria-pressed="true"] { background:var(--side-ink); color:var(--side); }
 
 /* Sidebar */
 aside h2 { font-size:1.08rem; font-weight:700; margin:34px 0 10px; }
@@ -70,6 +78,7 @@ blockquote { margin:0 0 8px; }
   body { background:#fff; font-size:9pt; line-height:1.5; }
   .page { margin:0; max-width:none; border-radius:0; box-shadow:none; min-height:297mm; grid-template-columns:68mm 1fr; }
   header { padding:14mm 9mm 2mm; } aside { padding:4mm 9mm 12mm; } main { padding:12mm 11mm 12mm 11mm; }
+  .contact { display:none; }
   .experience .item { break-inside:auto; } h3, .when { break-after:avoid; }
   .testimonials .item { break-inside:avoid; }
 }

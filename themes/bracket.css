@@ -1,6 +1,6 @@
 /* Bracket: a yellow L-bracket over a bold uppercase name, grayscale photo on a yellow offset block,
    diamond markers, dotted timeline, A4 sheets. */
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 :root { --accent:#f6b92b; --ink:#262626; --muted:#7a7a7a; --line:#d9d9d9; --side:#f4f3ef; }
 * { box-sizing:border-box; }
@@ -16,14 +16,14 @@ header::after { content:""; position:absolute; left:14mm; top:12mm; width:2.2mm;
 header > * { position:relative; }
 .photo { grid-area:photo; align-self:center; width:31mm; height:31mm; object-fit:cover; filter:grayscale(1) contrast(1.05);
          box-shadow:3mm 3mm 0 var(--accent); }
-.role { grid-area:role; align-self:end; font-size:.72em; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
-h1 { grid-area:name; align-self:start; margin:1mm 0 0; font-size:2.9em; line-height:1; font-weight:800; text-transform:uppercase; letter-spacing:.01em; }
+.role { grid-area:role; align-self:end; font-size:.72em; font-weight:400; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+h1 { grid-area:name; align-self:start; margin:1mm 0 0; font-size:2.9em; line-height:1; font-weight:700; text-transform:uppercase; letter-spacing:.01em; }
 .where { display:none; }
 /* Contact: language switch, ruled links, then PDF/DOCX side by side. */
 .contact { grid-area:contact; align-self:center; display:grid; grid-template-columns:1fr 1fr; column-gap:2mm; min-width:46mm; }
 .contact > * { grid-column:1 / -1; }
 .contact a { display:flex; justify-content:flex-end; align-items:center; gap:3mm; padding:1.6mm 0; border-bottom:1px solid var(--ink);
-             color:var(--ink); text-decoration:none; font-weight:600; font-size:.85em; }
+             color:var(--ink); text-decoration:none; font-weight:700; font-size:.85em; }
 .contact a:first-of-type { border-top:1px solid var(--ink); }
 .contact a::after { content:""; width:2.4mm; height:2.4mm; background:var(--accent); transform:rotate(45deg); }
 .contact a.download { grid-column:auto; justify-content:center; margin-top:2.5mm; padding:1.3mm 0; border:0; background:var(--accent);
@@ -37,7 +37,7 @@ h1 { grid-area:name; align-self:start; margin:1mm 0 0; font-size:2.9em; line-hei
                                font-family:inherit; font-weight:700; font-size:.72em; line-height:1.4; letter-spacing:.12em; }
 .contact .lang-switch button[aria-pressed="true"] { background:var(--ink); color:#fff; }
 .highlights { grid-area:stats; display:grid; grid-auto-flow:column; grid-auto-columns:1fr; gap:6mm; margin-top:9mm; }
-.highlights b { display:block; font-size:1.9em; font-weight:800; line-height:1.1; }
+.highlights b { display:block; font-size:1.9em; font-weight:700; line-height:1.1; }
 .highlights b::after { content:""; display:block; width:8mm; height:1mm; margin:1.2mm 0 1mm; background:var(--accent); }
 .highlights span { font-size:.78em; color:var(--muted); }
 
@@ -61,7 +61,7 @@ dt { margin:2.4mm 0 .3mm; font-size:.72em; font-weight:700; letter-spacing:.12em
 aside dl:has(a), aside h2:has(+ dl a) { display:none; }  /* the header lists the links */
 .kv { display:flex; justify-content:space-between; gap:2mm; margin:0 0 1.6mm; }
 .kv span:last-child { color:var(--muted); font-size:.86em; }
-.kv[style] { display:block; margin:0 0 2.4mm; font-weight:500; }
+.kv[style] { display:block; margin:0 0 2.4mm; font-weight:400; }
 .kv[style] span:last-child { display:none; }
 .kv[style]::after { content:""; display:block; height:1.2mm; margin-top:1mm;
                     background:linear-gradient(var(--accent), var(--accent)) 0/calc(var(--level) * 20%) 100% no-repeat, #dddbd3; }
@@ -72,8 +72,8 @@ main { padding:10mm 14mm 12mm 10mm; min-width:0; }
 h3 { margin:0; font-size:1.02em; font-weight:700; }
 h3 .at { display:none; }
 .experience h3 .title { display:block; }
-.experience h3 .company { font-size:.86em; font-weight:500; color:var(--muted); }
-.experience h3 .city { font-size:.86em; font-weight:500; color:var(--muted); }
+.experience h3 .company { font-size:.86em; font-weight:400; color:var(--muted); }
+.experience h3 .city { font-size:.86em; font-weight:400; color:var(--muted); }
 .when { display:inline-block; margin:.6mm 0 2mm; padding-bottom:.4mm; border-bottom:.6mm solid var(--accent);
         font-size:.76em; font-weight:700; letter-spacing:.04em; }
 /* Timeline: a hairline with a ringed dot per role. */
@@ -83,11 +83,11 @@ h3 .at { display:none; }
                             background:#fff; border:.6mm solid var(--ink); }
 ul { margin:0 0 2mm; padding-left:4mm; } li { margin-bottom:.6mm; } li::marker { color:var(--accent); }
 .tools { display:flex; flex-wrap:wrap; gap:1.2mm; padding:0; list-style:none; }
-.tools li { margin:0; padding:.3mm 2mm; font-size:.76em; font-weight:500; background:var(--side); border-left:.6mm solid var(--accent); }
+.tools li { margin:0; padding:.3mm 2mm; font-size:.76em; font-weight:400; background:var(--side); border-left:.6mm solid var(--accent); }
 .education .item { margin-bottom:3mm; }
 .education p { margin:0; color:var(--muted); }
 .testimonials .item { margin-bottom:4mm; padding-left:4mm; border-left:.8mm solid var(--accent); }
-.testimonials .when { border:0; padding:0; color:var(--muted); font-weight:500; }
+.testimonials .when { border:0; padding:0; color:var(--muted); font-weight:400; }
 blockquote { margin:0 0 1.5mm; color:#3a3a3a; font-style:italic; }
 
 @media screen and (max-width:760px) {
