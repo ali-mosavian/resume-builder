@@ -20,15 +20,15 @@ INK, ACCENT, MUTED, RULE, FILL = "222222", "1F3A5F", "6B7280", "C9D1DB", "F3F5F8
 
 
 def style(doc, name: str, base: str | None = None, *, size: float, color: str = INK, bold=False,
-          caps=False, spacing: float = 0, before: float = 0, after: float = 2, line: float = 1.15):
+          caps=False, spacing: float = 0, before: float = 0, after: float = 2, line: float = 1.15, font: str = FONT):
     styles = doc.styles
     s = styles[name] if name in [x.name for x in styles] else styles.add_style(name, WD_STYLE_TYPE.PARAGRAPH)
     if base:
         s.base_style = styles[base]
     f = s.font
-    f.name, f.size, f.bold, f.all_caps, f.italic = FONT, Pt(size), bold, caps, False
+    f.name, f.size, f.bold, f.all_caps, f.italic = font, Pt(size), bold, caps, False
     f.color.rgb = RGBColor.from_string(color)
-    s.element.rPr.get_or_add_rFonts().set(qn("w:eastAsia"), FONT)
+    s.element.rPr.get_or_add_rFonts().set(qn("w:eastAsia"), font)
     if spacing:
         sp = OxmlElement("w:spacing")
         sp.set(qn("w:val"), str(int(spacing * 20)))

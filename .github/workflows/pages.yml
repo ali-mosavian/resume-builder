@@ -30,7 +30,7 @@ jobs:
             name=$(sed -n 's/^download: //p' cv/cv_$lang.yaml)
             google-chrome --headless=new --disable-gpu --window-size=1280,1000 --virtual-time-budget=6000 \
               --no-pdf-header-footer --print-to-pdf=_site/$name.pdf "file://$PWD/_site/index.html#$lang"
-            uv run build_cv.py cv/cv_$lang.yaml --template templates/pro.docx --out _site/$name.docx
+            uv run build_cv.py cv/cv_$lang.yaml --template templates/bracket.docx --out _site/$name.docx
           done
           ls -l _site
       - uses: actions/upload-pages-artifact@v3
