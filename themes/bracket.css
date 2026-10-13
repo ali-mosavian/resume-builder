@@ -42,9 +42,10 @@ h1 { grid-area:name; align-self:start; margin:1mm 0 0; font-size:2.9em; line-hei
 .highlights span { font-size:.78em; color:var(--muted); }
 
 /* Section headings: a yellow diamond and a bold title, second-word yellow where there is one. */
-h2 { display:flex; align-items:center; gap:2.6mm; margin:7mm 0 3mm; font-size:1.35em; font-weight:700; }
+h2 { display:flex; align-items:center; gap:2.6mm; margin:7mm 0 4mm; font-size:1.35em; font-weight:700; }
 h2::before { content:""; flex:none; width:2.6mm; height:2.6mm; background:var(--accent); transform:rotate(45deg); }
 section > h2:first-child, aside > h2:first-child { margin-top:0; }
+main section + section { margin-top:10mm; }  /* air between summary, education, experience... */
 p { margin:0 0 3mm; }
 strong { font-weight:700; }
 a { color:inherit; }
@@ -53,7 +54,7 @@ a { color:inherit; }
 .grid { display:grid; grid-template-columns:64mm 1fr; }
 aside { background:var(--side); padding:10mm 8mm 12mm 10mm; font-size:.92em; }
 aside h2 { font-size:1.12em; }
-aside h2:not(:first-child) { margin-top:7mm; }
+aside h2:not(:first-child) { margin-top:9mm; }
 aside dl, aside p { margin:0; }
 dd { margin:0 0 .5mm; }
 dt { margin:2.4mm 0 .3mm; font-size:.72em; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
