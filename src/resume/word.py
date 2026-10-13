@@ -5,7 +5,7 @@ single-cell layout is one column: the main body, then the sidebar's sections.
 Restyle the template in Word; paragraph styles are referenced by style id below.
 
 Optional parts, used when the template has them (see docx_templates/bracket.py):
-placeholders CVPhoto ("{Photo <width cm> [gray]}"), CVContact and CVHighlights; styles CVRole + CVCompany
+placeholders CVPhoto ("{Photo <width cm> [gray] [round]}"), CVContact and CVHighlights; styles CVRole + CVCompany
 (role timeline), CVTool + CVTools (tool chips, no labels), CVSkill + CVSkillBar (level bars), CVSkillChips (skills
 as tool chips), CVKeyValue, CVQuote.
 The CV prefix keeps them from matching a template's own styles (Word has a built-in Quote).
@@ -131,6 +131,8 @@ def photo(p: Paragraph, cv: CV) -> None:
         run.add_picture(BytesIO(portrait(cv["dir"] / cv["photo"])), width=Cm(float(spec[1])))
         if "gray" in spec:
             run._r.xpath(".//a:blip")[0].append(OxmlElement("a:grayscl"))
+        if "round" in spec:
+            run._r.xpath(".//a:prstGeom")[0].set("prst", "ellipse")
 
 
 def contact(p: Paragraph, cv: CV) -> None:
