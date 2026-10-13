@@ -112,6 +112,11 @@ def main_body(cell, cv: dict, lb: dict, num_id: str) -> None:
     para(cell, "Heading1", lb["summary"])
     for text in cv["summary"]:
         para(cell, "Normal", text)
+    section(cell, "MainSectionsSpacing", "Heading1", lb["education"])
+    for ed in cv["education"]:
+        para(cell, "Heading2", f"{ed['degree']}, {ed['school']}, {ed['city']}")
+        para(cell, "Date", span(ed, lb))
+        para(cell, "Normal", ed.get("notes", ""))
     section(cell, "MainSectionsSpacing", "Heading1", lb["experience"])
     for job in cv["experience"]:
         para(cell, "Heading2", f"{job['title']} {lb['at']} {job['company']}, {job['city']}")
@@ -122,11 +127,6 @@ def main_body(cell, cv: dict, lb: dict, num_id: str) -> None:
         p = para(cell, "Normal")
         p.add_run(f"{lb['tools']}: ").italic = True
         p.add_run(", ".join(job["tools"]))
-    section(cell, "MainSectionsSpacing", "Heading1", lb["education"])
-    for ed in cv["education"]:
-        para(cell, "Heading2", f"{ed['degree']}, {ed['school']}, {ed['city']}")
-        para(cell, "Date", span(ed, lb))
-        para(cell, "Normal", ed.get("notes", ""))
     section(cell, "MainSectionsSpacing", "Heading1", lb["testimonials"])
     for t in cv["testimonials"]:
         para(cell, "Heading2", f"{t['name']} | {t['role']}")
