@@ -1,5 +1,3 @@
-/cv_*.docx
-/Ali_Mosavian_CV_*.docx
+/build/
+/assets/resume.io/
 __pycache__/
-/cv_*.html
-/cv_*.pdf
