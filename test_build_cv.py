@@ -138,8 +138,10 @@ with tempfile.TemporaryDirectory() as tmp:
     if chrome.exists():
         probe = ("<script>addEventListener('load',()=>setTimeout(()=>{const n=()=>[...document.querySelectorAll('.page')]"
                  ".map(p=>p.lang+(p.hidden?'-':'+')+p.querySelectorAll('.sheet').length).join(' ');const a=n();"
+                 "const x=!!document.querySelector('.page[lang=sv] .sheet:first-child [data-from=experience]');"
                  "document.querySelector('.page:not([hidden]) .lang-switch [data-lang=en]').click();"
-                 "setTimeout(()=>{document.title=a+'|'+n()},1000)},1500))</script>")
+                 "setTimeout(()=>{const y=!!document.querySelector('.page[lang=en] .sheet:first-child [data-from=experience]');"
+                 "document.title=a+'|'+n()+'|'+x+'|'+y},1000)},1500))</script>")
         page = Path(tmp) / "cv_switch.html"
         build_html(here / "cv" / "cv_en.yaml", page, "bracket", also=[here / "cv" / "cv_sv.yaml"])
         html = page.read_text(encoding="utf-8")
@@ -147,7 +149,10 @@ with tempfile.TemporaryDirectory() as tmp:
         page.write_text(html.replace("</body>", probe + "</body>"), encoding="utf-8")
         dom = subprocess.run([chrome, "--headless=new", "--disable-gpu", "--window-size=1280,1000", "--virtual-time-budget=6000",
                               "--dump-dom", page.as_uri() + "#sv"], capture_output=True, text=True, check=True).stdout
-        before, after = re.search("<title>(.*?)</title>", dom)[1].split("|")
+        before, after, sv_first, en_first = re.search("<title>(.*?)</title>", dom)[1].split("|")
+        # Experience once jumped to sheet 2, leaving a third of sheet 1 empty: in Swedish because the role's bottom
+        # padding was counted, in English because a long first bullet could not break across sheets.
+        assert sv_first == en_first == "true", f"Experience not on sheet 1: sv {sv_first}, en {en_first}"
         assert before.startswith("en-0 sv+") and not before.endswith("+0"), f"opened #sv: {before}"
         assert after.startswith("en+") and not after.startswith("en+0"), f"switched to en: {after}"
 
