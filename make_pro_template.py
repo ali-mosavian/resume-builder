@@ -28,7 +28,10 @@ def style(doc, name: str, base: str | None = None, *, size: float, color: str = 
     f = s.font
     f.name, f.size, f.bold, f.all_caps, f.italic = font, Pt(size), bold, caps, False
     f.color.rgb = RGBColor.from_string(color)
-    s.element.rPr.get_or_add_rFonts().set(qn("w:eastAsia"), font)
+    fonts = s.element.rPr.get_or_add_rFonts()
+    fonts.set(qn("w:eastAsia"), font)
+    for theme in ("w:asciiTheme", "w:hAnsiTheme", "w:eastAsiaTheme", "w:cstheme"):  # a theme font beats the named one
+        fonts.attrib.pop(qn(theme), None)
     if spacing:
         sp = OxmlElement("w:spacing")
         sp.set(qn("w:val"), str(int(spacing * 20)))

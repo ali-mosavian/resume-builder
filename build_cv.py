@@ -56,10 +56,12 @@ def section(cell, spacing_id: str, heading_id: str, title: str) -> None:
 def bullet_num_id(doc) -> str:
     """numId of the template's first bullet list, so bullets match the template."""
     numbering = doc.part.numbering_part.element
-    bullets = {a.get(qn("w:abstractNumId")) for a in numbering.findall(qn("w:abstractNum"))
-               if a.find(f"{qn('w:lvl')}/{qn('w:numFmt')}").get(qn("w:val")) == "bullet"}
+    # The first bullet definition, not the first instance of any bullet definition: a template's own list is
+    # often registered after python-docx's built-in ones.
+    first = next(a.get(qn("w:abstractNumId")) for a in numbering.findall(qn("w:abstractNum"))
+                 if a.find(f"{qn('w:lvl')}/{qn('w:numFmt')}").get(qn("w:val")) == "bullet")
     return next(n.get(qn("w:numId")) for n in numbering.findall(qn("w:num"))
-                if n.find(qn("w:abstractNumId")).get(qn("w:val")) in bullets)
+                if n.find(qn("w:abstractNumId")).get(qn("w:val")) == first)
 
 
 def bullet(cell, text: str, num_id: str) -> None:
@@ -133,9 +135,19 @@ def contact(p, cv: dict) -> None:
     drop(p)
 
 
+def inner_width(cell):
+    """The cell's width less its left and right margins: what a nested table may fill."""
+    pad = sum(int(w) for w in cell._tc.xpath("./w:tcPr/w:tcMar/*[self::w:left or self::w:right]/@w:w"))
+    return cell.width - Twips(pad)
+
+
 def highlights(p, cell, cv: dict) -> None:
     items = cv.get("highlights", [])
     t = cell.add_table(rows=2, cols=len(items))
+    for col, c in zip(t._tbl.tblGrid.gridCol_lst, t.columns):
+        col.w = int(inner_width(cell) / len(items))
+        for x in c.cells:
+            x.width = col.w
     for i, h in enumerate(items):
         for row, style_id, text in ((0, "CVHighlightValue", h["value"]), (1, "CVHighlightLabel", h["label"])):
             q = t.cell(row, i).paragraphs[0]
@@ -163,8 +175,7 @@ def header(doc, cv: dict) -> None:
 def bar(cell, level: int) -> None:
     """A skill level as a bar: SkillFill's shading over level/5 of the text width, SkillTrack's over the rest."""
     fill, track = (cell.part.styles.element.get_by_id(s).xpath(".//w:shd/@w:fill")[0] for s in ("CVSkillFill", "CVSkillTrack"))
-    pad = sum(int(w) for w in cell._tc.xpath("./w:tcPr/w:tcMar/*[self::w:left or self::w:right]/@w:w"))
-    inner = cell.width - Twips(pad)
+    inner = inner_width(cell)
     parts = [(level, fill)] + [(5 - level, track)] * (level < 5)
     t = cell.add_table(rows=1, cols=len(parts))
     t._tbl.tblPr.get_or_add_tblLayout().set(qn("w:type"), "fixed")
@@ -221,7 +232,7 @@ def main_body(cell, cv: dict, lb: dict, num_id: str) -> None:
             para(cell, "CVCompany", f"{job['company']}, {job['city']}")
         else:
             para(cell, "Heading2", f"{job['title']} {lb['at']} {job['company']}, {job['city']}")
-        para(cell, "Date", span(job, lb))
+        para(cell, "CVRoleDate" if has(cell, "CVRoleDate") else "Date", span(job, lb))
         if not chips:
             para(cell, "Normal").add_run(lb["achievements"]).italic = True
         for text in job["bullets"]:

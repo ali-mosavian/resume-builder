@@ -7,13 +7,18 @@
 Beyond the style ids every template has, it opts into build_cv.py's optional parts: Photo, Contact and
 Highlights placeholders, skill bars, a role timeline, tool chips and quote bars.
 """
+import uuid
 from pathlib import Path
 
 from docx import Document
+from lxml import etree
 from docx.enum.style import WD_STYLE_TYPE
-from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT, WD_TABLE_ALIGNMENT
+from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT, WD_ROW_HEIGHT_RULE, WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_UNDERLINE
 from docx.oxml import parse_xml
+from docx.opc.constants import RELATIONSHIP_TYPE as RT
+from docx.opc.packuri import PackURI
+from docx.opc.part import Part
 from docx.oxml.ns import nsdecls, qn
 from docx.shared import Cm, Pt, RGBColor
 
@@ -23,8 +28,12 @@ FONT = "Montserrat"
 INK, MUTED, ACCENT, SIDE, TRACK, LINE = "262626", "7A7A7A", "F6B92B", "F4F3EF", "DDDBD3", "D9D9D9"
 
 
-def font(**kw):
-    return style(font=FONT, **kw)
+LINE_GAP = 1.219  # Montserrat's line height per em: Word's "multiple" spacing scales it, CSS line-height doesn't
+
+
+def font(*, line: float = 1.6, **kw):
+    """A paragraph style in Montserrat; line is CSS line-height (a multiple of the font size)."""
+    return style(font=FONT, line=line / LINE_GAP, **kw)
 
 
 # Schema order of w:pPr children that may follow the ones added here; Word rejects out-of-order elements.
@@ -65,7 +74,7 @@ def char_style(doc, name: str, *, color: str | None = None, fill: str | None = N
 def marks(doc) -> dict[str, str]:
     """Bullet list first (build_cv.py takes the first bullet numbering), then the diamond and ring marks."""
     numbering = doc.part.numbering_part.element
-    defs = {"list": ("•", ACCENT, 284, 227, 9), "diamond": ("◆", ACCENT, 340, 340, 8), "ring": ("○", INK, 340, 340, 9)}
+    defs = {"list": ("•", ACCENT, 624, 284, 10), "diamond": ("◆", ACCENT, 400, 400, 11), "ring": ("○", INK, 340, 340, 12)}
     for i, (key, (glyph, color, left, hanging, size)) in enumerate(defs.items()):
         n = 90 + i
         numbering.insert(i, parse_xml(
@@ -114,107 +123,169 @@ def table(container, widths: list[float], rows: int = 1):
     return t
 
 
+def embed_font(doc, family: str, files: dict[str, Path]) -> None:
+    """Embed TrueType files (keys: Regular, Bold, Italic, BoldItalic) so Word shows the font without it installed.
+
+    Word stores each as an obfuscated .odttf: the first 32 bytes XORed with its GUID key, bytes reversed.
+    """
+    table = doc.part.part_related_by(RT.FONT_TABLE)
+    root = parse_xml(table.blob)
+    for old in root.findall(qn("w:font")):
+        if old.get(qn("w:name")) == family:
+            root.remove(old)
+    font = parse_xml(f'<w:font {nsdecls("w")} w:name="{family}"><w:charset w:val="00"/><w:family w:val="swiss"/>'
+                     '<w:pitch w:val="variable"/></w:font>')
+    for i, (kind, path) in enumerate(files.items(), 1):
+        guid = str(uuid.uuid4()).upper()
+        key = bytes.fromhex(guid.replace("-", ""))[::-1]
+        data = bytearray(path.read_bytes())
+        for j in range(32):
+            data[j] ^= key[j % 16]
+        part = Part(PackURI(f"/word/fonts/font{i}.odttf"), "application/vnd.openxmlformats-officedocument.obfuscatedFont",
+                    bytes(data), doc.part.package)
+        el = parse_xml(f'<w:embed{kind} {nsdecls("w", "r")} r:id="{table.relate_to(part, RT.FONT)}" w:fontKey="{{{guid}}}"/>')
+        font.append(el)
+    root.append(font)
+    table._blob = etree.tostring(root, xml_declaration=True, encoding="UTF-8", standalone=True)
+    settings = doc.settings.element
+    settings.find(qn("w:zoom")).addnext(parse_xml(f'<w:embedTrueTypeFonts {nsdecls("w")}/>'))  # schema: right after zoom
+
+
+WPS = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
+
+
+def rect(p, x: float, y: float, w: float, h: float, color: str, shape_id: int) -> None:
+    """A filled rectangle behind the text, placed on the page in mm: what CSS draws with positioned boxes."""
+    emu = lambda mm: int(mm * 36000)  # noqa: E731
+    p._p.append(parse_xml(
+        f'<w:r {nsdecls("w", "wp", "a")} xmlns:wps="{WPS}"><w:drawing>'
+        f'<wp:anchor distT="0" distB="0" distL="0" distR="0" simplePos="0" relativeHeight="{shape_id}" behindDoc="1" '
+        f'locked="1" layoutInCell="0" allowOverlap="1"><wp:simplePos x="0" y="0"/>'
+        f'<wp:positionH relativeFrom="page"><wp:posOffset>{emu(x)}</wp:posOffset></wp:positionH>'
+        f'<wp:positionV relativeFrom="page"><wp:posOffset>{emu(y)}</wp:posOffset></wp:positionV>'
+        f'<wp:extent cx="{emu(w)}" cy="{emu(h)}"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:wrapNone/>'
+        f'<wp:docPr id="{shape_id}" name="Shape {shape_id}"/><wp:cNvGraphicFramePr/>'
+        f'<a:graphic><a:graphicData uri="{WPS}"><wps:wsp><wps:cNvSpPr/><wps:spPr>'
+        f'<a:xfrm><a:off x="0" y="0"/><a:ext cx="{emu(w)}" cy="{emu(h)}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom>'
+        f'<a:solidFill><a:srgbClr val="{color}"/></a:solidFill><a:ln><a:noFill/></a:ln></wps:spPr><wps:bodyPr/></wps:wsp>'
+        f'</a:graphicData></a:graphic></wp:anchor></w:drawing></w:r>'))
+
+
+# Page geometry in mm, as themes/bracket.css lays out an A4 sheet.
+TOP, HEAD1, HEAD2, SIDE_W = 7, 45, 24, 64  # header rows: name block, then headline numbers; sidebar width
+SIDE_Y = TOP + HEAD1 + HEAD2  # where the sidebar starts on page 1
+
+
 def main() -> None:
     doc = Document()
     sec = doc.sections[0]
     sec.page_width, sec.page_height = Cm(21), Cm(29.7)
     sec.left_margin = sec.right_margin = Cm(0)
-    sec.top_margin, sec.bottom_margin = Cm(1.2), Cm(1.4)
+    sec.top_margin, sec.bottom_margin = Cm(TOP / 10), Cm(1.2)
     sec.header_distance, sec.footer_distance = Cm(0), Cm(0)
+    sec.different_first_page_header_footer = True
     ids = marks(doc)
 
-    font(doc=doc, name="Normal", size=9, after=4, line=1.3)
-    font(doc=doc, name="Name", base="Normal", size=27, bold=True, caps=True, after=0, line=1.0)
-    font(doc=doc, name="Job Title", base="Normal", size=7, color=MUTED, caps=True, spacing=1.3, after=3)
+    font(doc=doc, name="Normal", size=9.5, after=4, line=1.6)
+    font(doc=doc, name="Name", base="Normal", size=27.5, bold=True, caps=True, after=0, line=1.0)
+    font(doc=doc, name="Job Title", base="Normal", size=6.8, color=MUTED, caps=True, spacing=1.3, after=3)
     font(doc=doc, name="CV Photo", base="Normal", size=2, after=0, line=1.0)
     contact = font(doc=doc, name="CV Contact", base="Normal", size=8, bold=True, before=0, after=0, line=1.0)
     contact.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.RIGHT
     border(contact, "top between bottom", INK, 6, 5)
     font(doc=doc, name="CV Highlights", base="Normal", size=2, after=0)
-    value = font(doc=doc, name="CV Highlight Value", base="Normal", size=18, bold=True, after=3, line=1.0)
+    value = font(doc=doc, name="CV Highlight Value", base="Normal", size=18, bold=True, after=4, line=1.0)
     value.font.underline = WD_UNDERLINE.THICK
     value.element.rPr.find(qn("w:u")).set(qn("w:color"), ACCENT)
-    font(doc=doc, name="CV Highlight Label", base="Normal", size=7.5, color=MUTED, after=0)
+    font(doc=doc, name="CV Highlight Label", base="Normal", size=7.4, color=MUTED, after=0)
 
-    h1 = font(doc=doc, name="Heading 1", base="Normal", size=13, bold=True, before=0, after=8)
+    h1 = font(doc=doc, name="Heading 1", base="Normal", size=12.8, bold=True, before=0, after=8, line=1.2)
     numbered(h1, ids["diamond"])
-    font(doc=doc, name="Heading 2", base="Normal", size=9.5, bold=True, before=4, after=0)
-    role = font(doc=doc, name="CV Role", base="Heading 2", size=9.5, bold=True, before=8, after=0)
+    font(doc=doc, name="Heading 2", base="Normal", size=9.7, bold=True, before=4, after=0)
+    role = font(doc=doc, name="CV Role", base="Heading 2", size=9.7, bold=True, before=8, after=0)
     numbered(role, ids["ring"])
     company = font(doc=doc, name="CV Company", base="Normal", size=8.2, color=MUTED, after=1)
     company.paragraph_format.left_indent = Cm(0.6)
-    date = font(doc=doc, name="Date", base="Normal", size=7.2, bold=True, spacing=0.3, after=5)
+    date = font(doc=doc, name="Date", base="Normal", size=7.2, bold=True, spacing=0.3, after=6)
     date.font.underline = WD_UNDERLINE.THICK
     date.element.rPr.find(qn("w:u")).set(qn("w:color"), ACCENT)
-    h3 = font(doc=doc, name="Heading 3", base="Normal", size=10.5, bold=True, before=0, after=5)
+    role_date = font(doc=doc, name="CV Role Date", base="Date", size=7.2, bold=True, spacing=0.3, after=6)
+    role_date.font.underline = WD_UNDERLINE.THICK
+    role_date.element.rPr.find(qn("w:u")).set(qn("w:color"), ACCENT)
+    role_date.paragraph_format.left_indent = Cm(0.6)  # under the role title, past the ring
+    h3 = font(doc=doc, name="Heading 3", base="Normal", size=10.6, bold=True, before=0, after=6, line=1.2)
     numbered(h3, ids["diamond"])
-    font(doc=doc, name="Heading 4", base="Normal", size=6.8, color=MUTED, bold=True, caps=True, spacing=1.1, before=5, after=0)
-    font(doc=doc, name="Sidebar Text", base="Normal", size=8.5, after=1)
-    kv = font(doc=doc, name="CV Key Value", base="Normal", size=8.5, after=3)
+    font(doc=doc, name="Heading 4", base="Normal", size=6.6, color=MUTED, bold=True, caps=True, spacing=1.1, before=6, after=0)
+    font(doc=doc, name="Sidebar Text", base="Normal", size=8.7, after=1)
+    kv = font(doc=doc, name="CV Key Value", base="Normal", size=8.7, after=3)
     kv.paragraph_format.tab_stops.add_tab_stop(Cm(4.6), alignment=2)  # right, at the sidebar text edge
-    font(doc=doc, name="CV Skill", base="Normal", size=8.5, after=2)
-    font(doc=doc, name="CV Skill Bar", base="Normal", size=1, after=5, line=1.0)
-    font(doc=doc, name="List Paragraph", base="Normal", size=9, after=2)
-    tools = font(doc=doc, name="CV Tools", base="Normal", size=7, after=8, line=1.7)
+    font(doc=doc, name="CV Skill", base="Normal", size=8.7, after=2)
+    font(doc=doc, name="CV Skill Bar", base="Normal", size=1, after=6, line=1.0)
+    lst = font(doc=doc, name="List Paragraph", base="Normal", size=9.5, after=2)
+    lst.paragraph_format.left_indent = Cm(0.6)
+    tools = font(doc=doc, name="CV Tools", base="Normal", size=7.2, after=10, line=1.8)
     tools.paragraph_format.left_indent = Cm(0.6)
-    quote = font(doc=doc, name="CV Quote", base="Normal", size=9, color="3A3A3A", after=3)
+    quote = font(doc=doc, name="CV Quote", base="Normal", size=9.5, color="3A3A3A", after=3)
     quote.font.italic = True
     quote.paragraph_format.left_indent = Cm(0.4)
     border(quote, "left", ACCENT, 18, 8)
-    font(doc=doc, name="Sidebar Sections Spacing", base="Normal", size=4, after=14)
-    font(doc=doc, name="Main Sections Spacing", base="Normal", size=4, after=22)
+    font(doc=doc, name="Sidebar Sections Spacing", base="Normal", size=4, after=16)
+    font(doc=doc, name="Main Sections Spacing", base="Normal", size=4, after=26)
     char_style(doc, "CV Accent", color=ACCENT)
     char_style(doc, "CV Muted", color=MUTED, size=7.5)
-    char_style(doc, "CV Tool", fill=SIDE, size=7)
+    char_style(doc, "CV Tool", fill=SIDE, size=7.2)
     char_style(doc, "CV Skill Fill", fill=ACCENT)
     char_style(doc, "CV Skill Track", fill=TRACK)
-    for s in ("CV Contact", "CV Role", "CV Company", "Date", "Heading 1", "Heading 3"):
+    for s in ("CV Contact", "CV Role", "CV Company", "Date", "CV Role Date", "Heading 1", "Heading 3"):
         doc.styles[s].paragraph_format.keep_with_next = True
 
-    # Header: [bracket around photo | role over name | contact], headline numbers below.
-    head = table(doc, [4.7, 9.6, 6.0], rows=2)
-    head._tbl.tblPr.insert_element_before(parse_xml(f'<w:tblInd {nsdecls("w")} w:w="{int(0.7 * 567)}" w:type="dxa"/>'),  # bracket 7 mm in
-                                          "w:tblBorders", "w:shd", "w:tblLayout", "w:tblCellMar", "w:tblLook")
+    # Header rows of fixed height, so page 1's sidebar shape starts right under the headline numbers.
+    head = table(doc, [5.7, 9.3, 6.0], rows=2)
+    for row, mm in zip(head.rows, (HEAD1, HEAD2)):
+        row.height, row.height_rule = Cm(mm / 10), WD_ROW_HEIGHT_RULE.EXACTLY
     photo_c, name_c, contact_c = head.rows[0].cells
-    cell(photo_c, 4.7, pad=(0.5, 0, 0.3, 0.6), borders={"top": (ACCENT, 96), "left": (ACCENT, 96)},
-         valign=WD_CELL_VERTICAL_ALIGNMENT.CENTER)
-    cell(name_c, 9.6, pad=(0.9, 0.4, 0.3, 0.2), valign=WD_CELL_VERTICAL_ALIGNMENT.CENTER)
-    cell(contact_c, 6.0, pad=(0.9, 1.4, 0.3, 0.4), valign=WD_CELL_VERTICAL_ALIGNMENT.CENTER)
-    frame = table(photo_c, [3.4])  # the photo's yellow offset block
-    cell(frame.rows[0].cells[0], 3.4, borders={"right": (ACCENT, 96), "bottom": (ACCENT, 96)})
-    photo_c._tc.remove(photo_c.paragraphs[0]._p)
-    photo_c.paragraphs[-1]._p.style = "CVPhoto"
-    frame.rows[0].cells[0].paragraphs[0]._p.style = "CVPhoto"
-    frame.rows[0].cells[0].paragraphs[0].add_run("{Photo 3.1 gray}")
+    cell(photo_c, 5.7, pad=(0.9, 0, 0, 1.6))
+    cell(name_c, 9.3, pad=(0.9, 0.4, 0, 0.6), valign=WD_CELL_VERTICAL_ALIGNMENT.CENTER)
+    cell(contact_c, 6.0, pad=(0.9, 1.4, 0, 0.4), valign=WD_CELL_VERTICAL_ALIGNMENT.CENTER)
+    photo_c.paragraphs[0]._p.style = "CVPhoto"
+    photo_c.paragraphs[0].add_run("{Photo 3.1 gray}")
     name_c.paragraphs[0]._p.style = "JobTitle"
     name_c.paragraphs[0].add_run("{Job Title}")
     name_c.add_paragraph(style="Name").add_run("{Name}")
     contact_c.paragraphs[0]._p.style = "CVContact"
     contact_c.paragraphs[0].add_run("{Contact}")
     stats = head.rows[1].cells[0].merge(head.rows[1].cells[2])
-    cell(stats, 20.3, pad=(0.6, 1.4, 0.8, 0.9))
+    cell(stats, 21, pad=(0.4, 1.4, 0, 1.6))
     stats.paragraphs[0]._p.style = "CVHighlights"
     stats.paragraphs[0].add_run("{Highlights}")
 
-    # Body: light sidebar, main column.
+    # Body: sidebar column (its gray is a shape, see below) and main column.
     doc.add_paragraph(style="CV Photo")  # keeps Word from merging the two tables
-    lay = table(doc, [6.4, 14.6])
+    lay = table(doc, [SIDE_W / 10, 21 - SIDE_W / 10])
     side, main_c = lay.rows[0].cells
-    cell(side, 6.4, fill=SIDE, pad=(1.0, 0.8, 1.2, 1.0))
-    cell(main_c, 14.6, pad=(1.0, 1.4, 1.2, 1.0))
-    side.paragraphs[0]._p.style = "SidebarSectionsSpacing"
+    cell(side, SIDE_W / 10, pad=(0.3, 0.8, 0, 1.0))
+    cell(main_c, 21 - SIDE_W / 10, pad=(1.0, 1.4, 0, 1.0))
+    side.paragraphs[0]._p.style = "CVPhoto"  # build_cv adds a section spacer of its own
     doc.add_paragraph(style="CV Photo")  # Word needs a paragraph between the last table and the section end
 
-    # Every page ends in a yellow strip at the bottom right.
-    foot = sec.footer.paragraphs[0]
-    foot.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    foot.paragraph_format.space_after = Pt(0)
-    strip = foot.add_run(" " * 22)
-    strip.font.size = Pt(13)
-    strip._r.get_or_add_rPr().append(parse_xml(f'<w:shd {nsdecls("w")} w:val="clear" w:color="auto" w:fill="{ACCENT}"/>'))
+    # Page decoration as shapes behind the text, repeated by the page headers. Page 1: the bracket, its
+    # black square, the photo's offset block, the sidebar from under the header down. Later pages: the
+    # sidebar from the top, and the body starts 14 mm down, as the web's later sheets do.
+    first = sec.first_page_header.paragraphs[0]
+    first._p.style = "CVPhoto"
+    for i, (x, y, w, h, color) in enumerate([(7, 7, 60, 5, ACCENT), (7, 7, 5, 30, ACCENT), (14, 12, 2.2, 2.2, INK),
+                                              (19, 19, 31, 31, ACCENT), (0, SIDE_Y, SIDE_W, 297 - SIDE_Y, SIDE),
+                                              (188, 292, 22, 5, ACCENT)]):
+        rect(first, x, y, w, h, color, 1001 + i)
+    later = sec.header.paragraphs[0]
+    later._p.style = "CVPhoto"
+    later.paragraph_format.space_before = Cm(1.3)
+    for i, (x, y, w, h, color) in enumerate([(0, 0, SIDE_W, 297, SIDE), (188, 292, 22, 5, ACCENT)]):
+        rect(later, x, y, w, h, color, 1101 + i)
     zoom = doc.settings.element.find(qn("w:zoom"))
-    if zoom is not None:
-        zoom.set(qn("w:percent"), "100")  # python-docx's blank document omits this required attribute
+    zoom.set(qn("w:percent"), "100")  # python-docx's blank document omits this required attribute
+    fonts = Path(__file__).parent / "assets" / "fonts"
+    embed_font(doc, FONT, {kind: fonts / f"{FONT}-{kind}.ttf" for kind in ("Regular", "Bold", "Italic", "BoldItalic")})
     doc.save(Path(__file__).parent / "templates" / "bracket.docx")
 
 
