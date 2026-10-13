@@ -60,13 +60,13 @@ for template, color in (("pro", "1F3A5F"), ("bracket", "F6B92B")):
         used = numbering.xpath(f"./w:abstractNum[@w:abstractNumId='{abstract}']/w:lvl[@w:ilvl='0']/w:rPr/w:color/@w:val")
         assert used == [color], f"{template}: bullets coloured {used}, template says {color}"
 
-# Dates were printed "JUN 2024 — NU": the CV uses "-", never em or en dashes, in any output.
+# Dates were printed "JUN 2024 <em dash> NU": the CV uses "-", never em or en dashes, in any output.
 with tempfile.TemporaryDirectory() as tmp:
     from build_html import build as build_html
     build(here / "cv" / "cv_sv.yaml", Path(tmp) / "cv.docx", here / "templates" / "bracket.docx")
     build_html(here / "cv" / "cv_en.yaml", Path(tmp) / "cv.html", "bracket", also=[here / "cv" / "cv_sv.yaml"])
     out = Document(Path(tmp) / "cv.docx").element.xml + (Path(tmp) / "cv.html").read_text(encoding="utf-8")
-    assert not re.search("[—–]", out), f"dash in output: {re.search('.{20}[—–].{20}', out)[0]!r}"
+    assert not re.search("[\u2013\u2014]", out), f"dash in output: {re.search('.{20}[\u2013\u2014].{20}', out)[0]!r}"
 
 # Word glues a no-break space to the spaces around it, so tool chips (padded with no-break spaces) had no break
 # point between them and Word broke chips mid-word ("SQLAlchem|y"). Each separator carries a zero-width space.
