@@ -1,8 +1,10 @@
-// Cinematic effects: reveals, the role in focus, and a scroll-progress fallback for browsers without
-// CSS scroll-driven animations. Scene timing lives in cinematic.css; the vh ranges below mirror it.
+// Cinematic effects. Narrow screens get the film: reveals, the role in focus, and a scroll-progress fallback for
+// browsers without CSS scroll-driven animations (scene timing lives in cinematic.css; the vh ranges below mirror it).
+// Wide screens get A4 sheets (cinematic.sheets.js): sheets rise into view and the role at the reading line lights up.
 (() => {
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (calm) return;  // static cut: nothing moves, nothing hides
+  if (matchMedia("(min-width: 860px)").matches) return sheets();
   const root = document.documentElement;
   root.classList.add("cine");
   const pages = [...document.querySelectorAll(".page")];
@@ -59,4 +61,27 @@
   addEventListener("resize", onScroll);
   for (const b of document.querySelectorAll(".lang-switch button")) b.addEventListener("click", onScroll);
   onScroll();
+
+  function sheets() {
+    const seen = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) { e.target.classList.add("in"); seen.unobserve(e.target); }
+    }, { threshold: .02 });
+    new MutationObserver((muts) => {
+      for (const m of muts) for (const n of m.addedNodes) if (n.classList?.contains("sheet")) { n.classList.add("pre"); seen.observe(n); }
+    }).observe(document.body, { childList: true, subtree: true });
+
+    let queued = false;
+    const focus = () => {
+      queued = false;
+      const page = document.querySelector(".page:not([hidden])"), line = innerHeight * .4;
+      let best = null, dist = Infinity;
+      for (const it of page?.querySelectorAll(".sheet .experience .item:not(.cont)") ?? []) {
+        const r = it.getBoundingClientRect(), d = r.top > line ? r.top - line : r.bottom < line ? line - r.bottom : 0;
+        if (d < dist) { dist = d; best = it; }
+      }
+      for (const it of document.querySelectorAll(".experience .item.focus")) if (it !== best) it.classList.remove("focus");
+      if (best && dist < innerHeight * .3) best.classList.add("focus");
+    };
+    addEventListener("scroll", () => queued || ((queued = true), requestAnimationFrame(focus)), { passive: true });
+  }
 })();

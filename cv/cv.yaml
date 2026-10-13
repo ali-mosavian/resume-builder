@@ -1,0 +1,658 @@
+langs: [en, sv]
+name: Ali Mosavian
+title:
+  en: Senior Machine Learning/AI Contractor
+  sv: Senior Machine Learning/AI-konsult
+location:
+  en: Stockholm, Sweden
+  sv: Stockholm, Sverige
+born: 1982
+photo: ../assets/photo.png
+download: ali_mosavian-resume-{lang}
+nationality:
+  en: Swedish
+  sv: Svensk
+highlights:
+- value: 20+
+  en:
+    label: years programming
+  sv:
+    label: år av programmering
+- value: '17'
+  en:
+    label: years in machine learning
+  sv:
+    label: år inom machine learning
+- value: 42+
+  en:
+    label: markets, one model
+  sv:
+    label: marknader, en modell
+- en:
+    value: ex-CTO
+    label: led five teams
+  sv:
+    value: f.d. CTO
+    label: ledde fem team
+links:
+- label: LinkedIn
+  url: https://www.linkedin.com/in/ali-mosavian-7a27457
+- label: GitHub
+  url: https://github.com/ali-mosavian
+- url: https://www.42labs.ai/
+  en:
+    label: Website
+  sv:
+    label: Webbplats
+skills:
+- level: 5
+  aka: [LLM, language models, språkmodeller, GPT-3, GPT-4, GPT-4o, RAG]
+  en:
+    name: Large Language Models
+  sv:
+    name: Large Language Models (LLM)
+- level: 5
+  en:
+    name: Generative AI
+    aka: [generative AI, generativa AI, RAG]
+  sv:
+    name: Generativ AI
+    aka: [generative AI, generativ AI, generativa AI, RAG]
+- name: Machine Learning/AI
+  level: 5
+- name: Python
+  level: 5
+- name: C/C++
+  level: 4
+- name: JavaScript
+  level: 3
+- name: Java
+  level: 4
+- name: Git
+  level: 5
+- name: Snowflake
+  level: 4
+- name: BigQuery
+  level: 4
+- name: Postgres/MySQL
+  level: 4
+- name: Google Cloud Platform
+  level: 3
+  aka: [GCP]
+- name: Amazon Web Services
+  level: 3
+  aka: [AWS]
+languages:
+- en:
+    name: Swedish
+    level: Native speaker
+  sv:
+    name: Svenska
+    level: Modersmål
+- en:
+    name: English
+    level: Highly proficient
+  sv:
+    name: Engelska
+    level: Mycket god
+- en:
+    name: Farsi
+    level: Highly proficient
+  sv:
+    name: Persiska
+    level: Mycket god
+hobbies:
+  en: Working out, travel, reading & learning about anything and everything
+  sv: Träning, resor, läsning och att lära mig om allt möjligt
+summary:
+  en:
+  - Experienced **hands-on** engineer, machine learning/AI expert, generalist and ex-CTO with passion for finding
+    efficient and unconventional ways of going from an **idea to a product** by being **pragmatic, focused, out-of-the-box
+    thinking and above all moving fast.**
+  - A life long learner with over two decades of programming experience, working in the IT industry since 2005 and
+    working with machine learning/deep learning since 2009. The intersection where internet scale systems, machine
+    learning/AI meet to make up unforgettable user experience is where I feel at most home.
+  sv:
+  - Erfaren **hands-on**-ingenjör, expert inom machine learning/AI, generalist och före detta CTO med passion för
+    att hitta effektiva och okonventionella vägar från **idé till produkt** genom att vara **pragmatisk, fokuserad,
+    tänka utanför boxen och framför allt röra mig snabbt.**
+  - Livslångt lärande med över två decenniers programmeringserfarenhet, verksam i IT-branschen sedan 2005 och inom
+    machine learning/deep learning sedan 2009. Där storskaliga internetsystem och machine learning/AI möts för att
+    skapa oförglömliga användarupplevelser är där jag känner mig mest hemma.
+experience:
+- company: H&M Group
+  city: Stockholm
+  start: 2025-09
+  end: null
+  tools: [Python, OR-Tools CP-SAT, LightGBM, SHAP, scikit-learn, statsmodels, Numba, Pandas, PyArrow, DuckDB, BigQuery,
+    dbt, SQLFluff, Lark, Pydantic, Typer, Docker, Terraform, Cloud Run, GCS, GitHub Actions, Pytest, MyPy/Ty, Ruff,
+    Claude]
+  en:
+    title: Senior AI Engineer (Contractor)
+    bullets:
+    - '**Led the re-architecture and rewrite** of a proof-of-concept **store capacity optimization engine** into
+      a production system (81% of all changes), deciding which articles and pieces go on which fixture to fill each
+      store optimally. Designed a **domain-specific language for modelling store furniture** that replaced thousands
+      of lines of special-case code, on top of a two-stage **constraint solver**; grew the test suite from 5 to
+      100+ files.'
+    - 'Designed and built a **shop-floor stock prediction system** (98% of all changes) covering ~3,350 stores without
+      RFID: a gradient-boosted hurdle model on **161 engineered features** trained on **74M rows** from 686 RFID
+      stores, fed by a **custom data lineage and transformation pipeline** processing **6.6 TB** per training run.'
+    - '**Re-engineered the store-fullness data platform** in dbt (43% of all changes): introduced **contract-enforced
+      serving tables**, retired legacy models and fixed a fundamental flaw in the published stock-ratio metric.'
+  sv:
+    title: Senior AI Engineer (konsult)
+    bullets:
+    - '**Ledde omarkitekturen och omskrivningen** av en proof of concept för **store capacity optimization** till
+      ett produktionssystem (81 % av alla ändringar), som avgör vilka artiklar och plagg som placeras på vilken
+      inredning för att fylla varje butik optimalt. Designade ett **domain-specific language (DSL) för att modellera
+      butiksinredning** som ersatte tusentals rader specialfallskod, ovanpå en tvåstegs **constraint solver**; utökade
+      testsviten från 5 till 100+ filer.'
+    - 'Designade och byggde ett **system för att estimera shop-floor lager** (98 % av alla ändringar) för ~3 350
+      butiker utan RFID: en gradient boosted hurdle-modell med **161 features** tränad på **74 miljoner rader**
+      från 686 RFID-butiker, matad av en **egenutvecklad data lineage- och transformationspipeline** som bearbetar
+      **6,6 TB** per träningskörning.'
+    - '**Byggde om dataplattformen för butiksfyllnadsgrad** i dbt (43 % av alla ändringar): införde **serving-tabeller
+      med data contracts**, fasade ut legacy-modeller och rättade ett grundläggande fel i det publicerade stock
+      ratio-måttet.'
+- company: Aloi AI
+  city: Stockholm
+  start: 2025-04
+  end: 2025-07
+  tools: [Azure OpenAI, Azure Cohere, Python, FastAPI, Docker, MyPy, Ruff, PGVector, Postgres, Pytest, SQLAlchemy]
+  en:
+    title: Senior AI Engineer (Contractor)
+    bullets:
+    - Enhanced **retrieval-augmented generation (RAG)** pipelines for Aloi’s AI-driven legal clause completion product,
+      improving accuracy and relevance for contract drafting support.
+    - Developed advanced content extraction and chunking strategies for various **legal documents (docx, pptx, pdf
+      etc)**, including automated agreement-type classification and structure-preserving parsing.
+    - Built a specialized pipeline for **investor presentations**, leveraging visual element detection and asynchronous
+      processing to rapidly locate relevant pages and extract key data.
+    - Significantly improved RAG retrieval quality using **re-ranking** and other retrieval optimization techniques,
+      boosting downstream clause completion performance.
+  sv:
+    title: Senior AI Engineer (konsult)
+    bullets:
+    - Förbättrade **retrieval-augmented generation (RAG)**-pipelines i Alois AI-drivna produkt för clause completion,
+      med högre träffsäkerhet och relevans vid avtalsskrivande.
+    - Utvecklade avancerade strategier för content extraction och chunking för olika **juridiska dokument (docx,
+      pptx, pdf m.m.)**, inklusive automatisk klassificering av avtalstyp och strukturbevarande parsing.
+    - Byggde en specialiserad pipeline för **investerarpresentationer**, med detektering av visuella element och
+      asynkron bearbetning för att snabbt hitta relevanta sidor och extrahera nyckeldata.
+    - Förbättrade RAG-retrievalens kvalitet avsevärt med **re-ranking** och andra optimeringstekniker, vilket höjde
+      prestandan i clause completion.
+- company: Nordea AB, Financial Crime Prevention Unit
+  city: Stockholm
+  start: 2025-01
+  end: 2025-04
+  tools: [Python, MyPy, Ruff, Pytest, Arize AI Phoenix, LangGraph, Chainlit, Anthropic Claude, Docker, AWS, Hadoop]
+  en:
+    title: Senior AI Engineer (Contractor)
+    bullets:
+    - Completely **re-architected, re-wrote and productionalized** an existing toy proof of concept tool (to a working
+      production system) to **automate detection of financial crime** based on stated and actual transactional behavior.
+  sv:
+    title: Senior AI Engineer (konsult)
+    bullets:
+    - Gjorde om arkitekturen, skrev om och **produktionssatte** ett befintligt proof of concept-verktyg för att
+      **automatisera detektion av finansiell brottslighet** utifrån uppgivet och faktiskt transaktionsbeteende.
+- company: Byggfakta
+  city: Stockholm
+  start: 2024-06
+  end: 2025-01
+  tools: [Python, Langchain, Chainlit, GPT-4o, function calling, Catboost (gradient boosted decision trees), FastAPI,
+    DuckDB, SQL Server, Azure, Docker]
+  en:
+    title: Senior AI Engineer (Contractor)
+    bullets:
+    - Developed a **conversational AI** to streamline project searches, replacing a complex filter system with a
+      more user-friendly and intuitive interface.
+    - Enabled users to search for projects with minimal input, reducing the cognitive load associated with navigating
+      numerous filters and categories.
+    - Developed a **hybrid recommendations system** to give more relevant construction project recommendations to
+      customers.
+    - Developed a (construction) **role predictor** for a projects.
+  sv:
+    title: Senior AI Engineer (konsult)
+    bullets:
+    - Utvecklade en **conversational AI** för projektsökning som ersatte ett komplext filtersystem med ett mer användarvänligt
+      och intuitivt gränssnitt.
+    - Gjorde det möjligt för användare att söka projekt med minimal input, vilket minskade den kognitiva belastningen
+      av att navigera bland många filter och kategorier.
+    - Utvecklade ett **hybrid recommender system** som ger kunderna mer relevanta rekommendationer av byggprojekt.
+    - Utvecklade en **modell som predikterar roller i byggprojekt**.
+- company: EQT Partners
+  city: Stockholm
+  start: 2023-08
+  end: 2024-04
+  en:
+    title: Senior AI Engineer (Contractor)
+    bullets:
+    - Created a **multi-stage AI assistant (RAG-based)** to answer investor queries accurately by processing complex
+      documents.
+    - Implemented a method to **extract content from PDFs, Word, and PowerPoint** files while maintaining the original
+      structure, greatly improving document handling for AI systems.
+    - Designed and deployed an **automated evaluation framework** for tracking and measuring the assistant’s accuracy
+      over time.
+    tools: [Python, Langchain, FastAPI, SlackBolt, GPT-3.5, GPT-4, Pinecone (Vector database), Docker]
+  sv:
+    title: Senior AI Engineer (konsult)
+    bullets:
+    - Byggde en **multi-stage AI-assistent (RAG-baserad)** som besvarar investerarfrågor korrekt genom att bearbeta
+      komplexa dokument.
+    - Implementerade en metod för att **extrahera innehåll ur PDF-, Word- och PowerPoint-filer** med bibehållen
+      struktur, vilket kraftigt förbättrade dokumenthanteringen för AI-system.
+    - Designade och driftsatte ett **automatiserat evalueringsramverk** för att följa och mäta assistentens träffsäkerhet
+      över tid.
+    tools: [Python, Langchain, FastAPI, SlackBolt, GPT-3.5, GPT-4, Pinecone (vector database), Docker]
+- company: Lingio
+  city: Stockholm
+  start: 2022-11
+  end: 2024-06
+  tools: [GPT-3, Python, FastAPI, Pytorch, LoRA, Docker, GCP Kubernetes]
+  en:
+    title: Senior Machine Learning Engineer (Contractor)
+    bullets:
+    - Developed AI-driven tools for **translating, summarizing, and generating content**, enhancing the efficiency
+      of content creation processes.
+    - Fine-tuned **open-source language models** for specific tasks, improving performance and integration with
+      the generative AI product.
+    - Delivered production-quality services, now embedded at the **core of Lingio’s generative AI offerings**.
+  sv:
+    title: Senior Machine Learning Engineer (konsult)
+    bullets:
+    - Utvecklade AI-drivna verktyg för **översättning, sammanfattning och generering av innehåll**, vilket effektiviserade
+      innehållsproduktionen.
+    - Fine-tunade **open source-språkmodeller** för specifika uppgifter, med bättre prestanda och integration i
+      den generativa AI-produkten.
+    - Levererade tjänster i produktionskvalitet som i dag utgör **kärnan i Lingios generativa AI-erbjudande**.
+- title: Senior Machine Learning Engineer
+  company: Kry/Livi
+  city: Stockholm
+  start: 2021-09
+  end: 2022-10
+  tools: [Python, FastAPI, TensorFlow, Pytorch, RNN, CatBoost, AWS, Snowflake, Airflow 2]
+  en:
+    bullets:
+    - Designed and deployed a **CatBoost model** to classify the level of care required for patients, enhancing
+      the triage process.
+    - Led the development of an **RNN-based model to predict patient wait times**, providing more accurate service
+      level expectations.
+    - Re-architected **staffing forecasts**, optimizing workforce allocation and reducing operational inefficiencies.
+  sv:
+    bullets:
+    - Designade och driftsatte en **CatBoost-modell** som klassificerar patienters vårdbehov, vilket förbättrade
+      triagen.
+    - Ledde utvecklingen av en **RNN-baserad modell som predikterar patienters väntetider**, vilket gav mer träffsäkra
+      förväntningar på servicenivån.
+    - Gjorde om arkitekturen för **bemanningsprognoserna**, vilket optimerade resursfördelningen och minskade ineffektivitet
+      i driften.
+- company: IKEA Digital
+  city: Stockholm
+  start: 2020-07
+  end: 2021-05
+  tools: [Python, FastAPI, TensorFlow, Docker, GCP, Google AI Platform]
+  en:
+    title: Senior Data/Machine Learning Engineer (Contractor)
+    bullets:
+    - Developed a **recommendation model (contextual bandit-based)** and deployed it for IKEA’s inspirational feed.
+      The model automatically trains every night on **a few hundred million examples**, and its operation cost for
+      **42+ markets** is multiple factors lower than that of other teams using Google Recommendation API for a single
+      market.
+    - 'Re-factored and **split a monolithic backend into smaller services**, enhancing maintainability and performance.
+      Reduced average response time from ~800ms (99th percentile: 3-4s) to **~200ms** (99th percentile: ~500ms),
+      leading to a significant improvement in user experience and reducing operational costs.'
+    - Improved data iteration cycles **from hours to minutes**, enabling rapid experimentation and testing of different
+      model architectures.
+  sv:
+    title: Senior Data/Machine Learning Engineer (konsult)
+    bullets:
+    - Utvecklade en **recommendation-modell (contextual bandits)** och driftsatte den för IKEA:s inspirationsflöde.
+      Modellen tränas automatiskt varje natt på **några hundra miljoner exempel**, och driftkostnaden för **42+
+      marknader** är flera gånger lägre än för andra team som använder Google Recommendation API för en enda marknad.
+    - 'Refaktorerade och **delade upp en monolitisk backend i mindre tjänster**, vilket förbättrade underhållbarhet
+      och prestanda. Minskade den genomsnittliga svarstiden från ~800 ms (p99: 3-4 s) till **~200 ms** (p99: ~500
+      ms), vilket gav en markant bättre användarupplevelse och lägre driftkostnader.'
+    - Kortade iterationscyklerna för data **från timmar till minuter**, vilket möjliggjorde snabba experiment med
+      olika modellarkitekturer.
+- company: Neko Health
+  city: Stockholm
+  start: 2020-01
+  end: 2020-07
+  tools: [Python, OpenCV, RNN, CNN, Keras, TensorFlow, Linux]
+  en:
+    title: Senior Machine Learning/AI Engineer (Contractor)
+    bullets:
+    - Developed a cutting-edge, **contact-less method for estimating pulse and blood pressure** using video analysis,
+      advancing real-time health monitoring systems.
+    - Integrated digital filters, signal processing, and classical computer vision techniques to enhance the robustness
+      of video-based pulse detection.
+  sv:
+    title: Senior Machine Learning/AI Engineer (konsult)
+    bullets:
+    - Utvecklade en banbrytande, **kontaktlös metod för att skatta puls och blodtryck** med videoanalys, ett steg
+      framåt för hälsoövervakning i realtid.
+    - Kombinerade digitala filter, signalbehandling och klassisk computer vision för att göra den videobaserade
+      pulsdetektionen mer robust.
+- company: Schibsted Enterprise Technology
+  brief: true
+  city: Stockholm
+  start: 2019-05
+  end: 2020-01
+  tools: [Python, Keras, RNN, fastText, Docker, AWS]
+  en:
+    title: Senior Machine Learning/AI Engineer (Contractor)
+    bullets:
+    - Prototyped an **NLP-based solution to automate support ticket routing**, reducing manual effort and improving
+      accuracy in routing decisions.
+    - Improved classification accuracy by employing an **F1 loss function**, addressing imbalanced data across support
+      categories.
+  sv:
+    title: Senior Machine Learning/AI Engineer (konsult)
+    bullets:
+    - Tog fram en prototyp på en **NLP-baserad lösning för automatisk routing av supportärenden**, vilket minskade
+      det manuella arbetet och ökade träffsäkerheten.
+    - Förbättrade klassificeringens träffsäkerhet med en **F1 loss** för att hantera obalanserad data mellan supportkategorier.
+- company: Hedvig AB
+  brief: true
+  city: Stockholm
+  start: 2018-12
+  end: 2019-05
+  tools: [Python, Keras, RNN, fastText, Javascript, AWS, Docker]
+  en:
+    title: Senior Machine Learning/AI Engineer (Contractor)
+    bullets:
+    - Built and deployed an **intent classification system** for customer service chats, enhancing automated customer
+      support and streamlining communication workflows.
+    - Automated key operations, including **insurance cancellation processes**, through integration with existing
+      customer systems.
+  sv:
+    title: Senior Machine Learning/AI Engineer (konsult)
+    bullets:
+    - Byggde och driftsatte **intent classification för kundtjänstchattar**, vilket förbättrade den automatiserade
+      kundsupporten och effektiviserade kommunikationsflödena.
+    - Automatiserade centrala processer, bland annat **uppsägning av försäkringar**, genom integration med befintliga
+      kundsystem.
+- company: Volvo Car Mobility AB
+  brief: true
+  city: Stockholm
+  start: 2018-08
+  end: 2018-12
+  tools: [Python, Flask, Docker, GCP, Google BigQuery, Google Kubernetes Engine, Linux]
+  en:
+    title: Machine Learning/Data Science Contractor
+    bullets:
+    - Conducted detailed data analysis to support business decisions, helping refine the car-sharing service by
+      understanding user behavior and demand patterns.
+    - Performed **behavior-based user profile classification**, which informed targeted marketing and service improvement
+      strategies.
+    - Developed **demand prediction models** for car availability, contributing to operational efficiency.
+    - Set up **real-time dashboards** to visualize key business metrics, improving transparency and decision-making
+      across the company.
+  sv:
+    title: Machine Learning/Data Science-konsult
+    bullets:
+    - Genomförde detaljerade dataanalyser som beslutsunderlag och hjälpte till att förfina bilpoolstjänsten genom
+      att kartlägga användarbeteende och efterfrågemönster.
+    - Klassificerade **användarprofiler utifrån beteende**, vilket låg till grund för riktad marknadsföring och
+      förbättringar av tjänsten.
+    - Utvecklade **demand forecasting-modeller** för biltillgänglighet, vilket bidrog till en effektivare drift.
+    - Satte upp **real-time dashboards** för centrala affärsmått, vilket ökade transparensen och förbättrade beslutsfattandet
+      i hela företaget.
+- title: Machine Learning Lead
+  company: Epidemic Sound
+  brief: true
+  city: Stockholm
+  start: 2018-06
+  end: 2018-08
+  tools: [Python, Convolutional Neural Networks (CNN), Google BigQuery, Linux]
+  en:
+    bullets:
+    - Developed a **deep convolutional neural network** for automatic multi-label classification of songs based
+      on genre labels, enhancing the platform’s ability to recommend and categorize music accurately.
+    - Built a **condensed dataset from billions of historical events**, enabling the sales team to more effectively
+      target potential customers.
+    - Improved the company’s internal processes and data-driven decision-making by increasing efficiency through
+      data analysis and machine learning-driven solutions.
+  sv:
+    bullets:
+    - Utvecklade ett **deep convolutional neural network (CNN)** för automatisk multi-label-klassificering av låtar
+      efter genre, vilket förbättrade plattformens förmåga att rekommendera och kategorisera musik.
+    - Byggde ett komprimerat dataset från **miljarder historiska events**, så att säljteamet kunde rikta sig mot
+      potentiella kunder mer effektivt.
+    - Förbättrade företagets interna processer och datadrivna beslutsfattande genom dataanalys och machine learning-baserade
+      lösningar.
+- title: Chief Technology Officer
+  company: Watty AB
+  city: Stockholm
+  start: 2013-09
+  end: 2018-06
+  tools: [C/C++, Python, Docker, AWS, Kubernetes, CoreOS]
+  en:
+    bullets:
+    - Led **five cross-functional teams** in developing a **real-time energy monitoring product**, recognized as
+      one of the most advanced in the market.
+    - Engineered a **data collection platform and machine learning pipeline** that contributed to significant product
+      pivots and improved user experience.
+    - Designed the **full technical architecture**, from hardware data acquisition to cloud-based analysis and customer-facing
+      interfaces.
+  sv:
+    bullets:
+    - Ledde **fem tvärfunktionella team** i utvecklingen av en produkt för **energiövervakning i realtid**, erkänd
+      som en av de mest avancerade på marknaden.
+    - Byggde en **plattform för datainsamling och en machine learning-pipeline** som bidrog till viktiga produkt-pivots
+      och en bättre användarupplevelse.
+    - Designade **hela den tekniska arkitekturen**, från datainsamling i hårdvaran till molnbaserad analys och kundnära
+      gränssnitt.
+- title: Senior Software Engineer
+  company: Gavagai
+  brief: true
+  city: Stockholm
+  start: 2013-09
+  end: 2014-08
+  tools: [Java, J2EE, Python, NodeJS, Coffeescript, GPU-based computations, Linux]
+  en:
+    bullets:
+    - Contributed to Gavagai’s core text analysis product by working on **large-scale, real-time social media**
+      data processing.
+    - Implemented efficient **nearest-neighbor calculations on GPUs** to improve the performance of language models
+      used for understanding relationships between words.
+    - Developed non-core APIs in Node.js and Coffeescript, expanding the functionality and reach of the company’s
+      language analysis tools.
+    - Provided minor but impactful contributions in Python to further optimize performance and scalability.
+  sv:
+    bullets:
+    - Bidrog till Gavagais centrala textanalysprodukt genom **storskalig realtidsbearbetning av data från sociala
+      medier**.
+    - Implementerade effektiva **nearest neighbor-beräkningar på GPU** för att förbättra prestandan hos språkmodeller
+      som fångar relationer mellan ord.
+    - Utvecklade kompletterande API:er i Node.js och Coffeescript, vilket utökade funktionaliteten och räckvidden
+      hos företagets språkanalysverktyg.
+    - Bidrog med mindre men betydelsefulla insatser i Python för att ytterligare optimera prestanda och skalbarhet.
+- title: Senior Software Engineer
+  company: Euroling AB
+  brief: true
+  city: Stockholm
+  start: 2012-01
+  end: 2013-09
+  tools: [C++, Python, Ruby, Bash, Google Protocol Buffers, Git, Linux]
+  en:
+    bullets:
+    - Led the **architectural redesign of Siteseeker**, an enterprise search engine, to make it scalable and modular,
+      transitioning it from a monolithic structure to smaller services that could be scaled horizontally.
+    - Refactored legacy code by implementing **modern C++ (C++11)** standards and best practices, improving performance
+      and maintainability of the codebase.
+    - Introduced **Python-based microservices** to expedite the development and deployment of new features, reducing
+      the time-to-market for enhancements.
+    - Provided vision and leadership on improving the scalability of search engine technology, laying the foundation
+      for future growth and performance improvements.
+  sv:
+    bullets:
+    - Ledde **omdesignen av arkitekturen i Siteseeker**, en enterprise search-motor, för att göra den skalbar och
+      modulär - från en monolit till mindre tjänster som kunde skalas horisontellt.
+    - Refaktorerade legacy-kod enligt **modern C++ (C++11)** och best practices, vilket förbättrade kodbasens prestanda
+      och underhållbarhet.
+    - Införde **Python-baserade microservices** för att snabba upp utveckling och driftsättning av nya funktioner,
+      vilket kortade time-to-market.
+    - Stod för vision och ledarskap kring skalbarheten i sökmotortekniken och lade grunden för framtida tillväxt
+      och prestandaförbättringar.
+education:
+- city: Stockholm
+  start: 2005-08
+  end: 2009-12
+  en:
+    degree: Computer Science (Masters)
+    school: Royal Institute Of Technology
+    notes: Specialized in machine learning and autonomous systems
+  sv:
+    degree: Masterexamen i datavetenskap
+    school: Kungliga Tekniska högskolan
+    notes: Inriktning mot machine learning och autonoma system
+testimonials:
+- name: Simon Celinder
+  role: Data Scientist, KRY/Livi, Stockholm
+  quote:
+  - It is rare to come across someone who has both such a depth and breadth in engineering as Ali. He has long experience
+    in the Machine Learning space, but also in software engineering. I’m currently working closely with Ali in developing
+    machine learning models at the digital healthcare provider Kry, collaborating on problems in NLP and forecasting.
+    He has taught me a lot about engineering and ML, and he is always friendly, with an easy-going and pragmatic
+    attitude. He’s ML knowledge is deep, which shows in how he has very knowledge driven and specific hypotheses
+    about what type of model or architecture that is likely to improve the solution to a specific problem. He is
+    a source of inspiration for the rest of the team, constantly staying ahead of the curve, exploring new tools
+    and coming with creative ideas. I would recommend Ali to any company that wants to take data science to the
+    next level.
+  date: 2022-09
+- name: Balazs Toth
+  role: Senior Data Scientist, IKEA Digital
+  quote:
+  - Ali is one of the best engineers I have worked with. He is pragmatic, fast and productive. He is proficient
+    in machine learning, data engineering and backend development. It is hard to find people like him in the industry.
+  date: 2021-05
+- name: Antonio Davide Cali
+  role: Data Engineer, IKEA Digital
+  quote:
+  - I had the opportunity to work with Ali for almost a year. No matter what was the problem, he was able to resolve.
+    He's super skilled and talented. And all the conversation we had were always very useful. I had to say that
+    it was also a lot of fun working together. I hope to meet him again in some future project
+  date: 2021-05
+- name: Mattias Nilsson Ph.D., Principal Data Scientist, Startup in Stealth Mode
+  role: ''
+  quote:
+  - Ali is a true critical thinker and dares to question typical assumptions. He firmly believes in fast iterations,
+    which helped us understand and address critical issues of a difficult (research) challenge at an early stage.
+    Ali is agnostic to the specific tools and focuses instead on the problem to be solved. Basically, he gets stuff
+    done. I can strongly recommend Ali and I have really enjoyed working closely together with him for the past
+    months.
+  date: 2020-05
+- name: Hjalmar Nilsonne
+  role: Founder, Watty & Neko Health
+  quote:
+  - 'Ali is the most gifted technologist I know and it''s been a privilege to be working with him at Watty for the
+    past 2.5 year. During this time we have gone from an idea on paper to having the best product in the market
+    and signing some of the biggest players on the market as customer. Ali has been in charge of our technology
+    strategy across the board: machine learning, large-scale back-end systems, hardware and product. His ability
+    to identify the right opportunities across these areas has been critical for Watty''s success.'
+  - As a manager he has implemented a development culture with an emphasis on pragmatism and focusing only on that
+    which is most critical. It's been a treat to watch how that culture, combined with Ali's knack for finding unorthodox
+    strategies, has generated great results that has often exceeded our customers expectations. He is also passionate
+    about the product that ends up in people's hands and is always the most avid user of anything he builds. If
+    you're looking for the smartest guy around when it comes to technology, you need not look further
+  date: 2016-07
+- name: Per Mellqvist
+  role: Head of Engineering, Euroling
+  quote:
+  - With a strong drive for learning and trying new things Ali is likely to bring new influences to any organization.
+    He has a firm grip on search engine technology both in terms of internal implementation and integration aspects,
+    but I would recommend Ali to any team that want to drive change and continuously improve their code and architecture.
+  date: 2013-10
+- name: Anders Malm
+  role: Product Manager, MoSync
+  quote:
+  - Ali has a very deep knowledge in a very broad spectrum when it comes to all parts of software development. He
+    has this unique ability to always find a solution and then be able to implement it in a straight forward way.
+    I would recommend Ali without a doubt!
+  date: 2012-01
+- name: Mickel Grönroos
+  role: Production Manager, Findwise
+  quote:
+  - Ali is a great developer / software architect. He has the ability to solve tough problems efficiently and creatively.
+    There is always a solution in Ali's mind. Ali is independent and self-motivated and he has the ability to communicate
+    with both IT and business people in order to assist them with their challenges. For an IT consultant, this is
+    really a valuable trait.
+  date: 2011-11
+- name: Shiv Shankar
+  role: Engineer, MoSync
+  quote:
+  - Ali is a talented, creative and hard working Software Engineer but more importantly a pro-active leader and
+    an adaptive co-worker. Ali's personal insight into key problems and their solutions always helps the team move
+    ahead. I have no doubts his skill sets will set him apart in any role that he chooses to take up.
+  date: 2011-01
+- name: Håkan Kjellman
+  role: Technical Director, MoSync
+  quote:
+  - I had the fortune of working with Ali for seven months at Mosync. I wished it would have lasted longer since
+    Ali is an extremely skilled SW engineer. Just one of those rare guys that you know will always deliver a quality
+    job and on time.
+  date: 2010-12
+labels:
+  en:
+    details: Details
+    born: Date of birth
+    nationality: Nationality
+    links: Links
+    skills: Areas of Expertise
+    languages: Languages
+    hobbies: Hobbies
+    summary: Professional Summary
+    experience: Professional Experience
+    education: Education
+    testimonials: Words from ex-colleagues
+    achievements: Achievements
+    tools: Tools
+    at: at
+    earlier: Earlier roles
+    print: Download PDF
+    ui:
+      lang_name: EN
+      filtering: Roles using
+      clear: Clear filter
+      show_details: Show details
+      hide_details: Hide details
+      no_match: No roles mention this
+    present: Present
+    months: [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    levels:
+      5: Expert
+      4: Experienced
+      3: Skillful
+  sv:
+    details: Uppgifter
+    born: Födelseår
+    nationality: Nationalitet
+    links: Länkar
+    skills: Kompetensområden
+    languages: Språk
+    hobbies: Intressen
+    summary: Profil
+    experience: Yrkeserfarenhet
+    education: Utbildning
+    testimonials: Omdömen från tidigare kollegor
+    achievements: Resultat
+    tools: Verktyg
+    at: på
+    earlier: Tidigare roller
+    print: Ladda ner PDF
+    ui:
+      lang_name: SV
+      filtering: Roller med
+      clear: Rensa filter
+      show_details: Visa detaljer
+      hide_details: Dölj detaljer
+      no_match: Inga roller nämner detta
+    present: Nu
+    months: [jan, feb, mar, apr, maj, jun, jul, aug, sep, okt, nov, dec]
+    levels:
+      5: Expert
+      4: Erfaren
+      3: Kunnig
