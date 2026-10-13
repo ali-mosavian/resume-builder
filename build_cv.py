@@ -16,13 +16,14 @@ import re
 from pathlib import Path
 
 import typer
-import yaml
 from docx import Document
 from docx.enum.table import WD_ROW_HEIGHT_RULE
 from docx.opc.constants import RELATIONSHIP_TYPE
 from docx.oxml import OxmlElement, parse_xml
 from docx.oxml.ns import nsdecls, qn
 from docx.shared import Cm, Twips
+
+from cvdata import load
 
 BOLD = re.compile(r"\*\*(.+?)\*\*")
 
@@ -262,10 +263,10 @@ def main_body(cell, cv: dict, lb: dict, num_id: str) -> None:
 ROOT = Path(__file__).parent
 
 
-def build(cv_path: Path, out: Path | None = None, template: Path = ROOT / "templates" / "default.docx") -> None:
-    out = out or ROOT / "build" / f"{cv_path.stem}_{template.stem}.docx"
+def build(cv_path: Path, out: Path | None = None, template: Path = ROOT / "templates" / "default.docx", lang: str = "en") -> None:
+    out = out or ROOT / "build" / f"{cv_path.stem}_{lang}_{template.stem}.docx"
     out.parent.mkdir(exist_ok=True)
-    cv = yaml.safe_load(cv_path.read_text(encoding="utf-8")) | {"_dir": cv_path.parent}
+    cv = load(cv_path, lang)
     doc = Document(template)
     row = doc.tables[-1].rows[0].cells
     side, main = row[0], row[-1]
