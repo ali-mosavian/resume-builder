@@ -14,7 +14,7 @@ from pathlib import Path
 from docx import Document
 from docx.shared import Cm
 
-from build_cv import build
+from build_cv import build, cells
 
 here = Path(__file__).parent
 
@@ -23,12 +23,12 @@ for path in (here / "cv").glob("*.yaml"):
     for j in yaml.safe_load(path.read_text(encoding="utf-8"))["experience"]:
         for b in j["bullets"]:
             assert b.endswith("."), f"{path.name}, {j['company']}: bullet ends {b[-12:]!r}"
-for template in ("templates/default.docx", "templates/pro.docx"):
+for template in sorted((here / "templates").glob("*.docx")):
     with tempfile.TemporaryDirectory() as tmp:
         out = Path(tmp) / "cv.docx"
-        build(here / "cv" / "cv_en.yaml", out, here / template)
+        build(here / "cv" / "cv_en.yaml", out, template)
         doc = Document(out)
-        main = doc.tables[0].rows[0].cells[2]
+        main = doc.tables[-1].rows[0].cells[-1]
         texts = [p.text for p in main.paragraphs]
 
         # Plain text once got an explicit bold=False, which un-bolded every heading.
@@ -37,8 +37,14 @@ for template in ("templates/default.docx", "templates/pro.docx"):
         first = next(p for p in main.paragraphs if "store capacity optimization engine" in p.text)
         assert "**" not in first.text and any(r.bold and r.text == "store capacity optimization engine" for r in first.runs)
         assert "SEP 2025 — PRESENT" in texts
-        everywhere = [*doc.paragraphs, *doc.tables[0].rows[0].cells[0].paragraphs]
-        assert any(p.text == "Ali Mosavian" for p in everywhere), f"{template}: name placeholder not filled"
+        everywhere = [*doc.paragraphs, *(p for c in cells(doc.tables) for p in c.paragraphs)]
+        assert any(p.text == "Ali Mosavian" for p in everywhere), f"{template.name}: name placeholder not filled"
+        left = [p.text for p in everywhere if p.text.startswith("{")]
+        assert not left, f"{template.name}: placeholders left: {left}"
+        # Optional parts once keyed on common style names (SkillBar, Quote) that other templates also have:
+        # the resume.io template crashed and pro restyled its testimonials. Only bracket opts in.
+        quote = next(p for p in main.paragraphs if p.text.startswith("“It is rare"))
+        assert (quote._p.style == "CVQuote") == (template.stem == "bracket"), f"{template.name}: quote styled {quote._p.style}"
 
 # template_pro once had only cell widths, no grid widths: renderers split the page evenly,
 # squeezing the main column to a third and doubling the page count.
