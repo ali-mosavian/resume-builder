@@ -141,14 +141,14 @@ mark { background:var(--accent-tint); color:var(--head); border-radius:3px; padd
   body { color:var(--ink); font-size:9.5pt; line-height:1.5; }
   strong { color:var(--head); font-weight:700; }
   .page { display:block; padding:0; max-width:none; }
-  .page > .grid { display:flex; flex-direction:column; padding:0 16mm; }
+  .page > .grid { display:flex; flex-direction:column; padding:0 24mm; }
   main { display:contents; }
   .summary { order:1; } .education { order:2; } .experience { order:3; } .testimonials { order:4; } aside { order:5; }
   .filter-pill, .details-toggle, .lang-switch, .contact > a.download, .contact > button { display:none !important; }
 
   /* The band */
   header { display:grid; grid-template-columns:28mm 1fr auto; grid-template-areas:"photo name links" "photo role links" "stats stats stats";
-           column-gap:7mm; align-items:center; margin-bottom:9mm; padding:11mm 16mm 7mm; background:#0f172a; color:#f1f5f9; }
+           column-gap:7mm; align-items:center; margin-bottom:9mm; padding:11mm 24mm 7mm; background:#0f172a; color:#f1f5f9; }
   .photo { grid-area:photo; width:28mm; height:28mm; margin:0; border-radius:50%; box-shadow:none; align-self:start; }
   h1 { grid-area:name; align-self:end; font-size:24pt; color:#f1f5f9; letter-spacing:-.02em; }
   .role { grid-area:role; align-self:start; margin-top:2pt; font-size:8pt; text-transform:uppercase; letter-spacing:.12em; color:#cbd5e1; }
