@@ -60,5 +60,5 @@ def template(name: Annotated[str, typer.Argument(help=f"One of: {', '.join(docx_
     if name not in docx_templates.names():
         raise typer.BadParameter(f"no template generator {name!r}")
     out = ROOT / "templates" / f"{name}.docx"
-    importlib.import_module(f"{docx_templates.__name__}.{name}").make(out)
+    importlib.import_module(f"{docx_templates.__name__}.{name.replace('-', '_')}").make(out)
     print(f"wrote {out}")
