@@ -30,6 +30,8 @@ h1 { margin:0; font:600 2.5rem/1.1 var(--serif); letter-spacing:-.02em; }
 .where { display:none; }
 .contact { display:flex; flex-wrap:wrap; align-items:center; gap:6px 18px; margin-top:18px; font-size:.82rem; }
 .contact a { border-bottom:1px solid var(--rule); } .contact a:hover { border-color:var(--accent); color:var(--accent); }
+.contact > a.download { padding:3px 8px; border:1px solid var(--accent); border-radius:3px; color:var(--accent); font-family:var(--sans); }
+.contact > a.download:first-of-type { margin-left:auto; }
 .contact > button { margin-left:auto; font:500 .78rem var(--sans); color:var(--accent); background:none; border:1px solid var(--accent);
                     border-radius:3px; padding:5px 10px; cursor:pointer; }
 .contact > button:hover { background:var(--accent); color:var(--paper); }
@@ -61,7 +63,7 @@ aside .kv[style] { grid-column:2; }
 aside .kv { display:flex; justify-content:space-between; align-items:baseline; gap:12px; padding:3px 0; border-bottom:1px dotted var(--rule); }
 aside .kv span:last-child { font:400 .78rem var(--sans); color:var(--muted); white-space:nowrap; }
 aside .kv:not([style]) { justify-content:flex-start; border:0; padding:0; }
-aside .kv:not([style]) span:first-child::after { content:" —"; color:var(--muted); }
+aside .kv:not([style]) span:first-child::after { content:" -"; color:var(--muted); }
 aside h2:nth-of-type(4) + .kv { margin-top:14px; }
 aside p { margin:6px 0 0; color:var(--muted); font-style:italic; font-size:.9rem; }
 @media screen and (min-width:761px) {  /* skills in two columns */
@@ -129,7 +131,9 @@ mark { background:var(--accent-tint); color:inherit; box-shadow:0 1px 0 var(--ac
   main h2, aside h2 { margin-bottom:12px; padding-top:0; }
   h1 { font-size:2rem; }
   .highlights { grid-template-columns:1fr 1fr; gap:6px 16px; } .highlights div { flex-direction:column; gap:0; }
-  .contact > button { margin-left:0; }
+  .contact > a.download { border:1px solid var(--accent); }
+.contact > a.download:first-of-type { margin-left:auto; }
+.contact > button { margin-left:0; }
   .experience .item, .education .item { grid-template-columns:1fr; }
   .experience .item > .when, .experience .item > h3, .education .when { grid-column:1; grid-row:auto; }
   .details-toggle { grid-column:1; margin:16px 0 0; }
@@ -167,3 +171,5 @@ mark { background:var(--accent-tint); color:inherit; box-shadow:0 1px 0 var(--ac
   .testimonials .item { margin-bottom:8pt; break-inside:avoid; }
   .testimonials .item:nth-of-type(n+4) { display:none; }  /* print the first three */
 }
+
+.photo { display:none; }
