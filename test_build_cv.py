@@ -46,6 +46,27 @@ for template in sorted((here / "templates").glob("*.docx")):
         quote = next(p for p in main.paragraphs if p.text.startswith("“It is rare"))
         assert (quote._p.style == "CVQuote") == (template.stem == "bracket"), f"{template.name}: quote styled {quote._p.style}"
 
+# Bullets once came from python-docx's built-in list, not the template's own: black instead of the accent colour.
+for template, color in (("pro", "1F3A5F"), ("bracket", "F6B92B")):
+    with tempfile.TemporaryDirectory() as tmp:
+        build(here / "cv" / "cv_en.yaml", Path(tmp) / "cv.docx", here / "templates" / f"{template}.docx")
+        doc = Document(Path(tmp) / "cv.docx")
+        num_id = doc.element.body.xpath(".//w:numPr/w:numId/@w:val")[0]
+        numbering = doc.part.numbering_part.element
+        abstract = numbering.xpath(f"./w:num[@w:numId='{num_id}']/w:abstractNumId/@w:val")[0]
+        used = numbering.xpath(f"./w:abstractNum[@w:abstractNumId='{abstract}']/w:lvl[@w:ilvl='0']/w:rPr/w:color/@w:val")
+        assert used == [color], f"{template}: bullets coloured {used}, template says {color}"
+
+# bracket.docx once set its headings in Calibri: Word's heading styles name a theme font, which beats the named one.
+# And Montserrat travels inside the file, for readers who don't have it.
+bracket = Document(here / "templates" / "bracket.docx")
+themed = [s.style_id for s in bracket.styles if s.element.xpath("./w:rPr/w:rFonts[@w:ascii='Montserrat'][@w:asciiTheme]")]
+assert not themed, f"bracket.docx styles shadowed by a theme font: {themed}"
+with tempfile.TemporaryDirectory() as tmp:
+    build(here / "cv" / "cv_sv.yaml", Path(tmp) / "cv.docx", here / "templates" / "bracket.docx")
+    embedded = [p.partname for p in Document(Path(tmp) / "cv.docx").part.package.iter_parts() if p.partname.endswith(".odttf")]
+    assert len(embedded) == 4, f"bracket CV embeds {len(embedded)} font files"
+
 # template_pro once had only cell widths, no grid widths: renderers split the page evenly,
 # squeezing the main column to a third and doubling the page count.
 grid = Document(here / "templates" / "pro.docx").tables[0]._tbl.tblGrid.gridCol_lst
