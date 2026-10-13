@@ -1,0 +1,93 @@
+/* resume.io: a recreation of the resume.io template the CV was first made with.
+   Slate sidebar with photo, name and details; white main column; Lato throughout. */
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&display=swap");
+
+:root { --side:#4c546a; --side-ink:#fff; --side-muted:#a3a9b8; --track:#6b7287; --ink:#1d1f23; --muted:#8a8f99; }
+* { box-sizing:border-box; }
+body { margin:0; background:#eef1f5; color:var(--ink); font:14px/1.6 "Lato", "Helvetica Neue", Arial, sans-serif; }
+
+/* The page is one grid: header and aside stack in the slate column, main fills the other. */
+.page { max-width:1000px; margin:40px auto; display:grid; grid-template-columns:32% 1fr; grid-template-rows:auto 1fr;
+        background:#fff; border-radius:6px; overflow:hidden; box-shadow:0 4px 30px #1d1f2314; }
+.grid { display:contents; }
+header, aside { grid-column:1; background:var(--side); color:var(--side-ink); }
+header { grid-row:1; padding:56px 40px 8px; text-align:center; }
+aside { grid-row:2; padding:24px 40px 56px; font-size:.86rem; }
+main { grid-column:2; grid-row:1 / span 2; padding:56px 52px 56px; min-width:0; }
+
+/* Header: photo, name, divider, title */
+.photo { display:block; width:76px; height:76px; margin:0 auto 14px; border-radius:50%; object-fit:cover; }
+h1 { margin:0; font-size:1.55rem; font-weight:700; letter-spacing:.01em; }
+h1::after { content:""; display:block; width:18px; height:1px; margin:14px auto 16px; background:var(--side-muted); }
+.role { font-size:.66rem; letter-spacing:.2em; text-transform:uppercase; line-height:2; color:#d9dce4; }
+.where, .contact, .highlights { display:none; }
+
+/* Sidebar */
+aside h2 { font-size:1.08rem; font-weight:700; margin:34px 0 10px; }
+aside h2:first-child { margin-top:20px; }
+aside dl, aside p { margin:0; }
+dd { margin:0 0 2px; }
+dt { margin:12px 0 2px; font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--side-muted); }
+aside a { color:var(--side-ink); text-decoration:underline; text-underline-offset:3px; line-height:2.1; }
+.kv { display:flex; justify-content:space-between; gap:8px; margin:0 0 6px; }
+.kv span:last-child { color:var(--side-muted); font-size:.78rem; }
+/* Skills: name over a level bar (levels 3–5 fill 60–100%), as resume.io draws them. */
+.kv[style] { display:block; margin:0 0 12px; }
+.kv[style] span:last-child { display:none; }
+.kv[style]::after { content:""; display:block; height:3px; margin-top:5px;
+                    background:linear-gradient(#fff, #fff) 0/calc(var(--level) * 20%) 100% no-repeat, var(--track); }
+
+/* Main */
+main h2 { font-size:1.3rem; font-weight:700; margin:34px 0 8px; }
+main section:first-child h2 { margin-top:0; }
+p { margin:0 0 22px; }
+h3 { font-size:.95rem; font-weight:700; margin:0; }
+h3 .at { display:none; }
+.experience h3 .title::after { content:","; }
+.when { font-size:.66rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:2px 0 10px; }
+.experience .item { margin-bottom:22px; }
+.experience .item > ul:not(.tools)::before { content:"Achievements"; display:block; margin:0 0 8px -24px; font-style:italic; }
+ul { margin:0 0 14px; padding-left:24px; } li { margin-bottom:2px; }
+.tools { display:block; padding:0; list-style:none; }
+.tools::before { content:"Tools: "; font-style:italic; }
+.tools li { display:inline; margin:0; }
+.tools li:not(:last-child)::after { content:", "; }
+.education p { margin:0 0 14px; }
+.testimonials .item { margin-bottom:18px; }
+.testimonials .when { margin-bottom:6px; }
+blockquote { margin:0 0 8px; }
+.quote blockquote:first-child::before { content:"“"; } .quote blockquote:last-child::after { content:"”"; }
+
+@media screen and (max-width:760px) {
+  .page { margin:0; border-radius:0; grid-template-columns:1fr; }
+  header, aside, main { grid-column:1; }
+  header { grid-row:1; } main { grid-row:2; padding:32px 22px; } aside { grid-row:3; padding:24px 22px 40px; }
+  header { padding:40px 22px 8px; }
+}
+@media print {
+  @page { size:A4; margin:0; }
+  * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body { background:#fff; font-size:9pt; line-height:1.5; }
+  .page { margin:0; max-width:none; border-radius:0; box-shadow:none; min-height:297mm; grid-template-columns:68mm 1fr; }
+  header { padding:14mm 9mm 2mm; } aside { padding:4mm 9mm 12mm; } main { padding:12mm 11mm 12mm 11mm; }
+  .experience .item { break-inside:auto; } h3, .when { break-after:avoid; }
+  .testimonials .item { break-inside:avoid; }
+}
+
+/* A4 sheets, built by resumeio.js on wide screens and for print. */
+/* Sized in pt, the same on screen and paper: sheets are measured on screen and must print identically. */
+.page.paged { display:block; max-width:none; margin:40px auto; background:none; box-shadow:none; border-radius:0; overflow:visible;
+              font-size:9.5pt; line-height:1.5; }
+.sheet { width:210mm; height:297mm; margin:0 auto 28px; display:grid; grid-template-columns:68mm 1fr; background:#fff;
+         box-shadow:0 4px 30px #1d1f2314; overflow:hidden; }
+.sheet aside { grid-column:1; grid-row:1; padding:0 9mm 12mm; overflow:hidden; }
+.sheet main { grid-column:2; grid-row:1; padding:12mm 11mm; overflow:hidden; }
+.sheet header { background:none; padding:14mm 0 2mm; }
+.sheet:not(:first-child) aside { padding-top:12mm; }
+.sheet aside > h2:first-child, .sheet aside > header + h2 { margin-top:20px; }
+.sheet section > h2:first-child { margin-top:0; }
+.sheet .item.cont > ul:first-child::before, .sheet ul.cont::before { content:none; }
+@media print {
+  .page.paged { margin:0; }
+  .sheet { margin:0; box-shadow:none; break-after:page; }
+}

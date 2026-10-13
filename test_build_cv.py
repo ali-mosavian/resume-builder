@@ -7,6 +7,8 @@ import re
 import shutil
 import subprocess
 import tempfile
+
+import yaml
 from pathlib import Path
 
 from docx import Document
@@ -67,13 +69,28 @@ with tempfile.TemporaryDirectory() as tmp:
     else:
         print("skipped print check: needs Google Chrome and pdftotext")
 
+    # resumeio paginates into A4 sheets that clip overflow; chained testimonials once overflowed one sheet
+    # and the last four vanished from the PDF. Every role and testimonial must reach the paper, on A4.
+    if chrome.exists() and shutil.which("pdftotext"):
+        cv = yaml.safe_load((here / "cv_en.yaml").read_text(encoding="utf-8"))
+        page, pdf = Path(tmp) / "cv_rio.html", Path(tmp) / "cv_rio.pdf"
+        build_html(here / "cv_en.yaml", page, "resumeio")
+        subprocess.run([chrome, "--headless=new", "--disable-gpu", "--window-size=1280,1000", "--virtual-time-budget=4000",
+                        "--no-pdf-header-footer", f"--print-to-pdf={pdf}", page.as_uri()], capture_output=True, check=True)
+        text = " ".join(subprocess.run(["pdftotext", pdf, "-"], capture_output=True, text=True, check=True).stdout.split())
+        missing = [n for n in [*(j["company"] for j in cv["experience"]), *(t["name"] for t in cv["testimonials"])] if n not in text]
+        assert not missing, f"resumeio print lost: {missing}"
+        info = subprocess.run(["pdfinfo", pdf], capture_output=True, text=True, check=True).stdout
+        assert "(A4)" in info, "resumeio print is not A4"
+
     # "Show details" on earlier roles once turned their tool tags into a plain block (display:block beat flex):
     # expanded, they must lay out like any other role's tags.
     if chrome.exists():
         probe = ("<script>addEventListener('load',()=>{const d=e=>getComputedStyle(e).display;"
                  "document.querySelector('.page:not([hidden]) .details-toggle').click();"
                  "document.title=d(document.querySelector('.item:not(.brief) .tools'))+'|'+d(document.querySelector('.brief .tools'))})</script>")
-        for theme in sorted(p.stem for p in (here / "themes").glob("*.js") if "." not in p.stem):
+        shared = (here / "themes" / "aurora-v3.js").resolve()
+        for theme in sorted(p.stem for p in (here / "themes").glob("*.js") if p.resolve() == shared):
             page = Path(tmp) / f"cv_expand_{theme}.html"
             build_html(here / "cv_en.yaml", page, theme)
             page.write_text(page.read_text(encoding="utf-8").replace("</body>", probe + "</body>"), encoding="utf-8")
