@@ -8,6 +8,7 @@ import cv2.data
 
 SIDE = 480  # px: sharp at 2x in the page and at 300 dpi in print
 ZOOM = 1.8  # the square's side as a multiple of the face's width: head and shoulders, not the whole picture
+MIN_ZOOM = 1.3  # the tightest crop worth making to keep the face centered
 
 
 def face_center(img: cv2.typing.MatLike) -> tuple[float, float, float] | None:
@@ -24,11 +25,16 @@ def face_center(img: cv2.typing.MatLike) -> tuple[float, float, float] | None:
 
 
 def square(img: cv2.typing.MatLike) -> cv2.typing.MatLike:
-    """The largest square around the face (about ZOOM face widths), kept inside the picture; the middle without a face."""
+    """A square centered exactly on the face (about ZOOM face widths wide), as large as fits around that center.
+
+    A face near an edge gets a tighter square rather than being shifted off-center; the square never gets tighter
+    than MIN_ZOOM face widths, below which the face is moved off-center instead. Without a face: the middle square.
+    """
     height, width = img.shape[:2]
     face = face_center(img)
     cx, cy, w = face if face else (width / 2, height / 2, float(max(width, height)))
-    side = round(min(width, height, w * ZOOM))
+    fit = 2 * min(cx, width - cx, cy, height - cy)  # the biggest square centered on the face that stays in the picture
+    side = round(min(width, height, w * ZOOM, max(fit, w * MIN_ZOOM)))
     left = round(min(max(cx - side / 2, 0), width - side))
     top = round(min(max(cy - side / 2, 0), height - side))
     return img[top : top + side, left : left + side]

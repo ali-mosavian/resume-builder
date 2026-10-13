@@ -83,10 +83,10 @@ def header(doc: Doc) -> None:
         row.height, row.height_rule = Cm(mm / 10), WD_ROW_HEIGHT_RULE.EXACTLY
     photo_c, name_c, links_c = head.rows[0].cells
     cell(photo_c, 6.0, pad=(1.1, 0, 0, MARGIN))
-    cell(name_c, 9.0, pad=(1.1, 0.4, 0, 0.3), valign=WD_CELL_VERTICAL_ALIGNMENT.CENTER)
+    cell(name_c, 9.0, pad=(1.1, 0.4, 0, 0.7), valign=WD_CELL_VERTICAL_ALIGNMENT.CENTER)
     cell(links_c, 6.0, pad=(1.1, MARGIN, 0, 0.4), valign=WD_CELL_VERTICAL_ALIGNMENT.CENTER)
     photo_c.paragraphs[0]._p.style = "CVPhoto"
-    photo_c.paragraphs[0].add_run("{Photo 2.8}")
+    photo_c.paragraphs[0].add_run("{Photo 2.8 round}")
     name_c.paragraphs[0]._p.style = "Name"
     name_c.paragraphs[0].add_run("{Name}")
     name_c.add_paragraph(style="Job Title").add_run("{Job Title}")

@@ -120,3 +120,7 @@ def test_split_is_one_column() -> None:
     assert texts.index(labels["summary"]) < texts.index(labels["testimonials"]) < texts.index(labels["skills"])
     skills = next(p for p in body.paragraphs if p._p.style == "CVSkillChips")
     assert "Python" in skills.text
+
+
+def test_split_photo_is_round() -> None:
+    assert 'prst="ellipse"' in docx("split").element.xml
