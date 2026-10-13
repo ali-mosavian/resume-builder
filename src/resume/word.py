@@ -1,11 +1,13 @@
 """Build a CV .docx from the YAML, styled by a .docx template.
 
-The template's last top-level table is the layout: first column the sidebar, last column the main body.
+The template's last top-level table is the layout: first column the sidebar, last column the main body. A
+single-cell layout is one column: the main body, then the sidebar's sections.
 Restyle the template in Word; paragraph styles are referenced by style id below.
 
 Optional parts, used when the template has them (see docx_templates/bracket.py):
 placeholders CVPhoto ("{Photo <width cm> [gray]}"), CVContact and CVHighlights; styles CVRole + CVCompany
-(role timeline), CVTool + CVTools (tool chips, no labels), CVSkill + CVSkillBar (level bars), CVKeyValue, CVQuote.
+(role timeline), CVTool + CVTools (tool chips, no labels), CVSkill + CVSkillBar (level bars), CVSkillChips (skills
+as tool chips), CVKeyValue, CVQuote.
 The CV prefix keeps them from matching a template's own styles (Word has a built-in Quote).
 """
 
@@ -210,11 +212,14 @@ def sidebar(cell: _Cell, cv: CV, lb: Labels) -> None:
         for link in cv["links"]:
             hyperlink(para(cell, "SidebarText"), link["label"], link["url"])
     section(cell, "SidebarSectionsSpacing", "Heading3", lb["skills"])
-    for s in cv["skills"]:
-        if has(cell, "CVSkillBar"):
+    if has(cell, "CVSkillChips"):
+        chips(cell, [s["name"] for s in cv["skills"]], "CVSkillChips")
+    elif has(cell, "CVSkillBar"):
+        for s in cv["skills"]:
             para(cell, "CVSkill", s["name"])
             bar(cell, s["level"])
-        else:
+    else:
+        for s in cv["skills"]:
             para(cell, "SidebarText", f"{s['name']} · {lb['levels'][s['level']]}")
     section(cell, "SidebarSectionsSpacing", "Heading3", lb["languages"])
     for lang in cv["languages"]:
@@ -232,7 +237,12 @@ def tools(cell: _Cell, names: list[str], lb: Labels) -> None:
         p.add_run(f"{lb['tools']}: ").italic = True
         p.add_run(", ".join(names))
         return
-    p = para(cell, "CVTools")
+    chips(cell, names, "CVTools")
+
+
+def chips(cell: _Cell, names: list[str], style_id: str) -> None:
+    """One paragraph of chips in the CVTool character style."""
+    p = para(cell, style_id)
     for name in names:
         # A shaded narrow no-break space draws the edge; a bar glyph made Word break chips mid-word.
         styled(p.add_run("\u202f"), "CVToolMark")
@@ -278,6 +288,10 @@ def render(cv: CV, template: Path) -> Doc:
     doc = Document(str(template))
     row = doc.tables[-1].rows[0].cells
     header(doc, cv)
-    sidebar(row[0], cv, cv["labels"])
-    main_body(row[-1], cv, cv["labels"], bullet_num_id(doc))
+    if len(row) == 1:  # one column: the body, then the sidebar's sections
+        main_body(row[0], cv, cv["labels"], bullet_num_id(doc))
+        sidebar(row[0], cv, cv["labels"])
+    else:
+        sidebar(row[0], cv, cv["labels"])
+        main_body(row[-1], cv, cv["labels"], bullet_num_id(doc))
     return doc
