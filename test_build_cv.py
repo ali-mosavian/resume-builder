@@ -69,11 +69,11 @@ with tempfile.TemporaryDirectory() as tmp:
     else:
         print("skipped print check: needs Google Chrome and pdftotext")
 
-    # resumeio.js paginates into A4 sheets that clip overflow; chained testimonials once overflowed one sheet
+    # slate.js paginates into A4 sheets that clip overflow; chained testimonials once overflowed one sheet
     # and the last four vanished from the PDF. Every role and testimonial must reach the paper, on A4.
     if chrome.exists() and shutil.which("pdftotext"):
         cv = yaml.safe_load((here / "cv" / "cv_en.yaml").read_text(encoding="utf-8"))
-        pager = (here / "themes" / "resumeio.js").resolve()
+        pager = (here / "themes" / "slate.js").resolve()
         for theme in sorted(p.stem for p in (here / "themes").glob("*.js") if p.resolve() == pager):
             page, pdf = Path(tmp) / f"cv_{theme}.html", Path(tmp) / f"cv_{theme}.pdf"
             build_html(here / "cv" / "cv_en.yaml", page, theme)
@@ -88,17 +88,17 @@ with tempfile.TemporaryDirectory() as tmp:
             info = subprocess.run(["pdfinfo", pdf], capture_output=True, text=True, check=True).stdout
             assert "(A4)" in info, f"{theme} print is not A4"
 
-    # designmycv once dropped the sidebar column on sheets after its content ran out: every sheet keeps it.
+    # bracket once dropped the sidebar column on sheets after its content ran out: every sheet keeps it.
     if chrome.exists():
         probe = ("<script>addEventListener('load',()=>setTimeout(()=>{document.title=[...document.querySelectorAll('.sheet aside')]"
                  ".map(a=>a.getBoundingClientRect().width|0).join(',')},1500))</script>")
         page = Path(tmp) / "cv_dmc_side.html"
-        build_html(here / "cv" / "cv_en.yaml", page, "designmycv")
+        build_html(here / "cv" / "cv_en.yaml", page, "bracket")
         page.write_text(page.read_text(encoding="utf-8").replace("</body>", probe + "</body>"), encoding="utf-8")
         dom = subprocess.run([chrome, "--headless=new", "--disable-gpu", "--window-size=1280,1000", "--virtual-time-budget=4000",
                               "--dump-dom", page.as_uri()], capture_output=True, text=True, check=True).stdout
         widths = [int(w) for w in re.search("<title>(.*?)</title>", dom)[1].split(",")]
-        assert len(widths) > 1 and min(widths) > 100, f"designmycv sidebar widths per sheet: {widths}"
+        assert len(widths) > 1 and min(widths) > 100, f"bracket sidebar widths per sheet: {widths}"
 
     # "Show details" on earlier roles once turned their tool tags into a plain block (display:block beat flex):
     # expanded, they must lay out like any other role's tags.

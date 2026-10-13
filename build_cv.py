@@ -29,7 +29,7 @@ def add_text(p, text: str) -> None:
 
 
 def para(cell, style_id: str, text: str = ""):
-    # By style id, not name: the resume.io template has duplicate style names.
+    # By style id, not name: the default template has duplicate style names.
     p = cell.add_paragraph()
     p._p.style = style_id
     add_text(p, text)
