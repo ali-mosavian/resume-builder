@@ -1,4 +1,6 @@
-/cv_*.docx
-/Ali_Mosavian_CV_*.docx
+/build/
+/assets/originals/
 __pycache__/
-/cv_*.html
+uv.lock
+.venv/
+.DS_Store
