@@ -38,7 +38,9 @@
   function paginate(page) {
     if (page.classList.contains("paged")) return;
     const header = page.querySelector("header"), aside = page.querySelector("aside"), main = page.querySelector("main");
-    const sideGroups = groups([{ node: header }, ...[...aside.children].map((n) => ({ node: n, keep: n.matches("h2") }))]);
+    // --header-top:1 (theme CSS): the header spans the first sheet above both columns instead of topping the sidebar.
+    const top = getComputedStyle(page).getPropertyValue("--header-top").trim() === "1";
+    const sideGroups = groups([...(top ? [] : [{ node: header }]), ...[...aside.children].map((n) => ({ node: n, keep: n.matches("h2") }))]);
     const mainGroups = groups(mainUnits(main));
     page.querySelector(".grid").remove();
     page.classList.add("paged");
@@ -111,6 +113,7 @@
       }
     }
 
+    if (top) sheet(0).side.before(header);
     fill(sideGroups, (st) => st.side, (u, st) => (st.side.append(u.node), [u.node]));
     fill(mainGroups, (st) => st.body, placeMain);
   }
