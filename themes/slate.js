@@ -121,4 +121,5 @@
   const run = () => document.querySelectorAll(".page:not([hidden])").forEach(paginate);
   const go = () => (wide.matches ? run() : addEventListener("beforeprint", run, { once: true }));
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(go);
+  addEventListener("langchange", () => wide.matches && document.fonts.ready.then(run));  // a newly shown language
 })();
