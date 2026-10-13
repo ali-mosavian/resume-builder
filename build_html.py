@@ -6,7 +6,9 @@
 
 The look is a theme: themes/<name>.css, plus optional <name>.js and <name>.*.js, inlined. Each theme prints to A4.
 """
+import base64
 import json
+import mimetypes
 import re
 from html import escape
 from pathlib import Path
@@ -72,10 +74,19 @@ def body(cv: dict, lb: dict) -> str:
 </main>"""
 
 
+def photo(cv: dict) -> str:
+    """The YAML's photo, embedded so the page stays a single file. Themes that don't want it hide .photo."""
+    if not cv.get("photo"):
+        return ""
+    path = Path(cv["_dir"]) / cv["photo"]
+    data = base64.b64encode(path.read_bytes()).decode()
+    return f'<img class="photo" alt="{escape(cv["name"])}" src="data:{mimetypes.guess_type(path)[0]};base64,{data}">'
+
+
 def header(cv: dict, lb: dict) -> str:
     stats = "".join(f'<div><b>{escape(h["value"])}</b><span>{escape(h["label"])}</span></div>' for h in cv.get("highlights", []))
     links = "".join(f'<a href="{escape(l["url"])}">{escape(l["label"])}</a>' for l in cv["links"])
-    return f"""<header><h1>{escape(cv["name"])}</h1><div class="role">{escape(cv["title"])}</div>
+    return f"""<header>{photo(cv)}<h1>{escape(cv["name"])}</h1><div class="role">{escape(cv["title"])}</div>
 <div class="where">{escape(cv["location"])}</div>
 <nav class="contact">{links}<button type="button" onclick="print()">{lb["print"]}</button></nav>
 <div class="highlights">{stats}</div></header>"""
@@ -92,7 +103,7 @@ def page(cv: dict, hidden: bool) -> str:
 
 def build(cv_path: Path, out: Path, theme: str = "pro",
           also: Annotated[list[Path] | None, typer.Option(help="More YAMLs (other languages); a theme script may switch.")] = None) -> None:
-    cvs = [yaml.safe_load(p.read_text(encoding="utf-8")) for p in (cv_path, *(also or ()))]
+    cvs = [yaml.safe_load(p.read_text(encoding="utf-8")) | {"_dir": p.parent} for p in (cv_path, *(also or ()))]
     # <theme>.js (often a link to the shared interactions), then any <theme>.*.js extras, in name order.
     scripts = [p for p in [THEMES / f"{theme}.js", *sorted(THEMES.glob(f"{theme}.*.js"))] if p.exists()]
     js = "".join(f"<script>{p.read_text(encoding='utf-8')}</script>" for p in scripts)
