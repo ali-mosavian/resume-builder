@@ -29,6 +29,8 @@ h1 { grid-area:name; margin:0; font:600 2.6rem/1.05 var(--sans); letter-spacing:
 .contact { grid-area:contact; display:flex; flex-wrap:wrap; justify-content:flex-end; align-items:center; gap:6px; font-size:.78rem; }
 .contact a { padding:6px 10px; border:1px solid var(--rule); border-radius:6px; transition:border-color .15s, color .15s; }
 .contact a:hover { border-color:var(--ink); }
+.contact > a.download { color:#fff; background:var(--ink); border-color:var(--ink); }
+.contact > a.download:hover { background:var(--accent); border-color:var(--accent); }
 .contact > button { font:500 .78rem var(--mono); color:#fff; background:var(--ink); border:0; border-radius:6px; padding:7px 12px; cursor:pointer; }
 .contact > button:hover { background:var(--accent); }
 .lang-switch { display:flex; padding:2px; background:var(--wash); border-radius:7px; margin-right:6px; }
@@ -61,7 +63,7 @@ main h2::after { content:""; flex:1; height:1px; background:var(--rule); }
 .experience h3 .title { order:3; color:#2a2e35; font-weight:400; }
 .experience h3 .title::before { content:"/"; margin-right:8px; color:var(--faint); }
 .experience h3 .at { display:none; }
-ul { margin:10px 0 0; padding-left:16px; } li { margin-bottom:6px; color:#2a2e35; } ul:not(.tools) > li::marker { content:"– "; color:var(--faint); }
+ul { margin:10px 0 0; padding-left:16px; } li { margin-bottom:6px; color:#2a2e35; } ul:not(.tools) > li::marker { content:"- "; color:var(--faint); }
 .tools { display:flex; flex-wrap:wrap; gap:4px; margin:12px 0 0; padding:0; list-style:none; }
 .tools li { margin:0; font-size:.7rem; color:var(--muted); background:var(--wash); border-radius:4px; padding:2px 7px; }
 
@@ -167,3 +169,5 @@ mark { background:var(--accent-tint); color:inherit; border-radius:2px; padding:
   .testimonials .quote { -webkit-line-clamp:unset; margin-bottom:4pt; } blockquote { font-size:8.2pt; }
   .testimonials .item:nth-of-type(n+4) { display:none; }  /* print the first three */
 }
+
+.photo { display:none; }

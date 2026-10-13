@@ -33,6 +33,7 @@ h1 { margin:0; font:700 3rem/1.05 var(--sans); letter-spacing:-.03em; color:var(
 .highlights span { display:block; max-width:9em; font-size:.72rem; line-height:1.35; color:var(--faint); }
 .contact { display:flex; flex-wrap:wrap; align-items:center; gap:8px 20px; margin-top:28px; font-size:.82rem; font-weight:500; }
 .contact a { color:var(--muted); transition:color .15s; } .contact a:hover { color:var(--accent); }
+.contact > a.download { color:var(--accent); background:var(--accent-bg); border:1px solid #5eead44d; border-radius:99px; padding:4px 12px; }
 .contact > button { font:600 .78rem var(--sans); color:var(--accent); background:var(--accent-bg); border:1px solid #5eead44d; border-radius:99px; padding:6px 14px; cursor:pointer; }
 .contact > button:hover { background:#2dd4bf33; }
 .lang-switch { display:flex; gap:2px; padding:2px; border:1px solid var(--rule); border-radius:99px; }
@@ -144,3 +145,6 @@ mark { background:var(--accent-tint); color:var(--head); border-radius:3px; padd
   .testimonials .item { margin-bottom:8pt; break-inside:avoid; } .testimonials .quote { -webkit-line-clamp:unset; } blockquote { font-size:8.4pt; }
   .testimonials .item:nth-of-type(n+4) { display:none; }  /* print the first three */
 }
+
+.photo { display:block; width:96px; height:96px; margin-bottom:24px; border-radius:50%; object-fit:cover; filter:grayscale(.2); }
+@media print { .photo { display:none; } }
