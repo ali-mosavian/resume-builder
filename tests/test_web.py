@@ -30,7 +30,7 @@ def test_two_languages(tmp_path: Path) -> None:
     page = html(tmp_path / "cv.html", "aurora-v3", ["en", "sv"]).read_text(encoding="utf-8")
     assert re.search(r'<div class="page" lang="sv" data-ui="[^"]*" hidden>', page), "second language not hidden"
     assert re.search(r'<div class="page" lang="en" data-ui="[^"]*">', page), "first language hidden"
-    assert page.count("<script>") == 2
+    assert page.count("<script>") == len(web.scripts("aurora-v3", multilingual=True))
     assert 'data-aka="GCP"' in page
 
 
