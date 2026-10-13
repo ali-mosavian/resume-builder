@@ -39,6 +39,14 @@ p { margin:0 0 14px; }
   .sections a:hover i, .sections a.on i { width:64px; background:var(--head); }
 }
 
+/* ---------- While the page glides item to item, the item in view is bright and the rest recede ---------- */
+@media screen and (min-width:900px) and (prefers-reduced-motion:no-preference) {
+  .snapping .summary, .snapping aside, .snapping .education .item, .snapping .experience .item, .snapping .testimonials .item
+    { transition:opacity .6s ease; }
+  .snapping .experience:not(.filtering) .item:not(.here), .snapping .education .item:not(.here), .snapping .testimonials .item:not(.here) { opacity:.3; }
+  .snapping .experience:not(.filtering) .item.here { opacity:1; }
+}
+
 /* ---------- Identity ---------- */
 .photo { display:block; width:132px; height:132px; margin-bottom:28px; border-radius:50%; object-fit:cover;
          box-shadow:0 0 0 1px #334155, 0 0 0 6px var(--bg), 0 0 0 7px #5eead433; }
