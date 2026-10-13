@@ -28,6 +28,17 @@ p { margin:0 0 14px; }
   section, aside { margin-bottom:72px; }
 }
 
+/* ---------- Section menu (screen only; the script builds it) ---------- */
+.sections { display:none; }
+@media screen and (min-width:900px) {
+  .sections { display:flex; flex-direction:column; gap:4px; margin-top:44px; }
+  .sections a { display:flex; align-items:center; gap:14px; padding:6px 0; font-size:.72rem; font-weight:700; letter-spacing:.12em;
+                text-transform:uppercase; color:var(--faint); text-decoration:none; transition:color .15s; }
+  .sections i { display:block; width:32px; height:1px; background:var(--faint); transition:width .15s, background .15s; }
+  .sections a:hover, .sections a.on { color:var(--head); }
+  .sections a:hover i, .sections a.on i { width:64px; background:var(--head); }
+}
+
 /* ---------- Identity ---------- */
 .photo { display:block; width:132px; height:132px; margin-bottom:28px; border-radius:50%; object-fit:cover;
          box-shadow:0 0 0 1px #334155, 0 0 0 6px var(--bg), 0 0 0 7px #5eead433; }
