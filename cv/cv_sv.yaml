@@ -78,7 +78,7 @@ experience:
     på vilken inredning för att fylla varje butik optimalt. Designade ett **domain-specific language (DSL)
     för att modellera butiksinredning** som ersatte tusentals rader specialfallskod, ovanpå en tvåstegs
     **constraint solver**; utökade testsviten från 5 till 100+ filer.'
-  - 'Designade och byggde ett **system för att prediktera lager på säljytan** (98 % av alla ändringar)
+  - 'Designade och byggde ett **system för att estimera shop-floor lager** (98 % av alla ändringar)
     för ~3 350 butiker utan RFID: en gradient boosted hurdle-modell med **161 features** tränad på **74
     miljoner rader** från 686 RFID-butiker, matad av en **egenutvecklad data lineage- och transformationspipeline**
     som bearbetar **6,6 TB** per träningskörning.'
