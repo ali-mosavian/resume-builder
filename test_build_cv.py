@@ -116,7 +116,7 @@ with tempfile.TemporaryDirectory() as tmp:
         page = Path(tmp) / "cv_switch.html"
         build_html(here / "cv" / "cv_en.yaml", page, "bracket", also=[here / "cv" / "cv_sv.yaml"])
         html = page.read_text(encoding="utf-8")
-        assert 'href="Ali_Mosavian_CV_SV.docx" download' in html and "onclick=\"print()\"" not in html
+        assert 'href="ali_mosavian-resume-sv.docx" download' in html and "onclick=\"print()\"" not in html
         page.write_text(html.replace("</body>", probe + "</body>"), encoding="utf-8")
         dom = subprocess.run([chrome, "--headless=new", "--disable-gpu", "--window-size=1280,1000", "--virtual-time-budget=6000",
                               "--dump-dom", page.as_uri() + "#sv"], capture_output=True, text=True, check=True).stdout
