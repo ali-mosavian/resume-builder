@@ -41,7 +41,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
       # index.html, and per language its PDF (the page, printed) and .docx, named by the CV's `download:`.
-      - run: uv run --no-dev resume build --out _site && ls -l _site
+      # Runs when a PR is merged into main: the Split theme and its Word template are what gets published.
+      - run: uv run --no-dev resume build --theme split --template templates/split.docx --out _site && ls -l _site
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
