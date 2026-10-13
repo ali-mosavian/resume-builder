@@ -91,3 +91,4 @@ blockquote { margin:0 0 8px; }
   .page.paged { margin:0; }
   .sheet { margin:0; box-shadow:none; break-after:page; }
 }
+.sheet li.cont { list-style:none; }  /* a bullet continued from the previous sheet */
