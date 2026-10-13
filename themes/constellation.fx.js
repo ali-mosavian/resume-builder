@@ -8,7 +8,6 @@
     [...term.split("/"), ...aka.split("|").filter(Boolean)].map((t) => `(?<![\\w-])${esc(t.trim())}(?![\\w-])`).join("|"), "i");
   const MAX_STARS = 32, LABELS = 22;
   const NIGHT = { bg:null, star:"#cfd8ff", gold:"#e8bd63", edge:"#8fa0e6", ink:"#eef1fb", dim:"#8f99bd", halo:"#070a17" };
-  const PAPER = { bg:"#fff", star:"#3b47c9", gold:"#b8892a", edge:"#3b47c9", ink:"#141827", dim:"#5b6378", halo:"#fff" };
 
   const dateOf = (s) => { const m = s.match(/([a-zåäö]{3})\w*\.?\s+(\d{4})/i); return m ? +m[2] + (MONTHS[m[1].toLowerCase()] ?? 0) / 12 : null; };
   const rnd = (seed) => () => (seed = (seed * 16807) % 2147483647) / 2147483647;  // deterministic: same sky every visit
@@ -58,11 +57,7 @@
     hint.className = "sky-hint";
     hint.textContent = page.lang === "sv" ? "Peka på en stjärna" : "Hover a star";  // ponytail: two languages
     header.append(hint);
-    const kicker = document.createElement("div");
-    kicker.className = "kicker";
     const years = [Math.floor(Math.min(...roles.map((r) => r.t0))), Math.floor(Math.max(...roles.map((r) => r.t1)))];
-    kicker.textContent = `${years[0]} - ${years[1]}`;
-    header.prepend(kicker);
 
     const ctx = canvas.getContext("2d");
     let W = 0, H = 0, dpr = 1, hot = null, palette = NIGHT, running = false, t0 = performance.now();
@@ -262,11 +257,6 @@
       else n.el.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" });
     });
 
-    // Print: redraw in ink on white; back to night afterwards.
-    const repaint = (p) => { palette = p; resize(); };  // print changes the box, so lay out again, now
-    addEventListener("beforeprint", () => repaint(PAPER));
-    addEventListener("afterprint", () => repaint(NIGHT));
-    matchMedia("print").addEventListener("change", (e) => repaint(e.matches ? PAPER : NIGHT));
   }
 
   document.querySelectorAll(".page").forEach(build);

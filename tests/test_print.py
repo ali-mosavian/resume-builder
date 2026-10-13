@@ -19,8 +19,8 @@ THEMES = ROOT / "themes"
 
 
 def sharing(script: str) -> list[str]:
-    """Themes whose script is a link to the given one."""
-    return sorted(p.stem for p in THEMES.glob("*.js") if p.resolve() == (THEMES / script).resolve())
+    """Themes with a script (<theme>.js or <theme>.*.js) that is a link to the given one."""
+    return sorted({p.name.split(".")[0] for p in THEMES.glob("*.js") if p.resolve() == (THEMES / script).resolve()})
 
 
 def pdf(chrome: Path, page: Path, budget: int = 4000) -> Path:
@@ -96,6 +96,33 @@ def test_expanded_brief_roles_keep_tool_layout(chrome: Path, tmp_path: Path, the
     )
     normal, brief = title(chrome, html(tmp_path / "cv.html", theme, ["en"], probe).as_uri(), budget=1000).split("|")
     assert normal == brief
+
+
+@pytest.mark.parametrize("theme", sharing("aurora-v3.js"))
+def test_skill_filter_after_pagination(chrome: Path, tmp_path: Path, theme: str) -> None:
+    """Pagination into sheets replaced the roles the filter had captured: clicking a skill marked nothing on the
+    page and the pill counted 0 roles."""
+    probe = (
+        "addEventListener('load',()=>setTimeout(()=>{const p=document.querySelector('.page:not([hidden])');"
+        "[...p.querySelectorAll('aside .kv[style]')].find(k=>k.textContent.includes('Python')).click();"
+        "document.title=p.querySelectorAll('.sheet .experience .item.match').length+'|'+p.querySelector('.filter-pill').textContent},1500))"
+    )
+    marked, pill = title(chrome, html(tmp_path / "cv.html", theme, ["en"], probe).as_uri()).split("|", 1)
+    assert int(marked) > 0
+    assert not pill.rstrip("Clear").rstrip().endswith("· 0"), pill
+
+
+@pytest.mark.parametrize("theme", [p.stem for p in sorted(THEMES.glob("*.css"))])
+def test_one_language_shown_with_a_switch(chrome: Path, tmp_path: Path, theme: str) -> None:
+    """slate's `display:grid` beat `[hidden]`, so both languages showed (a 15-page PDF), and its header hid the
+    language switch and download links."""
+    probe = (
+        "addEventListener('load',()=>setTimeout(()=>{const v=e=>!!e&&e.getClientRects().length>0;"
+        "document.title=[...document.querySelectorAll('.page')].filter(v).length+'|'"
+        "+v(document.querySelector('.page:not([hidden]) .lang-switch'))+'|'+v(document.querySelector('.page:not([hidden]) a.download'))},1500))"
+    )
+    pages, switch, download = title(chrome, html(tmp_path / "cv.html", theme, ["en", "sv"], probe).as_uri()).split("|")
+    assert (pages, switch, download) == ("1", "true", "true")
 
 
 def test_build_writes_every_output(chrome: Path, tmp_path: Path) -> None:
