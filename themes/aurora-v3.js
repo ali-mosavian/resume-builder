@@ -11,18 +11,27 @@
 
   function wire(page) {
     const ui = JSON.parse(page.dataset.ui || "{}");
-    const exp = page.querySelector(".experience");
-    const roles = [...exp.querySelectorAll(".item")];
+    // Looked up on use: pagination into sheets (slate.js) replaces the sections and splits a role into a head
+    // item and ".cont" items on later sheets. A role is its parts.
+    const sections = () => [...page.querySelectorAll(".experience")];
+    const roles = () => {
+      const out = [];
+      for (const it of page.querySelectorAll(".experience .item")) {
+        if (it.classList.contains("cont") && out.length) out.at(-1).push(it);
+        else out.push([it]);
+      }
+      return out;
+    };
     const chips = [...page.querySelectorAll("aside .kv[style], .tools li")];
     // Join per element: adjacent tool tags have no whitespace between them in textContent.
-    const textOf = (role) => [...role.querySelectorAll("h3, li, p")].map((e) => e.textContent).join(" \n ");
+    const textOf = (role) => role.flatMap((part) => [...part.querySelectorAll("h3, li, p")].map((e) => e.textContent)).join(" \n ");
     const termOf = (el) => (el.matches(".kv") ? el.firstElementChild : el).textContent.trim();
 
     // Only offer chips that match at least one role.
     const akaOf = (el) => el.dataset.aka || "";
     for (const chip of chips) {
       const re = matcher(termOf(chip), akaOf(chip));
-      const hits = roles.filter((r) => re.test(textOf(r))).length;
+      const hits = roles().filter((r) => re.test(textOf(r))).length;
       if (hits) chip.dataset.hits = hits;
       else chip.title = ui.no_match || "";
     }
@@ -36,11 +45,13 @@
 
     let current = null;
     function unmark() {
-      for (const m of exp.querySelectorAll("mark")) m.replaceWith(...m.childNodes);
-      exp.normalize();
+      for (const exp of sections()) {
+        for (const m of exp.querySelectorAll("mark")) m.replaceWith(...m.childNodes);
+        exp.normalize();
+      }
     }
     function mark(re) {  // highlight the term in bullet text
-      for (const li of exp.querySelectorAll(".item.match > ul:not(.tools) li")) {
+      for (const li of page.querySelectorAll(".experience .item.match > ul:not(.tools) li")) {
         const walker = document.createTreeWalker(li, NodeFilter.SHOW_TEXT);
         const nodes = [];
         while (walker.nextNode()) nodes.push(walker.currentNode);
@@ -59,20 +70,24 @@
       current = term === current ? null : term;
       unmark();
       for (const c of chips) c.classList.toggle("active", current !== null && termOf(c) === current);
-      exp.classList.toggle("filtering", current !== null);
+      for (const exp of sections()) exp.classList.toggle("filtering", current !== null);
       if (current === null) {
-        roles.forEach((r) => r.classList.remove("match"));
+        for (const role of roles()) for (const part of role) part.classList.remove("match");
         pill.setAttribute("aria-hidden", "true");
         return;
       }
       const re = matcher(current, aka);
       let n = 0;
-      for (const r of roles) n += r.classList.toggle("match", re.test(textOf(r)));
+      for (const role of roles()) {
+        const hit = re.test(textOf(role));
+        for (const part of role) part.classList.toggle("match", hit);
+        n += hit;
+      }
       mark(re);
       pill.firstElementChild.innerHTML = `${ui.filtering || "Roles using"} <b></b> · ${n}`;
       pill.querySelector("b").textContent = current;
       pill.setAttribute("aria-hidden", "false");
-      const first = exp.querySelector(".item.match");
+      const first = page.querySelector(".experience .item.match");
       if (first && first.getBoundingClientRect().top > innerHeight) first.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" });
     }
     for (const chip of chips.filter((c) => c.dataset.hits)) {
@@ -85,7 +100,7 @@
     addEventListener("keydown", (e) => e.key === "Escape" && current !== null && !page.hidden && filter(current));
 
     // Earlier roles: one toggle to show their details.
-    const firstBrief = exp.querySelector(".brief[data-earlier]");
+    const firstBrief = page.querySelector(".experience .brief[data-earlier]");
     if (firstBrief) {
       const btn = document.createElement("button");
       btn.type = "button";
@@ -93,7 +108,8 @@
       btn.setAttribute("aria-expanded", "false");
       btn.textContent = ui.show_details || "Show details";
       btn.addEventListener("click", () => {
-        const open = exp.classList.toggle("expanded");
+        const open = !btn.closest(".experience").classList.contains("expanded");
+        for (const exp of sections()) exp.classList.toggle("expanded", open);
         btn.setAttribute("aria-expanded", open);
         btn.textContent = open ? ui.hide_details || "Hide details" : ui.show_details || "Show details";
       });
@@ -136,32 +152,4 @@
   };
   addEventListener("beforeprint", finish);
   matchMedia("print").addEventListener("change", (e) => e.matches && finish());
-
-  // Language switch, when the page holds more than one language.
-  if (pages.length > 1) {
-    const show = (lang) => {
-      for (const p of pages) p.hidden = p.lang !== lang;
-      document.documentElement.lang = lang;
-      for (const b of document.querySelectorAll(".lang-switch button")) b.setAttribute("aria-pressed", b.dataset.lang === lang);
-      history.replaceState(null, "", `#${lang}`);
-    };
-    for (const p of pages) {
-      const sw = document.createElement("div");
-      sw.className = "lang-switch";
-      sw.setAttribute("role", "group");
-      for (const q of pages) {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.dataset.lang = q.lang;
-        b.textContent = JSON.parse(q.dataset.ui || "{}").lang_name || q.lang.toUpperCase();
-        b.addEventListener("click", () => show(q.lang));
-        sw.append(b);
-      }
-      p.querySelector(".contact").prepend(sw);
-    }
-    const langs = pages.map((p) => p.lang);
-    const wanted = location.hash.slice(1);
-    const browser = (navigator.language || "").slice(0, 2);
-    show(langs.includes(wanted) ? wanted : langs.includes(browser) ? browser : langs[0]);
-  }
 })();

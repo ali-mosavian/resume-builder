@@ -1,7 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 :root { --ink:#1f2328; --muted:#6b7280; --accent:#1f3a5f; --rule:#d5dbe3; --side:#f3f5f8; }
 * { box-sizing:border-box; }
 body { margin:0; background:#e9edf2; color:var(--ink);
-       font:15px/1.55 "Inter","Segoe UI",system-ui,-apple-system,sans-serif; }
+       font-optical-sizing:none; font:15px/1.55 "Inter","Segoe UI",system-ui,-apple-system,sans-serif; }
 .page { max-width:1000px; margin:32px auto; background:#fff; box-shadow:0 2px 24px #0001; }
 header { padding:40px 48px 24px; border-bottom:3px solid var(--accent); }
 h1 { margin:0; font-size:2.4rem; letter-spacing:-.01em; color:var(--accent); }
@@ -23,7 +24,7 @@ dl { margin:0; } dt { color:var(--muted); font-size:.7rem; text-transform:upperc
 dd { margin:0; }
 .kv { display:flex; justify-content:space-between; gap:8px; } .kv span:last-child { color:var(--muted); }
 a { color:var(--accent); }
-blockquote { margin:0 0 4px; color:#374151; font-style:italic; }
+blockquote { margin:0 0 4px; }
 @media screen and (max-width:760px) {
   .page { margin:0; } .grid { grid-template-columns:1fr; } aside { order:2; } header, main, aside { padding-left:20px; padding-right:20px; }
 }
@@ -36,3 +37,52 @@ blockquote { margin:0 0 4px; color:#374151; font-style:italic; }
   .grid { grid-template-columns:62mm 1fr; } a { text-decoration:none; }
 }
 .contact, .highlights { display:none; }
+.photo { display:none; }
+/* On screen the header keeps the language switch and the downloads, top right; the sidebar lists the links. */
+@media screen {
+  header { position:relative; }
+  .contact { display:flex; gap:6px; position:absolute; top:12mm; right:14mm; }
+  .contact a:not(.download) { display:none; }
+  .contact .lang-switch { display:flex; gap:6px; margin-right:6px; }
+  .contact button, .contact a.download { padding:2px 9px; border:1px solid var(--rule); border-radius:3px; background:none;
+                                         color:var(--accent); font:inherit; font-size:8pt; text-decoration:none; cursor:pointer; }
+  .contact button[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:#fff; }
+}
+
+/* A4 sheets, built by the shared paginator (slate.js); sized in pt/mm so screen and paper match.
+   themes/pro.py mirrors these numbers. */
+.page { --header-top:1; }
+.page.paged { max-width:none; margin:40px auto; background:none; box-shadow:none; font-size:9.5pt; line-height:1.5; }
+.sheet { width:210mm; height:297mm; margin:0 auto 28px; display:grid; grid-template-columns:62mm 1fr; grid-template-rows:auto 1fr;
+         background:#fff; box-shadow:0 2px 24px #0001; overflow:hidden; }
+.sheet header { grid-column:1 / -1; grid-row:1; height:34mm; padding:12mm 14mm 0; border-bottom:.8mm solid var(--accent); }
+.sheet h1 { font-size:24pt; line-height:1.1; letter-spacing:-.01em; }
+.sheet .role { margin-top:1.5mm; font-size:8pt; }
+.sheet aside { grid-column:1; grid-row:2; padding:7mm 6mm 10mm 7mm; font-size:8.5pt; overflow:hidden; }
+.sheet main { grid-column:2; grid-row:2; padding:7mm 12mm 10mm 8mm; overflow:hidden; }
+.sheet:not(:first-child) aside, .sheet:not(:first-child) main { padding-top:12mm; }
+.sheet p { margin:0 0 2mm; }
+.sheet aside h2 { font-size:7.5pt; margin:5mm 0 2mm; }
+.sheet main h2 { font-size:8.5pt; margin:6mm 0 2mm; padding-bottom:1.5mm; }
+.sheet aside h2:first-child, .sheet main h2:first-child { margin-top:0; }
+.sheet h3 { font-size:10pt; }
+.sheet .when { font-size:7pt; margin:.5mm 0 2mm; }
+.sheet dt { font-size:6.5pt; margin-top:2mm; }
+.sheet aside p { margin:0; }
+.sheet .item { margin:3mm 0 0; }
+.sheet section > .item:first-child { margin-top:0; }
+.sheet h2 + .item { margin-top:3mm; }
+.sheet main section + section { margin-top:6mm; }
+.sheet ul { margin:0 0 2mm; padding-left:4.5mm; } .sheet li { margin-bottom:.8mm; }
+.sheet li.cont { list-style:none; }
+.sheet .item p { margin:0; }
+.sheet .tools { gap:1.2mm; margin:2mm 0 0; padding:0; }
+.sheet .tools li { font-size:7pt; padding:0 2mm; border-radius:1mm; }
+.sheet blockquote { margin:0 0 2mm; }
+.sheet main > section:last-child > .item:last-child ul:last-child { margin-bottom:0; }
+@media print {
+  @page { size:A4; margin:0; }
+  * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .page.paged { margin:0; }
+  .sheet { margin:0; box-shadow:none; break-after:page; }
+}
