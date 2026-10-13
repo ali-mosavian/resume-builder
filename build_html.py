@@ -69,8 +69,8 @@ def body(cv: dict, lb: dict) -> str:
 <div class="quote">{"".join(f"<blockquote>{md(q)}</blockquote>" for q in t["quote"])}</div></div>""" for t in cv["testimonials"])
     return f"""<main>
 <section class="summary"><h2>{lb["summary"]}</h2>{summary}</section>
-<section class="experience"><h2>{lb["experience"]}</h2>{jobs}</section>
 <section class="education"><h2>{lb["education"]}</h2>{edu}</section>
+<section class="experience"><h2>{lb["experience"]}</h2>{jobs}</section>
 <section class="testimonials"><h2>{lb["testimonials"]}</h2>{words}</section>
 </main>"""
 
