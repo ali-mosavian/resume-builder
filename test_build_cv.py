@@ -2,7 +2,7 @@
 # requires-python = ">=3.12"
 # dependencies = ["python-docx~=1.1", "pyyaml~=6.0", "typer~=0.12"]
 # ///
-"""Self-check: builds cv/cv_en.yaml with each template and checks what the reader sees. Run: uv run test_build_cv.py"""
+"""Self-check: builds cv/cv.yaml with each template and checks what the reader sees. Run: uv run test_build_cv.py"""
 import re
 import shutil
 import subprocess
@@ -15,21 +15,36 @@ from docx import Document
 from docx.shared import Cm
 
 from build_cv import build, cells
+from cvdata import Untranslated, langs, load
 
 here = Path(__file__).parent
+CV = here / "cv" / "cv.yaml"
+
+# One YAML holds every language: a translation point missing a declared language is an error, not a gap in the CV.
+with tempfile.TemporaryDirectory() as tmp:
+    data = yaml.safe_load(CV.read_text(encoding="utf-8"))
+    del data["experience"][3]["sv"]
+    broken = Path(tmp) / "cv.yaml"
+    broken.write_text(yaml.safe_dump(data, allow_unicode=True), encoding="utf-8")
+    try:
+        load(broken, "en")
+    except Untranslated as e:
+        assert "experience[3]" in str(e) and "missing sv" in str(e), e
+    else:
+        raise AssertionError("a role without its sv text loaded")
 
 # A bold edit once quoted only the end of a Swedish bullet, printing a stray ' after Nordea's text.
-for path in (here / "cv").glob("*.yaml"):
-    for j in yaml.safe_load(path.read_text(encoding="utf-8"))["experience"]:
+for lang in langs(CV):
+    for j in load(CV, lang)["experience"]:
         for b in j["bullets"]:
-            assert b.endswith("."), f"{path.name}, {j['company']}: bullet ends {b[-12:]!r}"
+            assert b.endswith("."), f"{lang}, {j['company']}: bullet ends {b[-12:]!r}"
     # Byggfakta once read "JUN 2024 - NU" long after it ended: only the latest role may be ongoing.
-    ongoing = [j["company"] for j in yaml.safe_load(path.read_text(encoding="utf-8"))["experience"][1:] if j["end"] is None]
-    assert not ongoing, f"{path.name}: earlier roles still ongoing: {ongoing}"
+    ongoing = [j["company"] for j in load(CV, lang)["experience"][1:] if j["end"] is None]
+    assert not ongoing, f"{lang}: earlier roles still ongoing: {ongoing}"
 for template in sorted((here / "templates").glob("*.docx")):
     with tempfile.TemporaryDirectory() as tmp:
         out = Path(tmp) / "cv.docx"
-        build(here / "cv" / "cv_en.yaml", out, template)
+        build(CV, out, template, lang="en")
         doc = Document(out)
         main = doc.tables[-1].rows[0].cells[-1]
         texts = [p.text for p in main.paragraphs]
@@ -52,7 +67,7 @@ for template in sorted((here / "templates").glob("*.docx")):
 # Bullets once came from python-docx's built-in list, not the template's own: black instead of the accent colour.
 for template, color in (("pro", "1F3A5F"), ("bracket", "F6B92B")):
     with tempfile.TemporaryDirectory() as tmp:
-        build(here / "cv" / "cv_en.yaml", Path(tmp) / "cv.docx", here / "templates" / f"{template}.docx")
+        build(CV, Path(tmp) / "cv.docx", here / "templates" / f"{template}.docx", lang="en")
         doc = Document(Path(tmp) / "cv.docx")
         num_id = doc.element.body.xpath(".//w:numPr/w:numId/@w:val")[0]
         numbering = doc.part.numbering_part.element
@@ -63,15 +78,15 @@ for template, color in (("pro", "1F3A5F"), ("bracket", "F6B92B")):
 # Dates were printed "JUN 2024 <em dash> NU": the CV uses "-", never em or en dashes, in any output.
 with tempfile.TemporaryDirectory() as tmp:
     from build_html import build as build_html
-    build(here / "cv" / "cv_sv.yaml", Path(tmp) / "cv.docx", here / "templates" / "bracket.docx")
-    build_html(here / "cv" / "cv_en.yaml", Path(tmp) / "cv.html", "bracket", also=[here / "cv" / "cv_sv.yaml"])
+    build(CV, Path(tmp) / "cv.docx", here / "templates" / "bracket.docx", lang="sv")
+    build_html(CV, Path(tmp) / "cv.html", "bracket", ["en", "sv"])
     out = Document(Path(tmp) / "cv.docx").element.xml + (Path(tmp) / "cv.html").read_text(encoding="utf-8")
     assert not re.search("[\u2013\u2014]", out), f"dash in output: {re.search('.{20}[\u2013\u2014].{20}', out)[0]!r}"
 
 # Word glues a no-break space to the spaces around it, so tool chips (padded with no-break spaces) had no break
 # point between them and Word broke chips mid-word ("SQLAlchem|y"). Each separator carries a zero-width space.
 with tempfile.TemporaryDirectory() as tmp:
-    build(here / "cv" / "cv_en.yaml", Path(tmp) / "cv.docx", here / "templates" / "bracket.docx")
+    build(CV, Path(tmp) / "cv.docx", here / "templates" / "bracket.docx", lang="en")
     chips = next(p for p in Document(Path(tmp) / "cv.docx").tables[-1].rows[0].cells[-1].paragraphs if p._p.style == "CVTools")
     assert chips.text.count("\u200b") == chips.text.count("\u202f"), "tool chips have no break point between them"
 
@@ -89,7 +104,7 @@ bracket = Document(here / "templates" / "bracket.docx")
 themed = [s.style_id for s in bracket.styles if s.element.xpath("./w:rPr/w:rFonts[@w:ascii='Montserrat'][@w:asciiTheme]")]
 assert not themed, f"bracket.docx styles shadowed by a theme font: {themed}"
 with tempfile.TemporaryDirectory() as tmp:
-    build(here / "cv" / "cv_sv.yaml", Path(tmp) / "cv.docx", here / "templates" / "bracket.docx")
+    build(CV, Path(tmp) / "cv.docx", here / "templates" / "bracket.docx", lang="sv")
     embedded = [p.partname for p in Document(Path(tmp) / "cv.docx").part.package.iter_parts() if p.partname.endswith(".odttf")]
     assert len(embedded) == 4, f"bracket CV embeds {len(embedded)} font files"
 
@@ -102,7 +117,7 @@ with tempfile.TemporaryDirectory() as tmp:
 
     for theme in sorted(p.stem for p in (here / "themes").glob("*.css")):
         out = Path(tmp) / f"cv_{theme}.html"
-        build_html(here / "cv" / "cv_en.yaml", out, theme)
+        build_html(CV, out, theme, ["en"])
         html = out.read_text(encoding="utf-8")
         assert "<strong>store capacity optimization engine</strong>" in html and "**" not in html
         assert "reading &amp; learning" in html, "YAML text is not HTML-escaped"
@@ -110,7 +125,7 @@ with tempfile.TemporaryDirectory() as tmp:
         assert html.count("data-earlier=") == 1, "earlier-roles caption repeated or missing"
     # One page, both languages: the second starts hidden; the theme script and the language switch are inlined.
     out = Path(tmp) / "cv_both.html"
-    build_html(here / "cv" / "cv_en.yaml", out, "aurora-v3", also=[here / "cv" / "cv_sv.yaml"])
+    build_html(CV, out, "aurora-v3", ["en", "sv"])
     html = out.read_text(encoding="utf-8")
     assert '<div class="page" lang="en"' in html and '<div class="page" lang="sv"' in html
     assert re.search(r'<div class="page" lang="sv" data-ui="[^"]*" hidden>', html), "second language not hidden"
@@ -120,7 +135,7 @@ with tempfile.TemporaryDirectory() as tmp:
     chrome = Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
     if chrome.exists() and shutil.which("pdftotext"):
         page, pdf = Path(tmp) / "cv_print.html", Path(tmp) / "cv.pdf"
-        build_html(here / "cv" / "cv_en.yaml", page, "aurora-v3")
+        build_html(CV, page, "aurora-v3", ["en"])
         subprocess.run([chrome, "--headless=new", "--disable-gpu", "--virtual-time-budget=300", "--no-pdf-header-footer",
                         f"--print-to-pdf={pdf}", page.as_uri()], capture_output=True, check=True)
         text = subprocess.run(["pdftotext", "-l", "1", pdf, "-"], capture_output=True, text=True, check=True).stdout.split()
@@ -131,11 +146,11 @@ with tempfile.TemporaryDirectory() as tmp:
     # slate.js paginates into A4 sheets that clip overflow; chained testimonials once overflowed one sheet
     # and the last four vanished from the PDF. Every role and testimonial must reach the paper, on A4.
     if chrome.exists() and shutil.which("pdftotext"):
-        cv = yaml.safe_load((here / "cv" / "cv_en.yaml").read_text(encoding="utf-8"))
+        cv = load(CV, "en")
         pager = (here / "themes" / "slate.js").resolve()
         for theme in sorted(p.stem for p in (here / "themes").glob("*.js") if p.resolve() == pager):
             page, pdf = Path(tmp) / f"cv_{theme}.html", Path(tmp) / f"cv_{theme}.pdf"
-            build_html(here / "cv" / "cv_en.yaml", page, theme)
+            build_html(CV, page, theme, ["en"])
             subprocess.run([chrome, "--headless=new", "--disable-gpu", "--window-size=1280,1000", "--virtual-time-budget=4000",
                             "--no-pdf-header-footer", f"--print-to-pdf={pdf}", page.as_uri()], capture_output=True, check=True)
             # Raw (content-stream) order: the default reading order once wove sidebar lines into a wrapped role heading
@@ -152,7 +167,7 @@ with tempfile.TemporaryDirectory() as tmp:
         probe = ("<script>addEventListener('load',()=>setTimeout(()=>{document.title=[...document.querySelectorAll('.sheet aside')]"
                  ".map(a=>a.getBoundingClientRect().width|0).join(',')},1500))</script>")
         page = Path(tmp) / "cv_dmc_side.html"
-        build_html(here / "cv" / "cv_en.yaml", page, "bracket")
+        build_html(CV, page, "bracket", ["en"])
         page.write_text(page.read_text(encoding="utf-8").replace("</body>", probe + "</body>"), encoding="utf-8")
         dom = subprocess.run([chrome, "--headless=new", "--disable-gpu", "--window-size=1280,1000", "--virtual-time-budget=4000",
                               "--dump-dom", page.as_uri()], capture_output=True, text=True, check=True).stdout
@@ -169,7 +184,7 @@ with tempfile.TemporaryDirectory() as tmp:
                  "setTimeout(()=>{const y=!!document.querySelector('.page[lang=en] .sheet:first-child [data-from=experience]');"
                  "document.title=a+'|'+n()+'|'+x+'|'+y},1000)},1500))</script>")
         page = Path(tmp) / "cv_switch.html"
-        build_html(here / "cv" / "cv_en.yaml", page, "bracket", also=[here / "cv" / "cv_sv.yaml"])
+        build_html(CV, page, "bracket", ["en", "sv"])
         html = page.read_text(encoding="utf-8")
         assert 'href="ali_mosavian-resume-sv.docx" download' in html and "onclick=\"print()\"" not in html
         page.write_text(html.replace("</body>", probe + "</body>"), encoding="utf-8")
@@ -191,7 +206,7 @@ with tempfile.TemporaryDirectory() as tmp:
         shared = (here / "themes" / "aurora-v3.js").resolve()
         for theme in sorted(p.stem for p in (here / "themes").glob("*.js") if p.resolve() == shared):
             page = Path(tmp) / f"cv_expand_{theme}.html"
-            build_html(here / "cv" / "cv_en.yaml", page, theme)
+            build_html(CV, page, theme, ["en"])
             page.write_text(page.read_text(encoding="utf-8").replace("</body>", probe + "</body>"), encoding="utf-8")
             dom = subprocess.run([chrome, "--headless=new", "--disable-gpu", "--virtual-time-budget=1000", "--dump-dom", page.as_uri()],
                                  capture_output=True, text=True, check=True).stdout
