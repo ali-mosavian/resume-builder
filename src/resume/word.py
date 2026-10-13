@@ -9,23 +9,33 @@ placeholders CVPhoto ("{Photo <width cm> [gray]}"), CVContact and CVHighlights; 
 The CV prefix keeps them from matching a template's own styles (Word has a built-in Quote).
 """
 
-from collections.abc import Iterable, Iterator
 from pathlib import Path
+from collections.abc import Iterable
+from collections.abc import Iterator
 
 from docx import Document
+from docx.shared import Cm
+from docx.oxml.ns import qn
+from docx.shared import Emu
+from docx.table import Table
+from docx.table import _Cell
+from docx.shared import Twips
+from docx.text.run import Run
+from docx.shared import Length
+from docx.oxml import OxmlElement
+from docx.oxml.styles import CT_Style
 from docx.document import Document as Doc
+from docx.text.paragraph import Paragraph
 from docx.enum.table import WD_ROW_HEIGHT_RULE
 from docx.opc.constants import RELATIONSHIP_TYPE
-from docx.oxml import OxmlElement
-from docx.oxml.ns import qn
-from docx.oxml.styles import CT_Style
-from docx.shared import Cm, Emu, Length, Twips
-from docx.table import Table, _Cell
-from docx.text.paragraph import Paragraph
-from docx.text.run import Run
 
-from resume.data import BOLD, CV, Labels, span, when
-from resume.ooxml import shading, xml
+from resume.data import CV
+from resume.data import BOLD
+from resume.data import span
+from resume.data import when
+from resume.ooxml import xml
+from resume.data import Labels
+from resume.ooxml import shading
 
 
 def add_text(p: Paragraph, text: str) -> None:

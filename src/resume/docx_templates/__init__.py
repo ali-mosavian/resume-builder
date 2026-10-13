@@ -4,19 +4,27 @@ Shared here: styles, bullet lists, borders, cells and tables as the generators b
 """
 
 import pkgutil
+from typing import cast
+from typing import NamedTuple
 from collections.abc import Sequence
-from typing import NamedTuple, cast
 
+from docx.shared import Cm
+from docx.shared import Pt
+from docx.oxml.ns import qn
+from docx.table import Table
+from docx.table import _Cell
+from docx.shared import RGBColor
+from docx.oxml import OxmlElement
 from docx.document import Document as Doc
 from docx.enum.style import WD_STYLE_TYPE
-from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT, WD_TABLE_ALIGNMENT
-from docx.oxml import OxmlElement
-from docx.oxml.ns import qn
-from docx.shared import Cm, Pt, RGBColor
-from docx.styles.style import CharacterStyle, ParagraphStyle
-from docx.table import Table, _Cell
+from docx.styles.style import CharacterStyle
+from docx.styles.style import ParagraphStyle
+from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
 
-from resume.ooxml import CM, shading, xml
+from resume.ooxml import CM
+from resume.ooxml import xml
+from resume.ooxml import shading
 
 
 def names() -> list[str]:
@@ -158,7 +166,8 @@ def border(s: ParagraphStyle, sides: str, color: str, size: int, space: int = 4)
     lists need "top between bottom"."""
     order = ("top", "left", "bottom", "right", "between")  # schema order
     edges = "".join(
-        f'<w:{side} w:val="single" w:sz="{size}" w:space="{space}" w:color="{color}"/>' for side in sorted(sides.split(), key=order.index)
+        f'<w:{side} w:val="single" w:sz="{size}" w:space="{space}" w:color="{color}"/>'
+        for side in sorted(sides.split(), key=order.index)
     )
     ppr(s, f"<w:pBdr>{edges}</w:pBdr>", AFTER_NUMPR[2:])
 
@@ -191,12 +200,20 @@ def cell(
     if fill:
         tc_pr.append(shading(fill))
     margin = dict(zip(("top", "right", "bottom", "left"), pad, strict=True))
-    tc_pr.append(xml("<w:tcMar>" + "".join(f'<w:{side} w:w="{int(margin[side] * CM)}" w:type="dxa"/>' for side in order) + "</w:tcMar>"))
+    tc_pr.append(
+        xml(
+            "<w:tcMar>"
+            + "".join(f'<w:{side} w:w="{int(margin[side] * CM)}" w:type="dxa"/>' for side in order)
+            + "</w:tcMar>"
+        )
+    )
     if valign:
         c.vertical_alignment = valign
 
 
-def table(container: Doc, widths: Sequence[float], rows: int = 1, align: WD_TABLE_ALIGNMENT = WD_TABLE_ALIGNMENT.LEFT) -> Table:
+def table(
+    container: Doc, widths: Sequence[float], rows: int = 1, align: WD_TABLE_ALIGNMENT = WD_TABLE_ALIGNMENT.LEFT
+) -> Table:
     """A fixed-layout table; cells pad themselves (see cell)."""
     t = container.add_table(rows=rows, cols=len(widths))
     t.alignment = align
