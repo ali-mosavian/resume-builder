@@ -36,7 +36,7 @@ for template in sorted((here / "templates").glob("*.docx")):
         # **markup** becomes a bold run without the asterisks.
         first = next(p for p in main.paragraphs if "store capacity optimization engine" in p.text)
         assert "**" not in first.text and any(r.bold and r.text == "store capacity optimization engine" for r in first.runs)
-        assert "SEP 2025 — PRESENT" in texts
+        assert "SEP 2025 - PRESENT" in texts
         everywhere = [*doc.paragraphs, *(p for c in cells(doc.tables) for p in c.paragraphs)]
         assert any(p.text == "Ali Mosavian" for p in everywhere), f"{template.name}: name placeholder not filled"
         left = [p.text for p in everywhere if p.text.startswith("{")]
@@ -56,6 +56,14 @@ for template, color in (("pro", "1F3A5F"), ("bracket", "F6B92B")):
         abstract = numbering.xpath(f"./w:num[@w:numId='{num_id}']/w:abstractNumId/@w:val")[0]
         used = numbering.xpath(f"./w:abstractNum[@w:abstractNumId='{abstract}']/w:lvl[@w:ilvl='0']/w:rPr/w:color/@w:val")
         assert used == [color], f"{template}: bullets coloured {used}, template says {color}"
+
+# Dates were printed "JUN 2024 — NU": the CV uses "-", never em or en dashes, in any output.
+with tempfile.TemporaryDirectory() as tmp:
+    from build_html import build as build_html
+    build(here / "cv" / "cv_sv.yaml", Path(tmp) / "cv.docx", here / "templates" / "bracket.docx")
+    build_html(here / "cv" / "cv_en.yaml", Path(tmp) / "cv.html", "bracket", also=[here / "cv" / "cv_sv.yaml"])
+    out = Document(Path(tmp) / "cv.docx").element.xml + (Path(tmp) / "cv.html").read_text(encoding="utf-8")
+    assert not re.search("[—–]", out), f"dash in output: {re.search('.{20}[—–].{20}', out)[0]!r}"
 
 # Word glues a no-break space to the spaces around it, so tool chips (padded with no-break spaces) had no break
 # point between them and Word broke chips mid-word ("SQLAlchem|y"). Each separator carries a zero-width space.

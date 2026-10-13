@@ -31,7 +31,7 @@ dt { margin:12px 0 2px; font-size:.62rem; letter-spacing:.16em; text-transform:u
 aside a { color:var(--side-ink); text-decoration:underline; text-underline-offset:3px; line-height:2.1; }
 .kv { display:flex; justify-content:space-between; gap:8px; margin:0 0 6px; }
 .kv span:last-child { color:var(--side-muted); font-size:.78rem; }
-/* Skills: name over a level bar (levels 3–5 fill 60–100%). */
+/* Skills: name over a level bar (levels 3-5 fill 60-100%). */
 .kv[style] { display:block; margin:0 0 12px; }
 .kv[style] span:last-child { display:none; }
 .kv[style]::after { content:""; display:block; height:3px; margin-top:5px;
