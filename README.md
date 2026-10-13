@@ -7,7 +7,7 @@ Live example: https://ali-mosavian.github.io/resume/
 ## Use
 
 1. Write your CV as YAML; `cv/cv.yaml` is a complete example. List the languages under `langs:`. Translated text sits under language keys (`en:`, `sv:`), and a missing language is an error.
-2. Point `photo:` at your photo, relative to the YAML.
+2. Point `photo:` at your photo, relative to the YAML. The build finds the face with OpenCV and crops a square around it, so a snapshot of any shape is framed the same way on the page, in the PDF and in Word.
 3. Build:
 
 ```bash

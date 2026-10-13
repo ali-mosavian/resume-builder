@@ -6,7 +6,6 @@ With more than one language, themes/_lang.js adds a language switch. Each theme 
 
 import json
 import base64
-import mimetypes
 from html import escape
 from pathlib import Path
 
@@ -18,6 +17,7 @@ from resume.data import span
 from resume.data import when
 from resume.data import Skill
 from resume.data import Labels
+from resume.photo import portrait
 
 THEMES = ROOT / "themes"
 
@@ -88,9 +88,8 @@ def photo(cv: CV) -> str:
     """The YAML's photo, embedded so the page stays a single file. Themes that don't want it hide .photo."""
     if "photo" not in cv:
         return ""
-    path = cv["dir"] / cv["photo"]
-    data = base64.b64encode(path.read_bytes()).decode()
-    return f'<img class="photo" alt="{escape(cv["name"])}" src="data:{mimetypes.guess_type(path)[0]};base64,{data}">'
+    data = base64.b64encode(portrait(cv["dir"] / cv["photo"])).decode()
+    return f'<img class="photo" alt="{escape(cv["name"])}" src="data:image/jpeg;base64,{data}">'
 
 
 def header(cv: CV, lb: Labels) -> str:
