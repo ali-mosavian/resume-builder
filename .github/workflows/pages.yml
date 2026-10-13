@@ -21,10 +21,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Use "-", never em or en dashes
         run: |
-          if git grep -n -I -e '—' -e '–'; then
-            echo "::error::Em/en dashes found above; use '-'"
-            exit 1
-          fi
+          # UTF-8 bytes of the en and em dash, escaped so this file passes its own check. grep's exit
+          # status: 0 found, 1 none, anything else an error, which must fail too rather than pass silently.
+          set +e
+          git grep -n -I -P '\xE2\x80[\x93\x94]'
+          case $? in
+            0) echo "::error::Em/en dashes found above; use '-'"; exit 1 ;;
+            1) ;;
+            *) exit 2 ;;
+          esac
 
   deploy:
     needs: dashes
