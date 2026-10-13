@@ -1,0 +1,29 @@
+[project]
+name = "resume"
+version = "0.1.0"
+description = "A CV as a web page, PDF and .docx from one multilingual YAML."
+requires-python = ">=3.12"
+dependencies = ["python-docx~=1.2", "pyyaml~=6.0", "typer~=0.12"]
+
+[project.scripts]
+resume = "resume.cli:app"
+
+[dependency-groups]
+dev = ["pytest", "ruff", "ty", "types-PyYAML"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 140
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF", "PL", "PT"]
+ignore = ["PLR2004", "PLR0913", "RUF001"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ty.environment]
+extra-paths = ["tests"]
