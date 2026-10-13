@@ -99,12 +99,15 @@ ul { margin:8px 0 0; padding-left:16px; } li { margin-bottom:6px; font-size:.9re
 
 @media screen {
   .experience .brief { padding-top:10px; padding-bottom:10px; margin-bottom:2px; }
-  .experience .brief ul { display:none; }
+  /* Earlier roles unfold: the height each list opens to (--h) is measured by split.snap.js, so it can animate */
+  .experience .brief ul { display:block; height:0; margin-top:0; overflow:hidden; opacity:0;
+                          transition:height .55s cubic-bezier(.4,0,.2,1), margin-top .55s cubic-bezier(.4,0,.2,1), opacity .4s ease; }
+  .experience .brief .tools { display:flex; }
   .experience .brief .when { grid-row:1; }
   .experience .brief[data-earlier] { margin-top:44px; }
   .experience .brief[data-earlier]::before { content:attr(data-earlier); position:absolute; top:-22px; left:20px; font-size:.7rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--head); }
-  .experience.expanded .brief ul:not(.tools), .experience.filtering .brief.match ul:not(.tools) { display:block; }
-  .experience.expanded .brief .tools, .experience.filtering .brief.match .tools { display:flex; }
+  .experience.expanded .brief ul, .experience.filtering .brief.match ul { height:var(--h, auto); opacity:1; margin-top:8px; }
+  .experience.expanded .brief .tools, .experience.filtering .brief.match .tools { margin-top:12px; }
 }
 .details-toggle { display:block; margin:32px 0 -44px auto; position:relative; z-index:1; font:700 .74rem var(--sans); color:var(--accent); background:none; border:0; padding:0; cursor:pointer; }
 .details-toggle::after { content:" →"; display:inline-block; transition:transform .2s; } .details-toggle[aria-expanded="true"]::after { transform:rotate(-90deg); }
@@ -114,8 +117,14 @@ ul { margin:8px 0 0; padding-left:16px; } li { margin-bottom:6px; font-size:.9re
 .education .when { grid-column:1; grid-row:1 / span 2; padding-top:.3em; font-size:.7rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--faint); }
 .education h3 { margin:0; font-size:1rem; font-weight:400; color:var(--head); } .education p { margin:2px 0 0; font-size:.9rem; }
 .testimonials .item { display:flex; flex-direction:column; margin-bottom:28px; outline:none; }
-.testimonials .quote { order:-1; margin-bottom:10px; padding-left:16px; border-left:2px solid var(--accent); display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:4; overflow:hidden; }
-.testimonials .item:hover .quote, .testimonials .item:focus .quote { -webkit-line-clamp:unset; }
+/* A long quote shows four lines, fading out, and unfolds to its full height (--clamp and --full: split.snap.js) */
+@property --fade { syntax:"<length>"; inherits:false; initial-value:0px; }
+.testimonials .quote { order:-1; margin-bottom:10px; padding-left:16px; border-left:2px solid var(--accent); display:block; overflow:hidden;
+                       height:var(--clamp, auto); --fade:1.8em; -webkit-mask-image:linear-gradient(#000 calc(100% - var(--fade)), transparent);
+                       mask-image:linear-gradient(#000 calc(100% - var(--fade)), transparent);
+                       transition:height .55s cubic-bezier(.4,0,.2,1), --fade .55s cubic-bezier(.4,0,.2,1); }
+.testimonials .quote.short { --fade:0px; }
+.testimonials .item:hover .quote, .testimonials .item:focus .quote, .testimonials .item.here .quote { height:var(--full, auto); --fade:0px; }
 blockquote { margin:0; display:inline; font-size:.95rem; color:var(--ink); } blockquote + blockquote::before { content:" "; }
 .testimonials h3 { margin:0; padding-left:18px; font-size:.85rem; font-weight:700; color:var(--head); }
 .testimonials .when { padding-left:18px; font-size:.75rem; color:var(--faint); }
@@ -197,7 +206,7 @@ mark { background:var(--accent-tint); color:var(--head); border-radius:3px; padd
   .testimonials h3, .testimonials .when { padding:0; }
   .testimonials h3 { font-size:10pt; }
   .testimonials .when { margin:1pt 0 4pt; font-size:7pt; color:var(--teal); text-transform:uppercase; }
-  .testimonials .quote { display:block; -webkit-line-clamp:unset; overflow:visible; padding-left:8pt; border-left:1.5pt solid #5eead4; }
+  .testimonials .quote { display:block; height:auto; overflow:visible; -webkit-mask-image:none; mask-image:none; padding-left:8pt; border-left:1.5pt solid #5eead4; }
   blockquote { font-size:9pt; font-style:italic; color:#334155; }
 
   /* Sidebar sections close the document */
