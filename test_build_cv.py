@@ -69,19 +69,36 @@ with tempfile.TemporaryDirectory() as tmp:
     else:
         print("skipped print check: needs Google Chrome and pdftotext")
 
-    # resumeio paginates into A4 sheets that clip overflow; chained testimonials once overflowed one sheet
+    # resumeio.js paginates into A4 sheets that clip overflow; chained testimonials once overflowed one sheet
     # and the last four vanished from the PDF. Every role and testimonial must reach the paper, on A4.
     if chrome.exists() and shutil.which("pdftotext"):
         cv = yaml.safe_load((here / "cv_en.yaml").read_text(encoding="utf-8"))
-        page, pdf = Path(tmp) / "cv_rio.html", Path(tmp) / "cv_rio.pdf"
-        build_html(here / "cv_en.yaml", page, "resumeio")
-        subprocess.run([chrome, "--headless=new", "--disable-gpu", "--window-size=1280,1000", "--virtual-time-budget=4000",
-                        "--no-pdf-header-footer", f"--print-to-pdf={pdf}", page.as_uri()], capture_output=True, check=True)
-        text = " ".join(subprocess.run(["pdftotext", pdf, "-"], capture_output=True, text=True, check=True).stdout.split())
-        missing = [n for n in [*(j["company"] for j in cv["experience"]), *(t["name"] for t in cv["testimonials"])] if n not in text]
-        assert not missing, f"resumeio print lost: {missing}"
-        info = subprocess.run(["pdfinfo", pdf], capture_output=True, text=True, check=True).stdout
-        assert "(A4)" in info, "resumeio print is not A4"
+        pager = (here / "themes" / "resumeio.js").resolve()
+        for theme in sorted(p.stem for p in (here / "themes").glob("*.js") if p.resolve() == pager):
+            page, pdf = Path(tmp) / f"cv_{theme}.html", Path(tmp) / f"cv_{theme}.pdf"
+            build_html(here / "cv_en.yaml", page, theme)
+            subprocess.run([chrome, "--headless=new", "--disable-gpu", "--window-size=1280,1000", "--virtual-time-budget=4000",
+                            "--no-pdf-header-footer", f"--print-to-pdf={pdf}", page.as_uri()], capture_output=True, check=True)
+            # Raw (content-stream) order: the default reading order once wove sidebar lines into a wrapped role heading
+            # and reported Nordea lost. Raw drops spaces, so compare without whitespace.
+            text = re.sub(r"\s", "", subprocess.run(["pdftotext", "-raw", pdf, "-"], capture_output=True, text=True, check=True).stdout)
+            names = [*(j["company"] for j in cv["experience"]), *(t["name"] for t in cv["testimonials"])]
+            missing = [n for n in names if re.sub(r"\s", "", n) not in text]
+            assert not missing, f"{theme} print lost: {missing}"
+            info = subprocess.run(["pdfinfo", pdf], capture_output=True, text=True, check=True).stdout
+            assert "(A4)" in info, f"{theme} print is not A4"
+
+    # designmycv once dropped the sidebar column on sheets after its content ran out: every sheet keeps it.
+    if chrome.exists():
+        probe = ("<script>addEventListener('load',()=>setTimeout(()=>{document.title=[...document.querySelectorAll('.sheet aside')]"
+                 ".map(a=>a.getBoundingClientRect().width|0).join(',')},1500))</script>")
+        page = Path(tmp) / "cv_dmc_side.html"
+        build_html(here / "cv_en.yaml", page, "designmycv")
+        page.write_text(page.read_text(encoding="utf-8").replace("</body>", probe + "</body>"), encoding="utf-8")
+        dom = subprocess.run([chrome, "--headless=new", "--disable-gpu", "--window-size=1280,1000", "--virtual-time-budget=4000",
+                              "--dump-dom", page.as_uri()], capture_output=True, text=True, check=True).stdout
+        widths = [int(w) for w in re.search("<title>(.*?)</title>", dom)[1].split(",")]
+        assert len(widths) > 1 and min(widths) > 100, f"designmycv sidebar widths per sheet: {widths}"
 
     # "Show details" on earlier roles once turned their tool tags into a plain block (display:block beat flex):
     # expanded, they must lay out like any other role's tags.
