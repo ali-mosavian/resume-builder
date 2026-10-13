@@ -5,7 +5,7 @@
 """Build a self-contained CV web page from the same YAML as build_cv.py.
 
 The look is a theme: themes/<name>.css, plus optional <name>.js and <name>.*.js, inlined.
-With --also, themes/_lang.js adds a language switch. Each theme prints to A4.
+With more than one language, themes/_lang.js adds a language switch. Each theme prints to A4.
 """
 import base64
 import json
@@ -16,9 +16,9 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
-import yaml
 
 from build_cv import span, when
+from cvdata import langs, load
 
 THEMES = Path(__file__).with_name("themes")
 
@@ -109,10 +109,10 @@ def page(cv: dict, hidden: bool) -> str:
 
 
 def build(cv_path: Path, out: Path | None = None, theme: str = "pro",
-          also: Annotated[list[Path] | None, typer.Option(help="More YAMLs (other languages); a theme script may switch.")] = None) -> None:
+          lang: Annotated[list[str] | None, typer.Option(help="Languages to include, first shown first; default all.")] = None) -> None:
     out = out or THEMES.parent / "build" / f"{cv_path.stem}_{theme}.html"
     out.parent.mkdir(exist_ok=True)
-    cvs = [yaml.safe_load(p.read_text(encoding="utf-8")) | {"_dir": p.parent} for p in (cv_path, *(also or ()))]
+    cvs = [load(cv_path, code) for code in lang or langs(cv_path)]
     # <theme>.js (often a link to the shared interactions), then any <theme>.*.js extras, in name order.
     scripts = [p for p in [THEMES / f"{theme}.js", *sorted(THEMES.glob(f"{theme}.*.js"))] if p.exists()]
     scripts += [THEMES / "_lang.js"] * (len(cvs) > 1)
