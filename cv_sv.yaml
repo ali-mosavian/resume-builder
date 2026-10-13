@@ -21,8 +21,6 @@ links:
   url: https://github.com/ali-mosavian
 - label: Webbplats
   url: https://www.42labs.ai/
-- label: Twitter
-  url: https://twitter.com/alimosavian
 skills:
 - name: Stora språkmodeller (LLM)
   level: 5
@@ -112,8 +110,8 @@ experience:
   city: Stockholm
   bullets:
   - Arkitekterade om, skrev om och produktionssatte helt ett befintligt proof of concept-verktyg (till
-    ett fungerande produktionssystem) för att automatisera upptäckt av finansiell brottslighet utifrån
-    uppgivet och faktiskt transaktionsbeteende.
+    ett fungerande produktionssystem) för att **automatisera upptäckt av finansiell brottslighet** utifrån
+    uppgivet och faktiskt transaktionsbeteende.'
   start: 2025-01
   end: 2025-04
   tools: [Python, MyPy, Ruff, Pytest, Arize AI Phoenix, LangGraph, Chainlit, Anthropic Claude, Docker,
@@ -122,12 +120,12 @@ experience:
   company: Byggfakta
   city: Stockholm
   bullets:
-  - Utvecklade en konversationell AI för att effektivisera projektsökningar och ersatte ett komplext filtersystem
+  - Utvecklade en **konversationell AI** för att effektivisera projektsökningar och ersatte ett komplext filtersystem
     med ett mer användarvänligt och intuitivt gränssnitt.
   - Gjorde det möjligt för användare att söka projekt med minimal inmatning, vilket minskade den kognitiva
     belastningen av att navigera bland många filter och kategorier.
-  - Utvecklade ett hybridrekommendationssystem som ger kunderna mer relevanta rekommendationer av byggprojekt.
-  - Utvecklade en modell som predikterar roller i byggprojekt.
+  - Utvecklade ett **hybridrekommendationssystem** som ger kunderna mer relevanta rekommendationer av byggprojekt.
+  - Utvecklade en **modell som predikterar roller i byggprojekt**.
   start: 2024-06
   end: null
   tools: [Python, Langchain, Chainlit, GPT-4o, function calling, Catboost (gradient boosted decision trees),
@@ -136,11 +134,11 @@ experience:
   company: EQT Partners
   city: Stockholm
   bullets:
-  - Skapade en flerstegs AI-assistent (RAG-baserad) som besvarar investerarfrågor korrekt genom att bearbeta
+  - Skapade en **flerstegs AI-assistent (RAG-baserad)** som besvarar investerarfrågor korrekt genom att bearbeta
     komplexa dokument.
-  - Implementerade en metod för att extrahera innehåll ur PDF-, Word- och PowerPoint-filer med bibehållen
+  - Implementerade en metod för att **extrahera innehåll ur PDF-, Word- och PowerPoint-filer** med bibehållen
     struktur, vilket kraftigt förbättrade dokumenthanteringen för AI-system.
-  - Utformade och driftsatte ett automatiserat utvärderingsramverk för att följa och mäta assistentens
+  - Utformade och driftsatte ett **automatiserat utvärderingsramverk** för att följa och mäta assistentens
     träffsäkerhet över tid.
   start: 2023-08
   end: 2024-04
@@ -149,11 +147,11 @@ experience:
   company: Lingio
   city: Stockholm
   bullets:
-  - Utvecklade AI-drivna verktyg för översättning, sammanfattning och generering av innehåll, vilket effektiviserade
+  - Utvecklade AI-drivna verktyg för **översättning, sammanfattning och generering av innehåll**, vilket effektiviserade
     innehållsproduktionen.
-  - Finjusterade språkmodeller med öppen källkod för specifika uppgifter, med bättre prestanda och integration
+  - Finjusterade **språkmodeller med öppen källkod** för specifika uppgifter, med bättre prestanda och integration
     i den generativa AI-produkten.
-  - Levererade tjänster i produktionskvalitet som i dag utgör kärnan i Lingios generativa AI-erbjudande.
+  - Levererade tjänster i produktionskvalitet som i dag utgör **kärnan i Lingios generativa AI-erbjudande**.
   start: 2022-11
   end: 2024-06
   tools: [GPT-3, Python, FastAPI, Pytorch, LoRA, Docker, GCP Kubernetes]
@@ -161,11 +159,11 @@ experience:
   company: Kry/Livi
   city: Stockholm
   bullets:
-  - Utformade och driftsatte en CatBoost-modell som klassificerar patienters vårdbehov, vilket förbättrade
+  - Utformade och driftsatte en **CatBoost-modell** som klassificerar patienters vårdbehov, vilket förbättrade
     triageringen.
-  - Ledde utvecklingen av en RNN-baserad modell för att prediktera patienters väntetider, vilket gav mer
+  - Ledde utvecklingen av en **RNN-baserad modell för att prediktera patienters väntetider**, vilket gav mer
     träffsäkra förväntningar på servicenivån.
-  - Arkitekterade om bemanningsprognoserna, vilket optimerade resursfördelningen och minskade ineffektivitet
+  - Arkitekterade om **bemanningsprognoserna**, vilket optimerade resursfördelningen och minskade ineffektivitet
     i driften.
   start: 2021-09
   end: 2022-10
@@ -174,14 +172,14 @@ experience:
   company: IKEA Digital
   city: Stockholm
   bullets:
-  - Utvecklade en rekommendationsmodell (baserad på contextual bandits) och driftsatte den för IKEA:s
-    inspirationsflöde. Modellen tränas automatiskt varje natt på några hundra miljoner exempel, och driftkostnaden
-    för 42+ marknader är flera gånger lägre än för andra team som använder Google Recommendation API för
+  - Utvecklade en **rekommendationsmodell (baserad på contextual bandits)** och driftsatte den för IKEA:s
+    inspirationsflöde. Modellen tränas automatiskt varje natt på **några hundra miljoner exempel**, och driftkostnaden
+    för **42+ marknader** är flera gånger lägre än för andra team som använder Google Recommendation API för
     en enda marknad.
-  - 'Refaktorerade och delade upp en monolitisk backend i mindre tjänster, vilket förbättrade underhållbarhet
+  - 'Refaktorerade och **delade upp en monolitisk backend i mindre tjänster**, vilket förbättrade underhållbarhet
     och prestanda. Minskade den genomsnittliga svarstiden från ~800 ms (99:e percentilen: 3–4 s) till
-    ~200 ms (99:e percentilen: ~500 ms), vilket gav en markant bättre användarupplevelse och lägre driftkostnader.'
-  - Kortade iterationscyklerna för data från timmar till minuter, vilket möjliggjorde snabba experiment
+    **~200 ms** (99:e percentilen: ~500 ms), vilket gav en markant bättre användarupplevelse och lägre driftkostnader.'
+  - Kortade iterationscyklerna för data **från timmar till minuter**, vilket möjliggjorde snabba experiment
     och tester av olika modellarkitekturer.
   start: 2020-07
   end: 2021-05
@@ -190,7 +188,7 @@ experience:
   company: Neko Health
   city: Stockholm
   bullets:
-  - Utvecklade en banbrytande, beröringsfri metod för att skatta puls och blodtryck med videoanalys, ett
+  - Utvecklade en banbrytande, **beröringsfri metod för att skatta puls och blodtryck** med videoanalys, ett
     steg framåt för hälsoövervakning i realtid.
   - Kombinerade digitala filter, signalbehandling och klassisk datorseende för att göra den videobaserade
     pulsdetekteringen mer robust.
@@ -202,9 +200,9 @@ experience:
   brief: true
   city: Stockholm
   bullets:
-  - Tog fram en prototyp på en NLP-baserad lösning för automatisk dirigering av supportärenden, vilket
+  - Tog fram en prototyp på en **NLP-baserad lösning för automatisk dirigering av supportärenden**, vilket
     minskade det manuella arbetet och ökade träffsäkerheten.
-  - Förbättrade klassificeringens träffsäkerhet med en F1-förlustfunktion för att hantera obalanserad
+  - Förbättrade klassificeringens träffsäkerhet med en **F1-förlustfunktion** för att hantera obalanserad
     data mellan supportkategorier.
   start: 2019-05
   end: 2020-01
@@ -214,9 +212,9 @@ experience:
   brief: true
   city: Stockholm
   bullets:
-  - Byggde och driftsatte ett system för avsiktsklassificering av kundtjänstchattar, vilket förbättrade
+  - Byggde och driftsatte ett **system för avsiktsklassificering av kundtjänstchattar**, vilket förbättrade
     den automatiserade kundsupporten och effektiviserade kommunikationsflödena.
-  - Automatiserade centrala processer, bland annat uppsägning av försäkringar, genom integration med befintliga
+  - Automatiserade centrala processer, bland annat **uppsägning av försäkringar**, genom integration med befintliga
     kundsystem.
   start: 2018-12
   end: 2019-05
@@ -228,11 +226,11 @@ experience:
   bullets:
   - Genomförde detaljerade dataanalyser som beslutsunderlag och hjälpte till att förfina bilpoolstjänsten
     genom att kartlägga användarbeteende och efterfrågemönster.
-  - Klassificerade användarprofiler utifrån beteende, vilket låg till grund för riktad marknadsföring
+  - Klassificerade **användarprofiler utifrån beteende**, vilket låg till grund för riktad marknadsföring
     och förbättringar av tjänsten.
-  - Utvecklade modeller för efterfrågeprognoser av biltillgänglighet, vilket bidrog till en effektivare
+  - Utvecklade **modeller för efterfrågeprognoser** av biltillgänglighet, vilket bidrog till en effektivare
     drift.
-  - Satte upp realtidsdashboards för centrala affärsmått, vilket ökade transparensen och förbättrade beslutsfattandet
+  - Satte upp **realtidsdashboards** för centrala affärsmått, vilket ökade transparensen och förbättrade beslutsfattandet
     i hela företaget.
   start: 2018-08
   end: 2018-12
@@ -242,9 +240,9 @@ experience:
   brief: true
   city: Stockholm
   bullets:
-  - Utvecklade ett djupt faltningsnätverk (CNN) för automatisk multietikettklassificering av låtar efter
+  - Utvecklade ett **djupt faltningsnätverk (CNN)** för automatisk multietikettklassificering av låtar efter
     genre, vilket förbättrade plattformens förmåga att rekommendera och kategorisera musik.
-  - Byggde ett komprimerat dataset från miljarder historiska händelser, så att säljteamet kunde rikta
+  - Byggde ett komprimerat dataset från **miljarder historiska händelser**, så att säljteamet kunde rikta
     sig mot potentiella kunder mer effektivt.
   - Förbättrade företagets interna processer och datadrivna beslutsfattande genom dataanalys och maskininlärningsbaserade
     lösningar.
@@ -255,11 +253,11 @@ experience:
   company: Watty AB
   city: Stockholm
   bullets:
-  - Ledde fem tvärfunktionella team i utvecklingen av en produkt för energiövervakning i realtid, erkänd
+  - Ledde **fem tvärfunktionella team** i utvecklingen av en produkt för **energiövervakning i realtid**, erkänd
     som en av de mest avancerade på marknaden.
-  - Byggde en plattform för datainsamling och en pipeline för maskininlärning som bidrog till viktiga
+  - Byggde en **plattform för datainsamling och en pipeline för maskininlärning** som bidrog till viktiga
     produktomställningar och en bättre användarupplevelse.
-  - Utformade hela den tekniska arkitekturen, från datainsamling i hårdvara till molnbaserad analys och
+  - Utformade **hela den tekniska arkitekturen**, från datainsamling i hårdvara till molnbaserad analys och
     kundnära gränssnitt.
   start: 2013-09
   end: 2018-06
@@ -269,9 +267,9 @@ experience:
   brief: true
   city: Stockholm
   bullets:
-  - Bidrog till Gavagais centrala textanalysprodukt genom storskalig databehandling av sociala medier
+  - Bidrog till Gavagais centrala textanalysprodukt genom **storskalig databehandling av sociala medier**
     i realtid.
-  - Implementerade effektiva närmaste granne-beräkningar på GPU:er för att förbättra prestandan hos språkmodeller
+  - Implementerade effektiva **närmaste granne-beräkningar på GPU:er** för att förbättra prestandan hos språkmodeller
     som fångar relationer mellan ord.
   - Utvecklade kompletterande API:er i Node.js och Coffeescript, vilket utökade funktionaliteten och räckvidden
     hos företagets språkanalysverktyg.
@@ -285,11 +283,11 @@ experience:
   brief: true
   city: Stockholm
   bullets:
-  - Ledde den arkitektoniska omdesignen av Siteseeker, en sökmotor för företag, för att göra den skalbar
+  - Ledde den **arkitektoniska omdesignen av Siteseeker**, en sökmotor för företag, för att göra den skalbar
     och modulär – från en monolitisk struktur till mindre tjänster som kunde skalas horisontellt.
-  - Refaktorerade äldre kod enligt moderna C++-standarder (C++11) och bästa praxis, vilket förbättrade
+  - Refaktorerade äldre kod enligt **moderna C++-standarder (C++11)** och bästa praxis, vilket förbättrade
     kodbasens prestanda och underhållbarhet.
-  - Införde Python-baserade mikrotjänster för att snabba upp utveckling och driftsättning av nya funktioner,
+  - Införde **Python-baserade mikrotjänster** för att snabba upp utveckling och driftsättning av nya funktioner,
     vilket kortade tiden till marknad.
   - Stod för vision och ledarskap kring skalbarheten i sökmotortekniken och lade grunden för framtida
     tillväxt och prestandaförbättringar.

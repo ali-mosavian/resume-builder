@@ -21,8 +21,6 @@ links:
   url: https://github.com/ali-mosavian
 - label: Website
   url: https://www.42labs.ai/
-- label: Twitter
-  url: https://twitter.com/alimosavian
 skills:
 - name: Large Language Models
   level: 5
@@ -111,8 +109,8 @@ experience:
   company: Nordea AB, Financial Crime Prevention Unit
   city: Stockholm
   bullets:
-  - Completely re-architected, re-wrote and productionalized an existing toy proof of concept tool (to
-    a working production system) to automate detection of financial crime based on stated and actual transactional
+  - Completely **re-architected, re-wrote and productionalized** an existing toy proof of concept tool (to
+    a working production system) to **automate detection of financial crime** based on stated and actual transactional
     behavior.
   start: 2025-01
   end: 2025-04
@@ -122,13 +120,13 @@ experience:
   company: Byggfakta
   city: Stockholm
   bullets:
-  - Developed a conversational AI to streamline project searches, replacing a complex filter system with
+  - Developed a **conversational AI** to streamline project searches, replacing a complex filter system with
     a more user-friendly and intuitive interface.
   - Enabled users to search for projects with minimal input, reducing the cognitive load associated with
     navigating numerous filters and categories.
-  - Developed a hybrid recommendations system to give more relevant construction project recommendations
+  - Developed a **hybrid recommendations system** to give more relevant construction project recommendations
     to customers.
-  - Developed a (construction) role predictor for a projects.
+  - Developed a (construction) **role predictor** for a projects.
   start: 2024-06
   end: null
   tools: [Python, Langchain, Chainlit, GPT-4o, function calling, Catboost (gradient boosted decision trees),
@@ -137,11 +135,11 @@ experience:
   company: EQT Partners
   city: Stockholm
   bullets:
-  - Created a multi-stage AI assistant (RAG-based) to answer investor queries accurately by processing
+  - Created a **multi-stage AI assistant (RAG-based)** to answer investor queries accurately by processing
     complex documents.
-  - Implemented a method to extract content from PDFs, Word, and PowerPoint files while maintaining the
+  - Implemented a method to **extract content from PDFs, Word, and PowerPoint** files while maintaining the
     original structure, greatly improving document handling for AI systems.
-  - Designed and deployed an automated evaluation framework for tracking and measuring the assistant’s
+  - Designed and deployed an **automated evaluation framework** for tracking and measuring the assistant’s
     accuracy over time.
   start: 2023-08
   end: 2024-04
@@ -150,11 +148,11 @@ experience:
   company: Lingio
   city: Stockholm
   bullets:
-  - Developed AI-driven tools for translating, summarizing, and generating content, enhancing the efficiency
+  - Developed AI-driven tools for **translating, summarizing, and generating content**, enhancing the efficiency
     of content creation processes.
-  - Fine-tuned open-source language models for specific tasks, improving performance and integration with
+  - Fine-tuned **open-source language models** for specific tasks, improving performance and integration with
     the generative AI product.
-  - Delivered production-quality services, now embedded at the core of Lingio’s generative AI offerings.
+  - Delivered production-quality services, now embedded at the **core of Lingio’s generative AI offerings**.
   start: 2022-11
   end: 2024-06
   tools: [GPT-3, Python, FastAPI, Pytorch, LoRA, Docker, GCP Kubernetes]
@@ -162,11 +160,11 @@ experience:
   company: Kry/Livi
   city: Stockholm
   bullets:
-  - Designed and deployed a CatBoost model to classify the level of care required for patients, enhancing
+  - Designed and deployed a **CatBoost model** to classify the level of care required for patients, enhancing
     the triage process.
-  - Led the development of an RNN-based model to predict patient wait times, providing more accurate service
+  - Led the development of an **RNN-based model to predict patient wait times**, providing more accurate service
     level expectations.
-  - Re-architected staffing forecasts, optimizing workforce allocation and reducing operational inefficiencies.
+  - Re-architected **staffing forecasts**, optimizing workforce allocation and reducing operational inefficiencies.
   start: 2021-09
   end: 2022-10
   tools: [Python, FastAPI, TensorFlow, Pytorch, RNN, CatBoost, AWS, Snowflake, Airflow 2]
@@ -174,14 +172,14 @@ experience:
   company: IKEA Digital
   city: Stockholm
   bullets:
-  - Developed a recommendation model (contextual bandit-based) and deployed it for IKEA’s inspirational
-    feed. The model automatically trains every night on a few hundred million examples, and its operation
-    cost for 42+ markets is multiple factors lower than that of other teams using Google Recommendation
+  - Developed a **recommendation model (contextual bandit-based)** and deployed it for IKEA’s inspirational
+    feed. The model automatically trains every night on **a few hundred million examples**, and its operation
+    cost for **42+ markets** is multiple factors lower than that of other teams using Google Recommendation
     API for a single market.
-  - 'Re-factored and split a monolithic backend into smaller services, enhancing maintainability and performance.
-    Reduced average response time from ~800ms (99th percentile: 3-4s) to ~200ms (99th percentile: ~500ms),
+  - 'Re-factored and **split a monolithic backend into smaller services**, enhancing maintainability and performance.
+    Reduced average response time from ~800ms (99th percentile: 3-4s) to **~200ms** (99th percentile: ~500ms),
     leading to a significant improvement in user experience and reducing operational costs.'
-  - Improved data iteration cycles from hours to minutes, enabling rapid experimentation and testing of
+  - Improved data iteration cycles **from hours to minutes**, enabling rapid experimentation and testing of
     different model architectures.
   start: 2020-07
   end: 2021-05
@@ -190,7 +188,7 @@ experience:
   company: Neko Health
   city: Stockholm
   bullets:
-  - Developed a cutting-edge, contact-less method for estimating pulse and blood pressure using video
+  - Developed a cutting-edge, **contact-less method for estimating pulse and blood pressure** using video
     analysis, advancing real-time health monitoring systems.
   - Integrated digital filters, signal processing, and classical computer vision techniques to enhance
     the robustness of video-based pulse detection.
@@ -202,9 +200,9 @@ experience:
   brief: true
   city: Stockholm
   bullets:
-  - Prototyped an NLP-based solution to automate support ticket routing, reducing manual effort and improving
+  - Prototyped an **NLP-based solution to automate support ticket routing**, reducing manual effort and improving
     accuracy in routing decisions.
-  - Improved classification accuracy by employing an F1 loss function, addressing imbalanced data across
+  - Improved classification accuracy by employing an **F1 loss function**, addressing imbalanced data across
     support categories.
   start: 2019-05
   end: 2020-01
@@ -214,9 +212,9 @@ experience:
   brief: true
   city: Stockholm
   bullets:
-  - Built and deployed an intent classification system for customer service chats, enhancing automated
+  - Built and deployed an **intent classification system** for customer service chats, enhancing automated
     customer support and streamlining communication workflows.
-  - Automated key operations, including insurance cancellation processes, through integration with existing
+  - Automated key operations, including **insurance cancellation processes**, through integration with existing
     customer systems.
   start: 2018-12
   end: 2019-05
@@ -228,10 +226,10 @@ experience:
   bullets:
   - Conducted detailed data analysis to support business decisions, helping refine the car-sharing service
     by understanding user behavior and demand patterns.
-  - Performed behavior-based user profile classification, which informed targeted marketing and service
+  - Performed **behavior-based user profile classification**, which informed targeted marketing and service
     improvement strategies.
-  - Developed demand prediction models for car availability, contributing to operational efficiency.
-  - Set up real-time dashboards to visualize key business metrics, improving transparency and decision-making
+  - Developed **demand prediction models** for car availability, contributing to operational efficiency.
+  - Set up **real-time dashboards** to visualize key business metrics, improving transparency and decision-making
     across the company.
   start: 2018-08
   end: 2018-12
@@ -241,9 +239,9 @@ experience:
   brief: true
   city: Stockholm
   bullets:
-  - Developed a deep convolutional neural network for automatic multi-label classification of songs based
+  - Developed a **deep convolutional neural network** for automatic multi-label classification of songs based
     on genre labels, enhancing the platform’s ability to recommend and categorize music accurately.
-  - Built a condensed dataset from billions of historical events, enabling the sales team to more effectively
+  - Built a **condensed dataset from billions of historical events**, enabling the sales team to more effectively
     target potential customers.
   - Improved the company’s internal processes and data-driven decision-making by increasing efficiency
     through data analysis and machine learning-driven solutions.
@@ -254,11 +252,11 @@ experience:
   company: Watty AB
   city: Stockholm
   bullets:
-  - Led five cross-functional teams in developing a real-time energy monitoring product, recognized as
+  - Led **five cross-functional teams** in developing a **real-time energy monitoring product**, recognized as
     one of the most advanced in the market.
-  - Engineered a data collection platform and machine learning pipeline that contributed to significant
+  - Engineered a **data collection platform and machine learning pipeline** that contributed to significant
     product pivots and improved user experience.
-  - Designed the full technical architecture, from hardware data acquisition to cloud-based analysis and
+  - Designed the **full technical architecture**, from hardware data acquisition to cloud-based analysis and
     customer-facing interfaces.
   start: 2013-09
   end: 2018-06
@@ -268,9 +266,9 @@ experience:
   brief: true
   city: Stockholm
   bullets:
-  - Contributed to Gavagai’s core text analysis product by working on large-scale, real-time social media
+  - Contributed to Gavagai’s core text analysis product by working on **large-scale, real-time social media**
     data processing.
-  - Implemented efficient nearest-neighbor calculations on GPUs to improve the performance of language
+  - Implemented efficient **nearest-neighbor calculations on GPUs** to improve the performance of language
     models used for understanding relationships between words.
   - Developed non-core APIs in Node.js and Coffeescript, expanding the functionality and reach of the
     company’s language analysis tools.
@@ -283,11 +281,11 @@ experience:
   brief: true
   city: Stockholm
   bullets:
-  - Led the architectural redesign of Siteseeker, an enterprise search engine, to make it scalable and
+  - Led the **architectural redesign of Siteseeker**, an enterprise search engine, to make it scalable and
     modular, transitioning it from a monolithic structure to smaller services that could be scaled horizontally.
-  - Refactored legacy code by implementing modern C++ (C++11) standards and best practices, improving
+  - Refactored legacy code by implementing **modern C++ (C++11)** standards and best practices, improving
     performance and maintainability of the codebase.
-  - Introduced Python-based microservices to expedite the development and deployment of new features,
+  - Introduced **Python-based microservices** to expedite the development and deployment of new features,
     reducing the time-to-market for enhancements.
   - Provided vision and leadership on improving the scalability of search engine technology, laying the
     foundation for future growth and performance improvements.
