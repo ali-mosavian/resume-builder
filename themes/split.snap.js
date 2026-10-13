@@ -30,7 +30,12 @@
   addEventListener("scroll", queue, { passive: true });
   addEventListener("resize", () => { collect(); queue(); });
   addEventListener("langchange", () => { collect(); queue(); });
-  document.addEventListener("click", () => setTimeout(() => { collect(); queue(); }, 400));
+  document.addEventListener("click", (e) => {
+    const item = e.target.closest?.(".education .item, .experience .item, .testimonials .item");
+    // a click on another item brings it to the middle, without cancelling what the click itself does
+    if (item && !item.classList.contains("here") && wide.matches && !e.target.closest("a, button, .tools li")) window.splitGlide?.(item);
+    setTimeout(() => { collect(); queue(); }, 400);
+  });
   collect();
   queue();
 })();
