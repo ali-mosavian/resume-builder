@@ -254,3 +254,4 @@ mark { background:none; color:var(--red-ink); font-weight:600; box-shadow:inset 
   .quote { display:block; -webkit-line-clamp:unset; } blockquote { font-size:8.6pt; }
   a[href]::after { content:none; }
 }
+.photo { display:none; }

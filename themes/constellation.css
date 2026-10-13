@@ -224,3 +224,4 @@ mark { background:var(--gold-soft); color:inherit; border-radius:2px; padding:0 
   mark { background:none; box-shadow:none; }
   .quote { -webkit-line-clamp:unset; }
 }
+.photo { display:none; }
