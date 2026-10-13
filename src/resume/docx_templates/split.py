@@ -34,7 +34,7 @@ LINE_GAP = 1.21  # Inter's line height per em: Word's "multiple" spacing scales 
 # Page geometry in mm, as themes/split.css prints an A4 sheet.
 HEAD1, HEAD2 = 41, 24  # band rows: photo, name and links; then the headline numbers
 BAND = HEAD1 + HEAD2 + 3  # the slate band, a little past the numbers
-MARGIN = 2.4  # body margin left and right, cm
+MARGIN = 3.0  # body margin left and right, cm
 
 
 def styles(doc: Doc) -> None:
@@ -78,12 +78,12 @@ def styles(doc: Doc) -> None:
 
 def header(doc: Doc) -> None:
     """Band rows of fixed height, so the body starts right under the slate."""
-    head = table(doc, [5.4, 9.6, 6.0], rows=2)
+    head = table(doc, [6.0, 9.0, 6.0], rows=2)
     for row, mm in zip(head.rows, (HEAD1, HEAD2), strict=True):
         row.height, row.height_rule = Cm(mm / 10), WD_ROW_HEIGHT_RULE.EXACTLY
     photo_c, name_c, links_c = head.rows[0].cells
-    cell(photo_c, 5.4, pad=(1.1, 0, 0, MARGIN))
-    cell(name_c, 9.6, pad=(1.1, 0.4, 0, 0.3), valign=WD_CELL_VERTICAL_ALIGNMENT.CENTER)
+    cell(photo_c, 6.0, pad=(1.1, 0, 0, MARGIN))
+    cell(name_c, 9.0, pad=(1.1, 0.4, 0, 0.3), valign=WD_CELL_VERTICAL_ALIGNMENT.CENTER)
     cell(links_c, 6.0, pad=(1.1, MARGIN, 0, 0.4), valign=WD_CELL_VERTICAL_ALIGNMENT.CENTER)
     photo_c.paragraphs[0]._p.style = "CVPhoto"
     photo_c.paragraphs[0].add_run("{Photo 2.8}")
