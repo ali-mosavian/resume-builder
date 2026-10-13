@@ -1,4 +1,4 @@
-// resume.io: flow the CV into A4 sheets (210 × 297 mm), each with the slate sidebar, as resume.io renders it.
+// Slate: flow the CV into A4 sheets (210 × 297 mm), each with the slate sidebar.
 // Without JS, or on narrow screens, the page stays one scrolling sheet; print then uses @page A4.
 (() => {
   const wide = matchMedia("(min-width: 860px)");

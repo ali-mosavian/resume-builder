@@ -1,4 +1,4 @@
-/* resume.io: a recreation of the resume.io template the CV was first made with.
+/* Slate: a classic two-column resume.
    Slate sidebar with photo, name and details; white main column; Lato throughout. */
 @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&display=swap");
 
@@ -31,7 +31,7 @@ dt { margin:12px 0 2px; font-size:.62rem; letter-spacing:.16em; text-transform:u
 aside a { color:var(--side-ink); text-decoration:underline; text-underline-offset:3px; line-height:2.1; }
 .kv { display:flex; justify-content:space-between; gap:8px; margin:0 0 6px; }
 .kv span:last-child { color:var(--side-muted); font-size:.78rem; }
-/* Skills: name over a level bar (levels 3–5 fill 60–100%), as resume.io draws them. */
+/* Skills: name over a level bar (levels 3–5 fill 60–100%). */
 .kv[style] { display:block; margin:0 0 12px; }
 .kv[style] span:last-child { display:none; }
 .kv[style]::after { content:""; display:block; height:3px; margin-top:5px;
@@ -74,7 +74,7 @@ blockquote { margin:0 0 8px; }
   .testimonials .item { break-inside:avoid; }
 }
 
-/* A4 sheets, built by resumeio.js on wide screens and for print. */
+/* A4 sheets, built by slate.js on wide screens and for print. */
 /* Sized in pt, the same on screen and paper: sheets are measured on screen and must print identically. */
 .page.paged { display:block; max-width:none; margin:40px auto; background:none; box-shadow:none; border-radius:0; overflow:visible;
               font-size:9.5pt; line-height:1.5; }
