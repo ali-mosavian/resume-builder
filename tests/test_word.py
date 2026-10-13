@@ -4,6 +4,8 @@ import pytest
 from docx import Document
 from docx.shared import Cm
 
+from support import CV
+from resume import data
 from support import docx
 from resume.word import cells
 from support import TEMPLATES
@@ -107,3 +109,14 @@ def test_bold_is_a_real_bold_face(template: str) -> None:
     ]
     assert not faked, f"styles faking bold: {faked}"
     assert "CV Strong" in [s.name for s in styles]
+
+
+def test_split_is_one_column() -> None:
+    """split.docx's layout is a single cell: the body first, then the sidebar's sections, skills as chips."""
+    doc = docx("split")
+    (body,) = doc.tables[-1].rows[0].cells
+    texts = [p.text for p in body.paragraphs]
+    labels = data.load(CV, "en")["labels"]
+    assert texts.index(labels["summary"]) < texts.index(labels["testimonials"]) < texts.index(labels["skills"])
+    skills = next(p for p in body.paragraphs if p._p.style == "CVSkillChips")
+    assert "Python" in skills.text
