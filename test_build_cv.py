@@ -17,6 +17,12 @@ from docx.shared import Cm
 from build_cv import build
 
 here = Path(__file__).parent
+
+# A bold edit once quoted only the end of a Swedish bullet, printing a stray ' after Nordea's text.
+for path in (here / "cv").glob("*.yaml"):
+    for j in yaml.safe_load(path.read_text(encoding="utf-8"))["experience"]:
+        for b in j["bullets"]:
+            assert b.endswith("."), f"{path.name}, {j['company']}: bullet ends {b[-12:]!r}"
 for template in ("templates/default.docx", "templates/pro.docx"):
     with tempfile.TemporaryDirectory() as tmp:
         out = Path(tmp) / "cv.docx"
@@ -65,7 +71,7 @@ with tempfile.TemporaryDirectory() as tmp:
         subprocess.run([chrome, "--headless=new", "--disable-gpu", "--virtual-time-budget=300", "--no-pdf-header-footer",
                         f"--print-to-pdf={pdf}", page.as_uri()], capture_output=True, check=True)
         text = subprocess.run(["pdftotext", "-l", "1", pdf, "-"], capture_output=True, text=True, check=True).stdout.split()
-        assert {"20+", "17", "74M"} <= set(text), f"printed headline numbers are partial: {text[:30]}"
+        assert {"20+", "17", "42+"} <= set(text), f"printed headline numbers are partial: {text[:30]}"
     else:
         print("skipped print check: needs Google Chrome and pdftotext")
 
