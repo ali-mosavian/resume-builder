@@ -5,7 +5,10 @@ from pathlib import Path
 
 from docx.document import Document as Doc
 
-from resume import ROOT, data, web, word
+from resume import web
+from resume import ROOT
+from resume import data
+from resume import word
 from resume.chrome import headless
 
 CV = ROOT / "cv" / "cv.yaml"

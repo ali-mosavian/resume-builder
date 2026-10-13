@@ -1,9 +1,9 @@
 from pathlib import Path
 
-import pytest
 import yaml
-from support import CV
+import pytest
 
+from support import CV
 from resume import data
 
 

@@ -4,7 +4,12 @@ import shutil
 import subprocess
 from pathlib import Path
 
-CANDIDATES = ("google-chrome", "chromium", "chromium-browser", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+CANDIDATES = (
+    "google-chrome",
+    "chromium",
+    "chromium-browser",
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+)
 
 
 def find() -> Path | None:

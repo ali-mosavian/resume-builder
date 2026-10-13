@@ -4,14 +4,20 @@ The look is a theme: themes/<name>.css, plus optional <name>.js and <name>.*.js,
 With more than one language, themes/_lang.js adds a language switch. Each theme prints to A4.
 """
 
-import base64
 import json
+import base64
 import mimetypes
 from html import escape
 from pathlib import Path
 
 from resume import ROOT
-from resume.data import BOLD, CV, Job, Labels, Skill, span, when
+from resume.data import CV
+from resume.data import Job
+from resume.data import BOLD
+from resume.data import span
+from resume.data import when
+from resume.data import Skill
+from resume.data import Labels
 
 THEMES = ROOT / "themes"
 
@@ -31,7 +37,9 @@ def kv(key: str, value: str, attrs: str = "") -> str:
 
 def sidebar(cv: CV, lb: Labels) -> str:
     links = "".join(f'<dd><a href="{escape(link["url"])}">{escape(link["label"])}</a></dd>' for link in cv["links"])
-    skills = "".join(kv(s["name"], lb["levels"][s["level"]], f' style="--level:{s["level"]}"{aka(s)}') for s in cv["skills"])
+    skills = "".join(
+        kv(s["name"], lb["levels"][s["level"]], f' style="--level:{s["level"]}"{aka(s)}') for s in cv["skills"]
+    )
     langs = "".join(kv(lang["name"], lang["level"]) for lang in cv["languages"])
     return f"""<aside>
 <h2>{lb["details"]}</h2><dl><dd>{escape(cv["location"])}</dd>
@@ -86,7 +94,9 @@ def photo(cv: CV) -> str:
 
 
 def header(cv: CV, lb: Labels) -> str:
-    stats = "".join(f"<div><b>{escape(h['value'])}</b><span>{escape(h['label'])}</span></div>" for h in cv.get("highlights", []))
+    stats = "".join(
+        f"<div><b>{escape(h['value'])}</b><span>{escape(h['label'])}</span></div>" for h in cv.get("highlights", [])
+    )
     links = "".join(f'<a href="{escape(link["url"])}">{escape(link["label"])}</a>' for link in cv["links"])
     # download: basename of a published .pdf/.docx next to the page; without it, the browser's print dialog.
     if "download" in cv:

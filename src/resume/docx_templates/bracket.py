@@ -5,26 +5,36 @@ Highlights placeholders, skill bars, a role timeline, tool chips and quote bars.
 """
 
 import uuid
-from functools import partial
 from pathlib import Path
+from functools import partial
 
 from docx import Document
-from docx.document import Document as Doc
-from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT, WD_ROW_HEIGHT_RULE
-from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT, WD_UNDERLINE
-from docx.opc.constants import RELATIONSHIP_TYPE as RT
-from docx.opc.oxml import serialize_part_xml
-from docx.opc.packuri import PackURI
+from docx.shared import Cm
+from docx.oxml.ns import qn
 from docx.opc.part import Part
 from docx.oxml import parse_xml
-from docx.oxml.ns import qn
-from docx.shared import Cm
-from docx.styles.style import ParagraphStyle
+from docx.opc.packuri import PackURI
+from docx.enum.text import WD_UNDERLINE
+from docx.document import Document as Doc
 from docx.text.paragraph import Paragraph
+from docx.enum.text import WD_TAB_ALIGNMENT
+from docx.opc.oxml import serialize_part_xml
+from docx.styles.style import ParagraphStyle
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.table import WD_ROW_HEIGHT_RULE
+from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
+from docx.opc.constants import RELATIONSHIP_TYPE as RT
 
 from resume import ROOT
-from resume.docx_templates import Mark, border, bullet_lists, cell, char_style, numbered, style, table
 from resume.ooxml import xml
+from resume.docx_templates import Mark
+from resume.docx_templates import cell
+from resume.docx_templates import style
+from resume.docx_templates import table
+from resume.docx_templates import border
+from resume.docx_templates import numbered
+from resume.docx_templates import char_style
+from resume.docx_templates import bullet_lists
 
 FONT = "Montserrat"
 INK, MUTED, ACCENT, SIDE, TRACK = "262626", "7A7A7A", "F6B92B", "F4F3EF", "DDDBD3"
@@ -50,7 +60,9 @@ def embed_font(doc: Doc, family: str, files: dict[str, Path]) -> None:
     for old in root.findall(qn("w:font")):  # a font table isn't an oxml class: no w: prefix in xpath
         if old.get(qn("w:name")) == family:
             root.remove(old)
-    font = xml(f'<w:font w:name="{family}"><w:charset w:val="00"/><w:family w:val="swiss"/><w:pitch w:val="variable"/></w:font>')
+    font = xml(
+        f'<w:font w:name="{family}"><w:charset w:val="00"/><w:family w:val="swiss"/><w:pitch w:val="variable"/></w:font>'
+    )
     for i, (kind, path) in enumerate(files.items(), 1):
         guid = str(uuid.uuid4()).upper()
         key = bytes.fromhex(guid.replace("-", ""))[::-1]
@@ -63,7 +75,9 @@ def embed_font(doc: Doc, family: str, files: dict[str, Path]) -> None:
             bytes(data),
             doc.part.package,
         )
-        font.append(xml(f'<w:embed{kind} r:id="{font_table.relate_to(part, RT.FONT)}" w:fontKey="{{{guid}}}"/>', "w", "r"))
+        font.append(
+            xml(f'<w:embed{kind} r:id="{font_table.relate_to(part, RT.FONT)}" w:fontKey="{{{guid}}}"/>', "w", "r")
+        )
     root.append(font)
     font_table._blob = serialize_part_xml(root)
     doc.settings.element.xpath("./w:zoom")[0].addnext(xml("<w:embedTrueTypeFonts/>"))  # schema: right after zoom
@@ -230,7 +244,9 @@ def make(out: Path) -> None:
     layout(doc)
     decorate(doc)
     settings = doc.settings.element
-    settings.xpath("./w:zoom")[0].set(qn("w:percent"), "100")  # python-docx's blank document omits this required attribute
+    settings.xpath("./w:zoom")[0].set(
+        qn("w:percent"), "100"
+    )  # python-docx's blank document omits this required attribute
     # Word 2013+ layout. In the blank document's Word 2010 mode, a table's first-cell text aligns with the margin,
     # so the cell padding pushes the table, the sidebar text and its marks off the page's left edge.
     settings.xpath("./w:compat/w:compatSetting[@w:name='compatibilityMode']")[0].set(qn("w:val"), "15")

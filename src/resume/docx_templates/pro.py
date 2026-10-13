@@ -1,13 +1,18 @@
 """templates/pro.docx: name banner on top, light sidebar left, main column right."""
 
-from functools import partial
 from pathlib import Path
+from functools import partial
 
 from docx import Document
-from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.shared import Cm
+from docx.enum.table import WD_TABLE_ALIGNMENT
 
-from resume.docx_templates import Mark, border, bullet_lists, cell, style, table
+from resume.docx_templates import Mark
+from resume.docx_templates import cell
+from resume.docx_templates import style
+from resume.docx_templates import table
+from resume.docx_templates import border
+from resume.docx_templates import bullet_lists
 
 FONT = "Calibri"
 INK, ACCENT, MUTED, RULE, FILL = "222222", "1F3A5F", "6B7280", "C9D1DB", "F3F5F8"

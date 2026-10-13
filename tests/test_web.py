@@ -2,9 +2,11 @@ import re
 from pathlib import Path
 
 import pytest
-from support import CV, html
 
-from resume import data, web
+from resume import web
+from support import CV
+from resume import data
+from support import html
 
 
 @pytest.mark.parametrize("theme", web.themes())

@@ -1,13 +1,18 @@
 """resume: build the CV's web page, PDFs and .docx files, and the .docx templates."""
 
 import importlib
-from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Annotated
+from concurrent.futures import ThreadPoolExecutor
 
 import typer
 
-from resume import ROOT, chrome, data, docx_templates, web, word
+from resume import web
+from resume import ROOT
+from resume import data
+from resume import word
+from resume import chrome
+from resume import docx_templates
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 
@@ -39,7 +44,10 @@ def build(
         for c in cvs:
             name = c.get("download", f"cv-{c['lang']}")
             pdf, doc = out / f"{name}.pdf", out / f"{name}.docx"
-            jobs += [pool.submit(chrome.pdf, browser, f"{page.resolve().as_uri()}#{c['lang']}", pdf), pool.submit(docx, c, template, doc)]
+            jobs += [
+                pool.submit(chrome.pdf, browser, f"{page.resolve().as_uri()}#{c['lang']}", pdf),
+                pool.submit(docx, c, template, doc),
+            ]
             written += [pdf, doc]
         for job in jobs:
             job.result()  # raises the first failure
