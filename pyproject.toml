@@ -9,7 +9,7 @@ dependencies = ["python-docx~=1.2", "pyyaml~=6.0", "typer~=0.12"]
 resume = "resume.cli:app"
 
 [dependency-groups]
-dev = ["isort~=6.1", "pytest", "ruff", "ty", "types-PyYAML"]
+dev = ["fonttools", "isort~=6.1", "pytest", "ruff", "ty", "types-PyYAML"]
 
 [build-system]
 requires = ["hatchling"]
