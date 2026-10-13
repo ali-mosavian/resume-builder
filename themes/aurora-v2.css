@@ -152,3 +152,4 @@ aside h2 + .kv[style], .kv[style] + .kv[style] { display:inline-flex; }
   .testimonials .item:nth-of-type(n+4) { display:none; }  /* print the first three */
   .testimonials .item::before { font-size:3rem; top:-2px; }
 }
+.photo { display:none; }

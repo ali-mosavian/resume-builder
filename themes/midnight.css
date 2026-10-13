@@ -245,3 +245,4 @@ mark { background:#5fe3f22e; color:#dffbff; border-radius:3px; padding:0 2px; bo
   mark { background:none; box-shadow:none; color:inherit; }
   a { color:var(--accent); }
 }
+.photo { display:none; }

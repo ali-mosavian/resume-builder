@@ -265,3 +265,4 @@ mark { background:var(--accent-tint); color:inherit; box-shadow:0 1px 0 var(--ac
   .kv { padding:3pt 0; } .kv span:first-child { font-size:8.4pt; }
   dd a { border:0; }
 }
+.photo { display:none; }
