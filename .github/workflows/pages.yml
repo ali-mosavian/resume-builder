@@ -24,8 +24,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
       - run: |
-          uv run build_html.py cv/cv_en.yaml --theme bracket --out _site/index.html
-          uv run build_html.py cv/cv_sv.yaml --theme bracket --out _site/sv.html
+          uv run build_html.py cv/cv_en.yaml --also cv/cv_sv.yaml --theme bracket --out _site/index.html
+          # Downloads named by each CV's `download:`; the PDF is the page itself, printed in that language.
+          for lang in en sv; do
+            name=$(sed -n 's/^download: //p' cv/cv_$lang.yaml)
+            google-chrome --headless=new --disable-gpu --window-size=1280,1000 --virtual-time-budget=6000 \
+              --no-pdf-header-footer --print-to-pdf=_site/$name.pdf "file://$PWD/_site/index.html#$lang"
+            uv run build_cv.py cv/cv_$lang.yaml --template templates/pro.docx --out _site/$name.docx
+          done
+          ls -l _site
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

@@ -243,7 +243,7 @@ mark { background:#5fd3c344; color:inherit; border-radius:3px; padding:0 2px; }
   :root { --gx:20px; --bar:48px; --dock:.4; --h1:15vw; }
   header { padding:calc(var(--bar) + 40px) var(--gx) 40px; grid-template-columns:1fr; }
   .contact { grid-column:1; grid-row:auto; justify-content:flex-start; margin-top:22px; }
-  .highlights { grid-template-columns:1fr 1fr; margin-top:36px; }
+  .highlights { grid-template-columns:1fr 1fr; grid-auto-flow:row; margin-top:36px; }
   .grid { grid-template-columns:1fr; gap:16px; padding:32px var(--gx) 64px; }
   main, aside { grid-column:1; grid-row:auto; } aside { position:static; margin-top:40px; }
   main h2 { font-size:1.8rem; margin-top:52px; }
@@ -273,7 +273,7 @@ mark { background:#5fd3c344; color:inherit; border-radius:3px; padding:0 2px; }
   .page { max-width:none; }
   header { padding:0 0 10px; border-bottom:1px solid var(--line); grid-template-columns:1fr auto; }
   h1 { font-size:34pt; } .role { margin-bottom:10px; font-size:7.5pt; } .where { margin-top:12px; font-size:7pt; background:none; }
-  .highlights { grid-column:1 / -1; margin-top:16px; border-radius:10px; grid-template-columns:repeat(4, 1fr); }
+  .highlights { grid-column:1 / -1; margin-top:16px; border-radius:10px; grid-auto-flow:column; grid-auto-columns:1fr; }
   .highlights div { padding:8px 12px; background:var(--panel); } .highlights div::before { font-size:6pt; margin-bottom:2px; }
   .highlights b { font-size:16pt; } .highlights span { font-size:7.5pt; margin-top:2px; }
   .grid { grid-template-columns:1fr 52mm; gap:22px; padding:16px 0 0; }

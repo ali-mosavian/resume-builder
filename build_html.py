@@ -4,7 +4,8 @@
 # ///
 """Build a self-contained CV web page from the same YAML as build_cv.py.
 
-The look is a theme: themes/<name>.css, plus optional <name>.js and <name>.*.js, inlined. Each theme prints to A4.
+The look is a theme: themes/<name>.css, plus optional <name>.js and <name>.*.js, inlined.
+With --also, themes/_lang.js adds a language switch. Each theme prints to A4.
 """
 import base64
 import json
@@ -86,9 +87,15 @@ def photo(cv: dict) -> str:
 def header(cv: dict, lb: dict) -> str:
     stats = "".join(f'<div><b>{escape(h["value"])}</b><span>{escape(h["label"])}</span></div>' for h in cv.get("highlights", []))
     links = "".join(f'<a href="{escape(l["url"])}">{escape(l["label"])}</a>' for l in cv["links"])
+    # download: basename of a published .pdf/.docx next to the page; without it, the browser's print dialog.
+    if cv.get("download"):
+        name = escape(cv["download"])
+        get = "".join(f'<a class="download" href="{name}.{ext}" download>{ext.upper()}</a>' for ext in ("pdf", "docx"))
+    else:
+        get = f'<button type="button" onclick="print()">{lb["print"]}</button>'
     return f"""<header>{photo(cv)}<h1>{escape(cv["name"])}</h1><div class="role">{escape(cv["title"])}</div>
 <div class="where">{escape(cv["location"])}</div>
-<nav class="contact">{links}<button type="button" onclick="print()">{lb["print"]}</button></nav>
+<nav class="contact">{links}{get}</nav>
 <div class="highlights">{stats}</div></header>"""
 
 
@@ -108,6 +115,7 @@ def build(cv_path: Path, out: Path | None = None, theme: str = "pro",
     cvs = [yaml.safe_load(p.read_text(encoding="utf-8")) | {"_dir": p.parent} for p in (cv_path, *(also or ()))]
     # <theme>.js (often a link to the shared interactions), then any <theme>.*.js extras, in name order.
     scripts = [p for p in [THEMES / f"{theme}.js", *sorted(THEMES.glob(f"{theme}.*.js"))] if p.exists()]
+    scripts += [THEMES / "_lang.js"] * (len(cvs) > 1)
     js = "".join(f"<script>{p.read_text(encoding='utf-8')}</script>" for p in scripts)
     out.write_text(f"""<!doctype html>
 <html lang="{cvs[0]["lang"]}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
