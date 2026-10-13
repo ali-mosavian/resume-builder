@@ -2,7 +2,7 @@
 # requires-python = ">=3.12"
 # dependencies = ["python-docx~=1.1", "pyyaml~=6.0", "typer~=0.12"]
 # ///
-"""Self-check: builds cv_en.yaml with each template and checks what the reader sees. Run: uv run test_build_cv.py"""
+"""Self-check: builds cv/cv_en.yaml with each template and checks what the reader sees. Run: uv run test_build_cv.py"""
 import re
 import shutil
 import subprocess
@@ -17,10 +17,10 @@ from docx.shared import Cm
 from build_cv import build
 
 here = Path(__file__).parent
-for template in ("template.docx", "template_pro.docx"):
+for template in ("templates/default.docx", "templates/pro.docx"):
     with tempfile.TemporaryDirectory() as tmp:
         out = Path(tmp) / "cv.docx"
-        build(here / "cv_en.yaml", out, here / template)
+        build(here / "cv" / "cv_en.yaml", out, here / template)
         doc = Document(out)
         main = doc.tables[0].rows[0].cells[2]
         texts = [p.text for p in main.paragraphs]
@@ -36,14 +36,14 @@ for template in ("template.docx", "template_pro.docx"):
 
 # template_pro once had only cell widths, no grid widths: renderers split the page evenly,
 # squeezing the main column to a third and doubling the page count.
-grid = Document(here / "template_pro.docx").tables[0]._tbl.tblGrid.gridCol_lst
+grid = Document(here / "templates" / "pro.docx").tables[0]._tbl.tblGrid.gridCol_lst
 assert grid[2].w > Cm(12), "template_pro main column is not sized in the table grid"
 with tempfile.TemporaryDirectory() as tmp:
     from build_html import build as build_html
 
     for theme in sorted(p.stem for p in (here / "themes").glob("*.css")):
         out = Path(tmp) / f"cv_{theme}.html"
-        build_html(here / "cv_en.yaml", out, theme)
+        build_html(here / "cv" / "cv_en.yaml", out, theme)
         html = out.read_text(encoding="utf-8")
         assert "<strong>store capacity optimization engine</strong>" in html and "**" not in html
         assert "reading &amp; learning" in html, "YAML text is not HTML-escaped"
@@ -51,7 +51,7 @@ with tempfile.TemporaryDirectory() as tmp:
         assert html.count("data-earlier=") == 1, "earlier-roles caption repeated or missing"
     # One page, both languages: the second starts hidden, the theme script is inlined.
     out = Path(tmp) / "cv_both.html"
-    build_html(here / "cv_en.yaml", out, "aurora-v3", also=[here / "cv_sv.yaml"])
+    build_html(here / "cv" / "cv_en.yaml", out, "aurora-v3", also=[here / "cv" / "cv_sv.yaml"])
     html = out.read_text(encoding="utf-8")
     assert '<div class="page" lang="en"' in html and '<div class="page" lang="sv"' in html
     assert re.search(r'<div class="page" lang="sv" data-ui="[^"]*" hidden>', html), "second language not hidden"
@@ -61,7 +61,7 @@ with tempfile.TemporaryDirectory() as tmp:
     chrome = Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
     if chrome.exists() and shutil.which("pdftotext"):
         page, pdf = Path(tmp) / "cv_print.html", Path(tmp) / "cv.pdf"
-        build_html(here / "cv_en.yaml", page, "aurora-v3")
+        build_html(here / "cv" / "cv_en.yaml", page, "aurora-v3")
         subprocess.run([chrome, "--headless=new", "--disable-gpu", "--virtual-time-budget=300", "--no-pdf-header-footer",
                         f"--print-to-pdf={pdf}", page.as_uri()], capture_output=True, check=True)
         text = subprocess.run(["pdftotext", "-l", "1", pdf, "-"], capture_output=True, text=True, check=True).stdout.split()
@@ -72,11 +72,11 @@ with tempfile.TemporaryDirectory() as tmp:
     # resumeio.js paginates into A4 sheets that clip overflow; chained testimonials once overflowed one sheet
     # and the last four vanished from the PDF. Every role and testimonial must reach the paper, on A4.
     if chrome.exists() and shutil.which("pdftotext"):
-        cv = yaml.safe_load((here / "cv_en.yaml").read_text(encoding="utf-8"))
+        cv = yaml.safe_load((here / "cv" / "cv_en.yaml").read_text(encoding="utf-8"))
         pager = (here / "themes" / "resumeio.js").resolve()
         for theme in sorted(p.stem for p in (here / "themes").glob("*.js") if p.resolve() == pager):
             page, pdf = Path(tmp) / f"cv_{theme}.html", Path(tmp) / f"cv_{theme}.pdf"
-            build_html(here / "cv_en.yaml", page, theme)
+            build_html(here / "cv" / "cv_en.yaml", page, theme)
             subprocess.run([chrome, "--headless=new", "--disable-gpu", "--window-size=1280,1000", "--virtual-time-budget=4000",
                             "--no-pdf-header-footer", f"--print-to-pdf={pdf}", page.as_uri()], capture_output=True, check=True)
             # Raw (content-stream) order: the default reading order once wove sidebar lines into a wrapped role heading
@@ -93,7 +93,7 @@ with tempfile.TemporaryDirectory() as tmp:
         probe = ("<script>addEventListener('load',()=>setTimeout(()=>{document.title=[...document.querySelectorAll('.sheet aside')]"
                  ".map(a=>a.getBoundingClientRect().width|0).join(',')},1500))</script>")
         page = Path(tmp) / "cv_dmc_side.html"
-        build_html(here / "cv_en.yaml", page, "designmycv")
+        build_html(here / "cv" / "cv_en.yaml", page, "designmycv")
         page.write_text(page.read_text(encoding="utf-8").replace("</body>", probe + "</body>"), encoding="utf-8")
         dom = subprocess.run([chrome, "--headless=new", "--disable-gpu", "--window-size=1280,1000", "--virtual-time-budget=4000",
                               "--dump-dom", page.as_uri()], capture_output=True, text=True, check=True).stdout
@@ -109,7 +109,7 @@ with tempfile.TemporaryDirectory() as tmp:
         shared = (here / "themes" / "aurora-v3.js").resolve()
         for theme in sorted(p.stem for p in (here / "themes").glob("*.js") if p.resolve() == shared):
             page = Path(tmp) / f"cv_expand_{theme}.html"
-            build_html(here / "cv_en.yaml", page, theme)
+            build_html(here / "cv" / "cv_en.yaml", page, theme)
             page.write_text(page.read_text(encoding="utf-8").replace("</body>", probe + "</body>"), encoding="utf-8")
             dom = subprocess.run([chrome, "--headless=new", "--disable-gpu", "--virtual-time-budget=1000", "--dump-dom", page.as_uri()],
                                  capture_output=True, text=True, check=True).stdout

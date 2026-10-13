@@ -101,8 +101,10 @@ def page(cv: dict, hidden: bool) -> str:
 </div>"""
 
 
-def build(cv_path: Path, out: Path, theme: str = "pro",
+def build(cv_path: Path, out: Path | None = None, theme: str = "pro",
           also: Annotated[list[Path] | None, typer.Option(help="More YAMLs (other languages); a theme script may switch.")] = None) -> None:
+    out = out or THEMES.parent / "build" / f"{cv_path.stem}_{theme}.html"
+    out.parent.mkdir(exist_ok=True)
     cvs = [yaml.safe_load(p.read_text(encoding="utf-8")) | {"_dir": p.parent} for p in (cv_path, *(also or ()))]
     # <theme>.js (often a link to the shared interactions), then any <theme>.*.js extras, in name order.
     scripts = [p for p in [THEMES / f"{theme}.js", *sorted(THEMES.glob(f"{theme}.*.js"))] if p.exists()]
