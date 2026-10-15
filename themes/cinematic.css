@@ -1,7 +1,7 @@
 /* Cinematic: a scroll-driven film of a career. Letterboxed opening shot, the name docks into the top bar,
    headline numbers take the stage one by one, the timeline draws itself. Scroll-driven CSS animations when
    supported, cinematic.fx.js drives --p otherwise. Without JS, with reduced motion and in print: static.
-   Shared interactions from cinematic.js (= aurora-v3.js). */
+   Shared interactions from cinematic.js (= aurora.js). */
 @import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;700&display=swap");
 
 :root {

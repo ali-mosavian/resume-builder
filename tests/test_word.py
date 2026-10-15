@@ -24,9 +24,7 @@ def test_template_fills_in(template: str) -> None:
     # **markup** becomes a bold run without the asterisks.
     first = next(p for p in main.paragraphs if "demand forecasting platform" in p.text)
     assert "**" not in first.text
-    assert any(
-        (r.bold or r._r.style == "CVStrong") and r.text == "demand forecasting platform" for r in first.runs
-    )
+    assert any((r.bold or r._r.style == "CVStrong") and r.text == "demand forecasting platform" for r in first.runs)
     assert "MAR 2025 - PRESENT" in [p.text for p in main.paragraphs]
     everywhere = [*doc.paragraphs, *(p for c in cells(doc.tables) for p in c.paragraphs)]
     assert any(p.text == "Katrin Vogel" for p in everywhere), "name placeholder not filled"

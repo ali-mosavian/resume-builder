@@ -1,6 +1,6 @@
 # Resume builder
 
-A resume builder: write your CV once as YAML, add a photo, and get a web page, PDFs and Word documents in any of thirteen themes. Every output is A4, in as many languages as the YAML holds.
+A resume builder: write your CV once as YAML, add a photo, and get a web page, PDFs and Word documents in any of eleven themes. Every output is A4, in as many languages as the YAML holds.
 
 `example/resume.yaml` and `example/headshot.jpg` are a fictional example; the photo is AI-generated.
 
@@ -25,14 +25,6 @@ Page 1 of the example in each theme: the web page, its PDF and the `.docx` as Wo
 ### aurora
 
 ![aurora: web, pdf, docx](docs/showcase/aurora.jpg)
-
-### aurora-v2
-
-![aurora-v2: web, pdf, docx](docs/showcase/aurora-v2.jpg)
-
-### aurora-v3
-
-![aurora-v3: web, pdf, docx](docs/showcase/aurora-v3.jpg)
 
 ### bracket
 
