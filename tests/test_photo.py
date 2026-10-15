@@ -7,7 +7,7 @@ from resume.photo import square
 from resume.photo import portrait
 from resume.photo import face_center
 
-PHOTO = ROOT / "assets" / "photo.jpg"
+PHOTO = ROOT / "example" / "headshot.jpg"
 
 
 def read() -> np.ndarray:

@@ -11,7 +11,7 @@ from resume import data
 from resume import word
 from resume.chrome import headless
 
-CV = ROOT / "cv" / "cv.yaml"
+CV = ROOT / "example" / "resume.yaml"
 TEMPLATES = ROOT / "templates"
 
 
