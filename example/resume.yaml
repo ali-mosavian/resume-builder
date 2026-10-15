@@ -1,39 +1,39 @@
-langs: [en, sv]
-name: Alex Morgan
+langs: [en, de]
+name: Katrin Vogel
 title:
-  en: Senior Machine Learning/AI Contractor
-  sv: Senior Machine Learning/AI-konsult
+  en: Senior Machine Learning Engineer
+  de: Senior Machine Learning Engineer
 location:
-  en: Stockholm, Sweden
-  sv: Stockholm, Sverige
-born: 1985
+  en: Munich, Germany
+  de: München, Deutschland
+born: 1988
 photo: headshot.jpg
-download: alex_morgan-resume-{lang}
+download: katrin_vogel-resume-{lang}
 nationality:
-  en: Swedish
-  sv: Svensk
+  en: German
+  de: Deutsch
 highlights:
-- value: 15+
+- value: 12+
   en:
-    label: years programming
-  sv:
-    label: år av programmering
-- value: '9'
+    label: years in software
+  de:
+    label: Jahre in der Softwareentwicklung
+- value: '8'
   en:
-    label: years in machine learning
-  sv:
-    label: år inom machine learning
-- value: 30+
+    label: years shipping ML to production
+  de:
+    label: Jahre ML in Produktion
+- value: 40+
   en:
-    label: markets, one model
-  sv:
-    label: marknader, en modell
+    label: models in production
+  de:
+    label: Modelle in Produktion
 - en:
-    value: ex-CTO
-    label: led four teams
-  sv:
-    value: f.d. CTO
-    label: ledde fyra team
+    value: tech lead
+    label: for a team of six
+  de:
+    value: Tech Lead
+    label: für ein Team von sechs
 links:
 - label: LinkedIn
   url: https://www.linkedin.com/in/example
@@ -42,506 +42,359 @@ links:
 - url: https://www.example.com/
   en:
     label: Website
-  sv:
-    label: Webbplats
+  de:
+    label: Webseite
 skills:
 - level: 5
-  aka: [LLM, language models, språkmodeller, GPT-4, RAG]
+  aka: [forecasting, time series, Prognosen, Zeitreihen]
   en:
-    name: Large Language Models
-  sv:
-    name: Large Language Models (LLM)
+    name: Demand Forecasting
+  de:
+    name: Bedarfsprognosen
 - level: 5
   en:
-    name: Generative AI
-    aka: [generative AI, generativa AI, RAG]
-  sv:
-    name: Generativ AI
-    aka: [generative AI, generativ AI, generativa AI, RAG]
-- name: Machine Learning/AI
+    name: MLOps
+    aka: [ML platform, model serving, feature store]
+  de:
+    name: MLOps
+    aka: [ML-Plattform, Model Serving, Feature Store]
+- name: Machine Learning
   level: 5
 - name: Python
   level: 5
-- name: Rust
-  level: 3
-- name: C/C++
+- name: PyTorch
   level: 4
-- name: TypeScript
-  level: 3
-- name: Go
-  level: 4
-- name: Git
+- name: SQL
   level: 5
-- name: Snowflake
+- name: Computer Vision
   level: 4
-- name: BigQuery
+- name: Recommender Systems
   level: 4
-- name: Postgres/MySQL
+- name: Kubernetes
   level: 4
+- name: Docker
+  level: 5
+- name: Java
+  level: 3
+- name: Apache Spark
+  level: 3
 - name: Google Cloud Platform
-  level: 3
+  level: 4
   aka: [GCP]
-- name: Amazon Web Services
+- name: Microsoft Azure
   level: 3
-  aka: [AWS]
+  aka: [Azure]
 languages:
 - en:
-    name: Swedish
+    name: German
     level: Native speaker
-  sv:
-    name: Svenska
-    level: Modersmål
+  de:
+    name: Deutsch
+    level: Muttersprache
 - en:
     name: English
-    level: Highly proficient
-  sv:
-    name: Engelska
-    level: Mycket god
+    level: Fluent
+  de:
+    name: Englisch
+    level: Fließend
 - en:
-    name: Spanish
-    level: Conversational
-  sv:
-    name: Spanska
-    level: Konversationsnivå
+    name: French
+    level: Basic
+  de:
+    name: Französisch
+    level: Grundkenntnisse
 hobbies:
-  en: Trail running, sailing, photography, reading & tinkering with anything that has a circuit board
-  sv: Terränglöpning, segling, fotografi, läsning och att meka med allt som har ett kretskort
+  en: Bouldering, cycling, board games, reading & baking sourdough
+  de: Bouldern, Radfahren, Brettspiele, Lesen und Sauerteigbacken
 summary:
   en:
-  - Experienced **hands-on** engineer, machine learning/AI specialist, generalist and ex-CTO with a passion for finding
-    simple and unconventional ways of going from an **idea to a product** by being **pragmatic, curious, focused
-    and above all shipping early.**
-  - A life long learner with over fifteen years of programming experience, working in the IT industry since 2008 and
-    working with machine learning since 2016. The intersection where scalable data systems and machine
-    learning/AI meet to make up a product people love is where I feel at home.
-  sv:
-  - Erfaren **hands-on**-ingenjör, specialist inom machine learning/AI, generalist och före detta CTO med passion för
-    att hitta enkla och okonventionella vägar från **idé till produkt** genom att vara **pragmatisk, nyfiken,
-    fokuserad och framför allt leverera tidigt.**
-  - Livslångt lärande med över femton års programmeringserfarenhet, verksam i IT-branschen sedan 2008 och inom
-    machine learning sedan 2016. Där skalbara datasystem och machine learning/AI möts för att skapa en
-    produkt som människor älskar är där jag känner mig hemma.
+  - Machine learning engineer who likes the whole path from messy data to a **model people rely on**. Steady, curious
+    and direct, with a habit of measuring before optimising.
+  - Twelve years in software and eight in machine learning, mostly in forecasting, recommendations and computer
+    vision. Happiest where **solid engineering** and applied statistics meet in a product that keeps working
+    after launch.
+  de:
+  - Machine-Learning-Ingenieurin, die den ganzen Weg von unordentlichen Daten zu einem **Modell, auf das man sich verlässt**,
+    mag. Beständig, neugierig und direkt, mit der Gewohnheit, zu messen, bevor sie optimiert.
+  - Zwölf Jahre Softwareentwicklung und acht Jahre Machine Learning, überwiegend in Prognosen, Empfehlungssystemen
+    und Computer Vision. Am wohlsten dort, wo **solides Engineering** und angewandte Statistik in einem Produkt
+    zusammenkommen, das auch nach dem Launch zuverlässig läuft.
 experience:
-- company: Halvorsen Retail Group
-  city: Stockholm
-  start: 2025-09
+- company: Kestrel Freight
+  city: Munich
+  start: 2025-03
   end: null
-  tools: [Python, OR-Tools CP-SAT, LightGBM, SHAP, scikit-learn, statsmodels, Numba, Pandas, PyArrow, DuckDB, BigQuery,
-    dbt, SQLFluff, Pydantic, Typer, Docker, Terraform, Cloud Run, GCS, GitHub Actions, Pytest, MyPy, Ruff]
+  tools: [Python, LightGBM, PyTorch, Prophet, Pandas, Polars, BigQuery, dbt, Airflow, Docker, Kubernetes, Terraform, GitHub Actions]
   en:
-    title: Senior AI Engineer (Contractor)
+    title: Senior Machine Learning Engineer
     bullets:
-    - 'Led the re-architecture of a prototype **shelf allocation engine** into a production system (74% of all
-      changes), deciding which products go on which shelf to fill each store optimally. Designed a small modelling
-      language for store fixtures that replaced thousands of lines of special-case code, on top of a two-stage
-      constraint solver; grew the test suite from 8 to 90+ files.'
-    - 'Designed and built a **stock level estimation system** (95% of all changes) covering ~2,800 stores without
-      sensors: a gradient-boosted model on 140 engineered features trained on 52M rows from 540 sensor-equipped
-      stores, fed by a custom lineage and transformation pipeline processing 4.1 TB per training run.'
-    - 'Rebuilt the **store-fullness data platform** in dbt (38% of all changes): introduced contract-enforced
-      serving tables, retired legacy models and fixed a fundamental flaw in the published stock-ratio metric.'
-  sv:
-    title: Senior AI Engineer (konsult)
+    - Built a **demand forecasting platform** for 1,200 freight lanes, replacing spreadsheet planning with daily probabilistic forecasts that cut planning error by a third.
+    - Introduced backtesting and drift monitoring for every forecast, so a degrading model is flagged within a day instead of at the monthly review.
+    - Moved training and serving to a shared Kubernetes setup, bringing a model release from two weeks down to one afternoon.
+  de:
+    title: Senior Machine Learning Engineer
     bullets:
-    - 'Ledde omarkitekturen av en prototyp för **hyllallokering** till ett produktionssystem (74 % av alla
-      ändringar), som avgör vilka produkter som hamnar på vilken hylla för att fylla varje butik optimalt. Designade
-      ett litet modelleringsspråk för butiksinredning som ersatte tusentals rader specialfallskod, ovanpå en
-      tvåstegs constraint solver; utökade testsviten från 8 till 90+ filer.'
-    - 'Designade och byggde ett **system för att estimera lagernivåer** (95 % av alla ändringar) för ~2 800
-      butiker utan sensorer: en gradient boosted modell med 140 features tränad på 52 miljoner rader
-      från 540 sensorutrustade butiker, matad av en egenutvecklad lineage- och transformationspipeline som bearbetar
-      4,1 TB per träningskörning.'
-    - 'Byggde om **dataplattformen för butiksfyllnadsgrad** i dbt (38 % av alla ändringar): införde serving-tabeller
-      med data contracts, fasade ut legacy-modeller och rättade ett grundläggande fel i det publicerade stock
-      ratio-måttet.'
-- company: Quillfeather AI
-  city: Stockholm
-  start: 2025-04
-  end: 2025-07
-  tools: [Azure OpenAI, Python, FastAPI, Docker, MyPy, Ruff, PGVector, Postgres, Pytest, SQLAlchemy]
+    - Baute eine **Plattform für Bedarfsprognosen** für 1.200 Frachtrelationen auf, die die Planung in Tabellenkalkulationen durch tägliche probabilistische Prognosen ersetzte und den Planungsfehler um ein Drittel senkte.
+    - Führte Backtesting und Drift-Monitoring für jede Prognose ein, sodass ein nachlassendes Modell innerhalb eines Tages auffällt statt erst im Monatsreview.
+    - 'Verlegte Training und Serving auf ein gemeinsames Kubernetes-Setup: Ein Modell-Release dauert nun einen Nachmittag statt zwei Wochen, dank **automatisierter Pipelines**.'
+- company: Tidewell Energy
+  city: Munich
+  start: 2023-10
+  end: 2025-02
+  tools: [Python, MLflow, Feast, Kubeflow, Docker, Kubernetes, Azure, Terraform, Prometheus, Grafana]
   en:
-    title: Senior AI Engineer (Contractor)
+    title: Machine Learning Platform Engineer
     bullets:
-    - Enhanced **retrieval-augmented generation (RAG)** pipelines for Quillfeather’s AI-driven contract drafting
-      product, improving accuracy and relevance of suggested clauses.
-    - Developed content extraction and chunking strategies for various document types (docx, pptx, pdf etc),
-      including automated document-type classification and structure-preserving parsing.
-    - Built a specialized pipeline for slide decks, leveraging visual element detection and asynchronous
-      processing to rapidly locate relevant pages and extract key data.
-    - Significantly improved retrieval quality using **re-ranking** and other optimization techniques, boosting
-      downstream clause suggestions.
-  sv:
-    title: Senior AI Engineer (konsult)
+    - Designed an internal **ML platform** with a feature store, model registry and one-command deployment, adopted by five teams.
+    - Added automated canary releases and rollback for model services, removing manual sign-off from routine updates.
+    - Wrote the onboarding guide and ran workshops, which halved the time for a new team to ship its first model.
+  de:
+    title: Machine Learning Platform Engineer
     bullets:
-    - Förbättrade **retrieval-augmented generation (RAG)**-pipelines i Quillfeathers AI-drivna produkt för
-      avtalsskrivning, med högre träffsäkerhet och relevans för föreslagna klausuler.
-    - Utvecklade strategier för content extraction och chunking för olika dokumenttyper (docx, pptx, pdf m.m.),
-      inklusive automatisk klassificering av dokumenttyp och strukturbevarande parsing.
-    - Byggde en specialiserad pipeline för presentationer, med detektering av visuella element och asynkron
-      bearbetning för att snabbt hitta relevanta sidor och extrahera nyckeldata.
-    - Förbättrade retrievalens kvalitet avsevärt med **re-ranking** och andra optimeringstekniker, vilket höjde
-      kvaliteten på de föreslagna klausulerna.
-- company: Norrby Bank AB, Fraud Analytics Unit
-  city: Stockholm
-  start: 2025-01
-  end: 2025-04
-  tools: [Python, MyPy, Ruff, Pytest, LangGraph, Chainlit, Docker, AWS, Hadoop]
-  en:
-    title: Senior AI Engineer (Contractor)
-    bullets:
-    - Completely re-architected, re-wrote and productionalized an existing proof of concept tool (to a working
-      production system) to **automate detection of suspicious transactions** based on stated and actual behavior.
-  sv:
-    title: Senior AI Engineer (konsult)
-    bullets:
-    - Gjorde om arkitekturen, skrev om och produktionssatte ett befintligt proof of concept-verktyg för att
-      **automatisera detektion av misstänkta transaktioner** utifrån uppgivet och faktiskt beteende.
-- company: Bygglinje
-  city: Stockholm
-  start: 2024-06
-  end: 2025-01
-  tools: [Python, Langchain, Chainlit, GPT-4o, function calling, LightGBM, FastAPI, DuckDB, SQL Server, Azure, Docker]
-  en:
-    title: Senior AI Engineer (Contractor)
-    bullets:
-    - Developed a **conversational AI** to streamline tender searches, replacing a complex filter system with a
-      more user-friendly and intuitive interface.
-    - Enabled users to search for tenders with minimal input, reducing the cognitive load of navigating
-      numerous filters and categories.
-    - Developed a **hybrid recommendations system** to give more relevant tender recommendations to customers.
-    - Developed a trade-category predictor for incoming tenders.
-  sv:
-    title: Senior AI Engineer (konsult)
-    bullets:
-    - Utvecklade en **conversational AI** för anbudssökning som ersatte ett komplext filtersystem med ett mer
-      användarvänligt och intuitivt gränssnitt.
-    - Gjorde det möjligt för användare att söka anbud med minimal input, vilket minskade den kognitiva belastningen
-      av att navigera bland många filter och kategorier.
-    - Utvecklade ett **hybrid recommender system** som ger kunderna mer relevanta anbudsrekommendationer.
-    - Utvecklade en modell som predikterar branschkategori för inkommande anbud.
-- company: Tallrik Capital
-  city: Stockholm
-  start: 2023-08
-  end: 2024-04
-  en:
-    title: Senior AI Engineer (Contractor)
-    bullets:
-    - Created a **multi-stage AI assistant** (RAG-based) to answer analyst queries accurately by processing complex
-      documents.
-    - Implemented a method to extract content from PDF, Word and PowerPoint files while maintaining the original
-      structure, greatly improving document handling for AI systems.
-    - Designed and deployed an **automated evaluation framework** for tracking and measuring the assistant’s accuracy
-      over time.
-    tools: [Python, Langchain, FastAPI, SlackBolt, GPT-3.5, GPT-4, Qdrant (Vector database), Docker]
-  sv:
-    title: Senior AI Engineer (konsult)
-    bullets:
-    - Byggde en **multi-stage AI-assistent** (RAG-baserad) som besvarar analytikerfrågor korrekt genom att bearbeta
-      komplexa dokument.
-    - Implementerade en metod för att extrahera innehåll ur PDF-, Word- och PowerPoint-filer med bibehållen
-      struktur, vilket kraftigt förbättrade dokumenthanteringen för AI-system.
-    - Designade och driftsatte ett **automatiserat evalueringsramverk** för att följa och mäta assistentens träffsäkerhet
-      över tid.
-    tools: [Python, Langchain, FastAPI, SlackBolt, GPT-3.5, GPT-4, Qdrant (vector database), Docker]
-- company: Lexiro
-  city: Stockholm
-  start: 2022-11
-  end: 2024-06
-  tools: [GPT-3, Python, FastAPI, Pytorch, LoRA, Docker, GCP Kubernetes]
+    - Entwarf eine interne **ML-Plattform** mit Feature Store, Modellregister und Deployment per Einzeiler, die fünf Teams übernahmen.
+    - Ergänzte automatische Canary-Releases und Rollbacks für Modell-Services, wodurch die manuelle Freigabe bei Routine-Updates entfiel.
+    - Schrieb den Onboarding-Leitfaden und hielt Workshops, was die Zeit bis zum ersten Modell eines neuen Teams halbierte.
+- company: Pixelbro Vision
+  brief: true
+  city: Munich
+  start: 2023-02
+  end: 2023-09
+  tools: [Python, PyTorch, OpenCV, ONNX, Docker]
   en:
     title: Senior Machine Learning Engineer (Contractor)
     bullets:
-    - Developed AI-driven tools for translating, summarizing and generating course content, enhancing the efficiency
-      of content creation.
-    - Fine-tuned **open-source language models** for specific tasks, improving performance and integration with
-      the generative AI product.
-    - Delivered production-quality services, now embedded at the **core of Lexiro’s generative AI offerings**.
-  sv:
-    title: Senior Machine Learning Engineer (konsult)
+    - Trained a **defect detector** for a packaging line and exported it to ONNX for edge inference.
+    - Cut false alarms by 40 percent with targeted data collection for the hardest cases.
+  de:
+    title: Senior Machine Learning Engineer (freiberuflich)
     bullets:
-    - Utvecklade AI-drivna verktyg för översättning, sammanfattning och generering av kursinnehåll, vilket
-      effektiviserade innehållsproduktionen.
-    - Fine-tunade **open source-språkmodeller** för specifika uppgifter, med bättre prestanda och integration i
-      den generativa AI-produkten.
-    - 'Levererade tjänster i produktionskvalitet: i dag utgör de **kärnan i Lexiros generativa AI-erbjudande**.'
-- title: Senior Machine Learning Engineer
-  company: Vitalia Care
-  city: Stockholm
-  start: 2021-09
-  end: 2022-10
-  tools: [Python, FastAPI, TensorFlow, Pytorch, RNN, CatBoost, AWS, Snowflake, Airflow 2]
+    - Trainierte einen **Defekt-Detektor** für eine Verpackungslinie und exportierte ihn für Edge-Inferenz nach ONNX.
+    - Senkte Fehlalarme um 40 Prozent durch gezielte Datenerhebung für die schwierigsten Fälle.
+- company: Lumenfold Retail
+  city: Nuremberg
+  start: 2021-06
+  end: 2023-01
+  tools: [Python, PyTorch, Spark, Redis, FastAPI, GCP, BigQuery, Docker, Kubernetes]
   en:
+    title: Senior Machine Learning Engineer
     bullets:
-    - Designed and deployed a **CatBoost model** to classify the level of care required for patients, enhancing
-      the triage process.
-    - Led the development of an **RNN-based model** to predict patient wait times, providing more accurate service
-      level expectations.
-    - Re-architected staffing forecasts, optimizing workforce allocation and reducing operational inefficiencies.
-  sv:
+    - Rebuilt the product **recommender** as a two-tower retrieval model with a re-ranker, lifting click-through on the home page by 11 percent.
+    - Moved candidate generation to a nightly Spark job and serving to Redis, keeping the 95th percentile latency under 60 ms.
+    - Set up an online experiment framework, which let the team run six A/B tests a month instead of one.
+  de:
+    title: Senior Machine Learning Engineer
     bullets:
-    - Designade och driftsatte en **CatBoost-modell** som klassificerar patienters vårdbehov, vilket förbättrade
-      triagen.
-    - Ledde utvecklingen av en **RNN-baserad modell** som predikterar patienters väntetider, vilket gav mer träffsäkra
-      förväntningar på servicenivån.
-    - Gjorde om arkitekturen för bemanningsprognoserna, vilket optimerade resursfördelningen och minskade ineffektivitet
-      i driften.
-- company: Solhem Digital
-  city: Stockholm
-  start: 2020-07
+    - Baute den Produkt-**Recommender** als Two-Tower-Retrieval-Modell mit Re-Ranker neu auf und steigerte die Klickrate auf der Startseite um 11 Prozent.
+    - Verlegte die Kandidatengenerierung in einen nächtlichen Spark-Job und das Serving nach Redis; die p95-Latenz blieb unter 60 ms.
+    - Richtete ein Framework für **Online-Experimente** ein, mit dem das Team sechs A/B-Tests pro Monat statt einem fahren konnte.
+- company: Harbourline Insurance
+  city: Munich
+  start: 2020-03
   end: 2021-05
-  tools: [Python, FastAPI, TensorFlow, Docker, GCP, Google AI Platform]
+  tools: [Python, XGBoost, scikit-learn, SHAP, Airflow, Snowflake, AWS, Docker]
   en:
-    title: Senior Data/Machine Learning Engineer (Contractor)
+    title: Data Scientist
     bullets:
-    - Developed a recommendation model (contextual bandit-based) and deployed it for Solhem’s inspirational feed.
-      The model automatically trains every night on a few hundred million examples, and its operation cost for
-      **30+ markets** is multiple factors lower than that of other teams using an off-the-shelf recommendation API
-      for a single market.
-    - 'Re-factored and split a monolithic backend into smaller services, enhancing maintainability and performance.
-      Reduced average response time from ~700ms (99th percentile: 3s) to **~180ms** (99th percentile: ~450ms),
-      leading to a significant improvement in user experience and reducing operational costs.'
-    - Improved data iteration cycles **from hours to minutes**, enabling rapid experimentation and testing of different
-      model architectures.
-  sv:
-    title: Senior Data/Machine Learning Engineer (konsult)
+    - Developed a claims triage model that routes simple claims for **automatic handling**, freeing adjusters for complex cases.
+    - Explained every prediction with SHAP values, which got the model through the compliance review at the first attempt.
+    - Rebuilt the training pipeline in Airflow, replacing a set of hand-run notebooks.
+  de:
+    title: Data Scientist
     bullets:
-    - Utvecklade en recommendation-modell (contextual bandits) och driftsatte den för Solhems inspirationsflöde.
-      Modellen tränas automatiskt varje natt på några hundra miljoner exempel, och driftkostnaden för **30+
-      marknader** är flera gånger lägre än för andra team som använder ett färdigt rekommendations-API för en enda
-      marknad.
-    - 'Refaktorerade och delade upp en monolitisk backend i mindre tjänster, vilket förbättrade underhållbarhet
-      och prestanda. Minskade den genomsnittliga svarstiden från ~700 ms (p99: 3 s) till **~180 ms** (p99: ~450
-      ms), vilket gav en markant bättre användarupplevelse och lägre driftkostnader.'
-    - Kortade iterationscyklerna för data **från timmar till minuter**, vilket möjliggjorde snabba experiment med
-      olika modellarkitekturer.
-- company: Pulsar Health
-  city: Stockholm
-  start: 2020-01
-  end: 2020-07
-  tools: [Python, OpenCV, RNN, CNN, Keras, TensorFlow, Linux]
+    - Entwickelte ein Triage-Modell für Schadenmeldungen, das einfache Fälle der **automatischen Bearbeitung** zuführt und Sachbearbeiter für komplexe Fälle entlastet.
+    - Erklärte jede Vorhersage mit SHAP-Werten, wodurch das Modell das Compliance-Review im ersten Anlauf bestand.
+    - Baute die Trainingspipeline in Airflow neu auf und löste damit eine Reihe von Hand gestarteter Notebooks ab.
+- company: Gantry Robotics
+  city: Augsburg
+  start: 2019-01
+  end: 2020-02
+  tools: [Python, TensorFlow, OpenCV, ROS, C++, Linux, Docker]
   en:
-    title: Senior Machine Learning/AI Engineer (Contractor)
+    title: Computer Vision Engineer
     bullets:
-    - Developed a contact-less method for estimating **respiration rate and heart rate** using video analysis,
-      advancing real-time health monitoring systems.
-    - Integrated digital filters, signal processing and classical computer vision techniques to enhance the robustness
-      of video-based vital sign detection.
-  sv:
-    title: Senior Machine Learning/AI Engineer (konsult)
+    - Built a **bin-picking vision system** that finds and grasps loose parts with a success rate above 96 percent.
+    - Generated synthetic training images from CAD models, which removed most of the manual labelling.
+    - Optimised inference to run at 30 frames per second on an embedded GPU.
+  de:
+    title: Computer Vision Engineer
     bullets:
-    - Utvecklade en kontaktlös metod för att skatta **andningsfrekvens och puls** med videoanalys, ett steg
-      framåt för hälsoövervakning i realtid.
-    - Kombinerade digitala filter, signalbehandling och klassisk computer vision för att göra den videobaserade
-      detektionen av vitalparametrar mer robust.
-- company: Stackmoon Media Tech
+    - Baute ein **Vision-System für Bin Picking**, das lose Teile findet und mit über 96 Prozent Erfolgsquote greift.
+    - Erzeugte synthetische Trainingsbilder aus CAD-Modellen, was den Großteil des manuellen Labelings überflüssig machte.
+    - Optimierte die Inferenz auf 30 Bilder pro Sekunde auf einer eingebetteten GPU.
+- company: Oakmere Media
   brief: true
-  city: Stockholm
-  start: 2019-05
-  end: 2020-01
-  tools: [Python, Keras, RNN, fastText, Docker, AWS]
-  en:
-    title: Senior Machine Learning/AI Engineer (Contractor)
-    bullets:
-    - Prototyped an NLP-based solution to automate **support ticket routing**, reducing manual effort and improving
-      accuracy in routing decisions.
-    - Improved classification accuracy by employing an F1 loss function, addressing imbalanced data across support
-      categories.
-  sv:
-    title: Senior Machine Learning/AI Engineer (konsult)
-    bullets:
-    - Tog fram en prototyp på en NLP-baserad lösning för automatisk **routing av supportärenden**, vilket minskade
-      det manuella arbetet och ökade träffsäkerheten.
-    - Förbättrade klassificeringens träffsäkerhet med en F1 loss för att hantera obalanserad data mellan supportkategorier.
-- company: Kvarn Försäkring
-  brief: true
-  city: Stockholm
-  start: 2018-12
-  end: 2019-05
-  tools: [Python, Keras, RNN, fastText, Javascript, AWS, Docker]
-  en:
-    title: Senior Machine Learning/AI Engineer (Contractor)
-    bullets:
-    - Built and deployed an **intent classification system** for customer service chats, enhancing automated customer
-      support and streamlining communication workflows.
-    - Automated key operations, including policy cancellation processes, through integration with existing
-      customer systems.
-  sv:
-    title: Senior Machine Learning/AI Engineer (konsult)
-    bullets:
-    - Byggde och driftsatte **intent classification för kundtjänstchattar**, vilket förbättrade den automatiserade
-      kundsupporten och effektiviserade kommunikationsflödena.
-    - Automatiserade centrala processer, bland annat uppsägning av försäkringar, genom integration med befintliga
-      kundsystem.
-- title: Machine Learning Lead
-  company: Tonvåg Music
-  brief: true
-  city: Stockholm
-  start: 2018-06
+  city: Munich
+  start: 2018-03
   end: 2018-12
-  tools: [Python, Convolutional Neural Networks (CNN), Google BigQuery, Linux]
+  tools: [Python, Keras, Elasticsearch, Flask, AWS]
   en:
+    title: Machine Learning Engineer
     bullets:
-    - Developed a **deep convolutional neural network** for automatic multi-label classification of songs based
-      on genre labels, enhancing the platform’s ability to recommend and categorize music accurately.
-    - Built a condensed dataset from **billions of historical events**, enabling the sales team to more effectively
-      target potential customers.
-    - Improved the company’s internal processes and data-driven decision-making by increasing efficiency through
-      data analysis and machine learning-driven solutions.
-  sv:
+    - Created a **related-article recommender** from text embeddings that raised pages per visit.
+    - Tagged the archive of 400,000 articles automatically with a topic classifier.
+  de:
+    title: Machine Learning Engineer
     bullets:
-    - Utvecklade ett **deep convolutional neural network (CNN)** för automatisk multi-label-klassificering av låtar
-      efter genre, vilket förbättrade plattformens förmåga att rekommendera och kategorisera musik.
-    - Byggde ett komprimerat dataset från **miljarder historiska events**, så att säljteamet kunde rikta sig mot
-      potentiella kunder mer effektivt.
-    - Förbättrade företagets interna processer och datadrivna beslutsfattande genom dataanalys och machine learning-baserade
-      lösningar.
-- title: Chief Technology Officer
-  company: Voltly AB
-  city: Stockholm
-  start: 2013-09
-  end: 2018-06
-  tools: [C/C++, Python, Docker, AWS, Kubernetes, CoreOS]
+    - Entwickelte einen **Recommender für verwandte Artikel** auf Basis von Text-Embeddings, der die Seitenaufrufe pro Besuch steigerte.
+    - Verschlagwortete das Archiv mit 400.000 Artikeln automatisch mit einem Themenklassifikator.
+- company: Veltrin Telecom
+  city: Munich
+  start: 2016-09
+  end: 2018-02
+  tools: [Python, scikit-learn, Spark, Hive, Hadoop, Tableau]
   en:
+    title: Data Scientist
     bullets:
-    - Led **four cross-functional teams** in developing a real-time energy monitoring product, recognized as
-      one of the most advanced in the market.
-    - Engineered a data collection platform and machine learning pipeline that contributed to significant product
-      pivots and improved user experience.
-    - Designed the full technical architecture, from hardware data acquisition to cloud-based analysis and customer-facing
-      interfaces.
-  sv:
+    - Built a **churn prediction model** on call and billing data that guided the retention campaigns of the consumer unit.
+    - Moved the feature pipeline from hand-written SQL scripts to scheduled Spark jobs.
+    - Presented results to the management team monthly, in plain language.
+  de:
+    title: Data Scientist
     bullets:
-    - Ledde **fyra tvärfunktionella team** i utvecklingen av en produkt för energiövervakning i realtid, erkänd
-      som en av de mest avancerade på marknaden.
-    - Byggde en plattform för datainsamling och en machine learning-pipeline som bidrog till viktiga produkt-pivots
-      och en bättre användarupplevelse.
-    - Designade hela den tekniska arkitekturen, från datainsamling i hårdvaran till molnbaserad analys och kundnära
-      gränssnitt.
-- title: Senior Software Engineer
-  company: Orbitext
+    - Baute ein **Churn-Prognosemodell** auf Gesprächs- und Abrechnungsdaten, das die Retention-Kampagnen des Privatkundenbereichs steuerte.
+    - Überführte die Feature-Pipeline von handgeschriebenen SQL-Skripten in zeitgesteuerte Spark-Jobs.
+    - Präsentierte der Geschäftsleitung monatlich die Ergebnisse, in verständlicher Sprache.
+- company: Fennel Foods
+  city: Stuttgart
+  start: 2015-04
+  end: 2016-08
+  tools: [R, Python, SQL, PostgreSQL, Excel]
+  en:
+    title: Data Analyst
+    bullets:
+    - Built **sales forecasts** for 300 products, replacing a manual process with weekly automated runs.
+    - Found that promotion timing explained a large share of forecast error and changed how campaigns were planned.
+  de:
+    title: Data Analyst
+    bullets:
+    - Erstellte **Absatzprognosen** für 300 Produkte und ersetzte einen manuellen Prozess durch wöchentliche automatische Läufe.
+    - Fand heraus, dass der Zeitpunkt von Aktionen einen großen Teil des Prognosefehlers erklärte, und veränderte so die Kampagnenplanung.
+- company: Quarrel Games
   brief: true
-  city: Stockholm
-  start: 2010-09
-  end: 2013-08
-  tools: [C++, Python, Ruby, Bash, Google Protocol Buffers, Git, Linux]
+  city: Stuttgart
+  start: 2014-06
+  end: 2015-03
+  tools: [Python, Java, MySQL, Jenkins]
   en:
+    title: Software Engineer
     bullets:
-    - Led the **architectural redesign of Findly**, an enterprise search engine, to make it scalable and modular,
-      transitioning it from a monolithic structure to smaller services that could be scaled horizontally.
-    - Refactored legacy code by implementing **modern C++ (C++11)** standards and best practices, improving performance
-      and maintainability of the codebase.
-    - Introduced Python-based microservices to expedite the development and deployment of new features, reducing
-      the time-to-market for enhancements.
-    - Provided vision and leadership on improving the scalability of search engine technology, laying the foundation
-      for future growth and performance improvements.
-  sv:
+    - Built a **player analytics pipeline** that tracked retention across game releases.
+    - Wrote a matchmaking service that balanced teams by skill rating.
+  de:
+    title: Softwareentwickler
     bullets:
-    - Ledde **omdesignen av arkitekturen i Findly**, en enterprise search-motor, för att göra den skalbar och
-      modulär - från en monolit till mindre tjänster som kunde skalas horisontellt.
-    - Refaktorerade legacy-kod enligt **modern C++ (C++11)** och best practices, vilket förbättrade kodbasens prestanda
-      och underhållbarhet.
-    - Införde Python-baserade microservices för att snabba upp utveckling och driftsättning av nya funktioner,
-      vilket kortade time-to-market.
-    - Stod för vision och ledarskap kring skalbarheten i sökmotortekniken och lade grunden för framtida tillväxt
-      och prestandaförbättringar.
+    - Baute eine **Analytics-Pipeline für Spieler**, die die Retention über Spiel-Releases hinweg verfolgte.
+    - Schrieb einen Matchmaking-Service, der Teams nach Spielstärke ausbalancierte.
+- company: Bluebell Analytics
+  city: Stuttgart
+  start: 2013-02
+  end: 2014-05
+  tools: [Java, Python, MySQL, Linux, Git]
+  en:
+    title: Software Engineer
+    bullets:
+    - Developed a reporting backend that served **dashboards** to forty customers.
+    - Cut report generation from minutes to seconds by pre-aggregating the data.
+    - Introduced code review and continuous integration to a team of five.
+  de:
+    title: Softwareentwickler
+    bullets:
+    - Entwickelte ein Reporting-Backend, das vierzig Kunden mit **Dashboards** versorgte.
+    - Verkürzte die Berichtserstellung von Minuten auf Sekunden durch vorab aggregierte Daten.
+    - Führte Code Reviews und Continuous Integration in einem Team von fünf Personen ein.
+- company: Drift Systems
+  city: Stuttgart
+  start: 2012-03
+  end: 2013-01
+  tools: [Java, SQL, Subversion, Linux]
+  en:
+    title: Junior Software Engineer
+    bullets:
+    - Maintained a fleet-tracking application and added **geofencing alerts** requested by customers.
+    - Fixed a long-standing memory leak that caused weekly restarts.
+  de:
+    title: Junior Softwareentwickler
+    bullets:
+    - Pflegte eine Anwendung zur Flottenortung und ergänzte auf Kundenwunsch **Geofencing-Alarme**.
+    - Behob ein langjähriges Speicherleck, das wöchentliche Neustarts verursacht hatte.
+- company: Cobalt Consulting
+  brief: true
+  city: Stuttgart
+  start: 2011-08
+  end: 2012-02
+  tools: [Java, SQL, Linux]
+  en:
+    title: Trainee Developer
+    bullets:
+    - Built internal tools for time reporting and **invoice export**.
+    - Learned the craft in a team that valued small, frequent releases.
+  de:
+    title: Trainee-Entwickler
+    bullets:
+    - Baute interne Tools für Zeiterfassung und **Rechnungsexport**.
+    - Lernte das Handwerk in einem Team, das kleine, häufige Releases schätzte.
 education:
-- city: Stockholm
-  start: 2004-08
-  end: 2009-06
+- city: Munich
+  start: 2006-10
+  end: 2011-06
   en:
-    degree: Computer Science (Masters)
-    school: Northern Institute of Technology
-    notes: Specialized in machine learning and distributed systems
-  sv:
-    degree: Masterexamen i datavetenskap
-    school: Norra tekniska institutet
-    notes: Inriktning mot machine learning och distribuerade system
+    degree: Engineering Physics (Masters)
+    school: Westland Institute of Technology
+    notes: Specialized in applied statistics and signal processing
+  de:
+    degree: Diplom in Technischer Physik
+    school: Westländische Technische Hochschule
+    notes: Schwerpunkt angewandte Statistik und Signalverarbeitung
 testimonials:
-- name: Elin Vasquez
-  role: Data Scientist, Vitalia Care, Stockholm
+- name: Elias Brenner
+  role: Head of Data, Kestrel Freight
   quote:
-  - It is rare to come across someone who has both such a depth and breadth in engineering as Alex. Alex has long
-    experience in the Machine Learning space, but also in software engineering. I’m currently working closely with
-    Alex in developing machine learning models at the digital healthcare provider Vitalia, collaborating on problems
-    in NLP and forecasting. Alex has taught me a lot about engineering and ML, and is always friendly, with an
-    easy-going and pragmatic attitude. The ML knowledge is deep, which shows in how Alex forms very specific,
-    knowledge driven hypotheses about what type of model or architecture is likely to improve the solution to a
-    given problem. Alex is a source of inspiration for the rest of the team, constantly staying ahead of the curve,
-    exploring new tools and coming with creative ideas. I would recommend Alex to any company that wants to take
-    data science to the next level.
-  date: 2022-09
-- name: Jonas Berglund
-  role: Senior Data Scientist, Solhem Digital
+  - Katrin turned a pile of spreadsheets into a forecasting system the planners actually trust. She explains trade-offs
+    clearly, tests her assumptions and never leaves a model unmonitored. Our whole team writes better code after
+    working with her.
+  date: 2026-06
+- name: Karolina Wagner
+  role: Engineering Manager, Tidewell Energy
   quote:
-  - Alex is one of the best engineers I have worked with. Pragmatic, fast and productive. Proficient in machine
-    learning, data engineering and backend development. It is hard to find people like that in the industry.
-  date: 2021-05
-- name: Priya Nair
-  role: Data Engineer, Solhem Digital
+  - Katrin built the platform that five teams now build on. Reliable, calm under pressure and generous with her time
+    when others get stuck.
+  date: 2025-01
+- name: Mattias Okafor
+  role: Product Owner, Lumenfold Retail
   quote:
-  - I had the opportunity to work with Alex for almost a year. No matter what the problem was, it got resolved.
-    Super skilled and talented, and all the conversations we had were always very useful. It was also a lot of
-    fun working together. I hope to meet again in some future project
-  date: 2021-05
-- name: Marta Lindqvist Ph.D., Principal Data Scientist, Startup in Stealth Mode
+  - Katrin made experimentation a habit for us. Every change had a hypothesis and a measurement, and the recommender
+    results spoke for themselves.
+  date: 2023-01
+- name: Dr. Freya Albrecht, Research Lead, Quiet Lab
   role: ''
   quote:
-  - Alex is a true critical thinker and dares to question typical assumptions. A firm believer in fast iterations,
-    which helped us understand and address critical issues of a difficult (research) challenge at an early stage.
-    Alex is agnostic to the specific tools and focuses instead on the problem to be solved. Basically, gets stuff
-    done. I can strongly recommend Alex and I have really enjoyed working closely together for the past
-    months.
-  date: 2020-05
-- name: Oskar Hedlund
-  role: Founder, Voltly & Pulsar Health
+  - Katrin is thorough and sceptical in the best way. She asks for the baseline first, which saved us weeks.
+    A pleasure to work with.
+  date: 2021-03
+- name: Rainer Hoffmann
+  role: Chief Actuary, Harbourline Insurance
   quote:
-  - 'Alex is the most gifted technologist I know and it''s been a privilege to be working together at Voltly for the
-    past 2.5 year. During this time we have gone from an idea on paper to having the best product in the market
-    and signing some of the biggest players on the market as customer. Alex has been in charge of our technology
-    strategy across the board: machine learning, large-scale back-end systems, hardware and product. The ability
-    to identify the right opportunities across these areas has been critical for Voltly''s success.'
-  - As a manager Alex has implemented a development culture with an emphasis on pragmatism and focusing only on that
-    which is most critical. It's been a treat to watch how that culture, combined with a knack for finding unorthodox
-    strategies, has generated great results that has often exceeded our customers expectations. Alex is also passionate
-    about the product that ends up in people's hands and is always the most avid user of anything built. If
-    you're looking for the smartest person around when it comes to technology, you need not look further
-  date: 2016-07
-- name: Karin Ekdahl
-  role: Head of Engineering, Orbitext
+  - 'Katrin made the claims model explainable to people who do not care about machine learning, only about
+    whether the numbers are right. The review went through without a single change request.'
+  - She is quick, honest about what a model can and cannot do, and easy to collaborate with.
+  date: 2021-05
+- name: Ida Peters
+  role: Software Engineer, Gantry Robotics
   quote:
-  - With a strong drive for learning and trying new things Alex is likely to bring new influences to any organization.
-    A firm grip on search engine technology both in terms of internal implementation and integration aspects,
-    but I would recommend Alex to any team that wants to drive change and continuously improve their code and architecture.
-  date: 2013-10
-- name: Daniel Sjöberg
-  role: Product Manager, Brightsync
+  - Katrin bridged the gap between research code and robots on the shop floor. She picks up new areas fast and
+    documents what she builds.
+  date: 2020-02
+- name: Gustav Lehmann
+  role: Team Lead, Veltrin Telecom
   quote:
-  - Alex has a very deep knowledge in a very broad spectrum when it comes to all parts of software development.
-    A unique ability to always find a solution and then implement it in a straight forward way.
-    I would recommend Alex without a doubt!
-  date: 2012-01
-- name: Henrik Strand
-  role: Production Manager, Fjordworks
+  - A strong analyst with real engineering discipline. Katrin's pipelines ran for years after she left.
+  date: 2018-03
+- name: Tobias Daniels
+  role: Senior Developer, Bluebell Analytics
   quote:
-  - Alex is a great developer / software architect with the ability to solve tough problems efficiently and creatively.
-    There is always a solution in Alex's mind. Independent and self-motivated, and able to communicate
-    with both IT and business people in order to assist them with their challenges. For an IT consultant, this is
-    really a valuable trait.
-  date: 2011-11
-- name: Sofia Brandt
-  role: Engineer, Brightsync
-  quote:
-  - Alex is a talented, creative and hard working Software Engineer but more importantly a pro-active leader and
-    an adaptive co-worker. Alex's personal insight into key problems and their solutions always helps the team move
-    ahead. I have no doubts these skill sets will set Alex apart in any role that is taken up.
-  date: 2011-01
-- name: Tobias Wikström
-  role: Technical Director, Brightsync
-  quote:
-  - I had the fortune of working with Alex for seven months at Brightsync. I wished it would have lasted longer since
-    Alex is an extremely skilled SW engineer. Just one of those rare people that you know will always deliver a quality
-    job and on time.
-  date: 2010-12
+  - Katrin raised the bar for the whole team by introducing reviews and tests early. Always constructive, never
+    fussy.
+  date: 2014-05
 labels:
   en:
     details: Details
@@ -573,33 +426,33 @@ labels:
       5: Expert
       4: Experienced
       3: Skillful
-  sv:
-    details: Uppgifter
-    born: Födelseår
-    nationality: Nationalitet
-    links: Länkar
-    skills: Kompetensområden
-    languages: Språk
-    hobbies: Intressen
+  de:
+    details: Angaben
+    born: Geburtsjahr
+    nationality: Staatsangehörigkeit
+    links: Links
+    skills: Fachgebiete
+    languages: Sprachen
+    hobbies: Interessen
     summary: Profil
-    experience: Yrkeserfarenhet
-    education: Utbildning
-    testimonials: Omdömen från tidigare kollegor
-    achievements: Resultat
-    tools: Verktyg
-    at: på
-    earlier: Tidigare roller
-    print: Ladda ner PDF
+    experience: Berufserfahrung
+    education: Ausbildung
+    testimonials: Stimmen ehemaliger Kolleginnen und Kollegen
+    achievements: Ergebnisse
+    tools: Werkzeuge
+    at: bei
+    earlier: Frühere Stationen
+    print: PDF herunterladen
     ui:
-      lang_name: SV
-      filtering: Roller med
-      clear: Rensa filter
-      show_details: Visa detaljer
-      hide_details: Dölj detaljer
-      no_match: Inga roller nämner detta
-    present: Nu
-    months: [jan, feb, mar, apr, maj, jun, jul, aug, sep, okt, nov, dec]
+      lang_name: DE
+      filtering: Stationen mit
+      clear: Filter löschen
+      show_details: Details anzeigen
+      hide_details: Details ausblenden
+      no_match: Keine Station erwähnt dies
+    present: Heute
+    months: [Jan, Feb, Mär, Apr, Mai, Jun, Jul, Aug, Sep, Okt, Nov, Dez]
     levels:
-      5: Expert
-      4: Erfaren
-      3: Kunnig
+      5: Experte
+      4: Erfahren
+      3: Fortgeschritten
