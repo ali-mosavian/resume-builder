@@ -36,7 +36,7 @@ def pdftotext(*args: str | Path) -> str:
 def test_headline_numbers_print_in_full(chrome: Path, tmp_path: Path) -> None:
     """Printing during the headline count-up once put partial numbers ("2+", "7M") in the PDF."""
     printed = pdf(chrome, html(tmp_path / "cv.html", "aurora-v3", ["en"]), budget=300)
-    assert {"15+", "9", "30+"} <= set(pdftotext("-l", "1", printed).split())
+    assert {"12+", "8", "40+"} <= set(pdftotext("-l", "1", printed).split())
 
 
 @pytest.mark.parametrize("theme", sharing("slate.js"))
@@ -81,21 +81,21 @@ def test_bracket_sidebar_on_every_sheet(chrome: Path, tmp_path: Path) -> None:
 
 
 def test_language_switch_paginates(chrome: Path, tmp_path: Path) -> None:
-    """The language opened by #sv is cut into sheets, and so is the one switched to."""
+    """The language opened by #de is cut into sheets, and so is the one switched to."""
     probe = (
         "addEventListener('load',()=>setTimeout(()=>{const n=()=>[...document.querySelectorAll('.page')]"
         ".map(p=>p.lang+(p.hidden?'-':'+')+p.querySelectorAll('.sheet').length).join(' ');const a=n();"
-        "const x=!!document.querySelector('.page[lang=sv] .sheet:first-child [data-from=experience]');"
+        "const x=!!document.querySelector('.page[lang=de] .sheet:first-child [data-from=experience]');"
         "document.querySelector('.page:not([hidden]) .lang-switch [data-lang=en]').click();"
         "setTimeout(()=>{const y=!!document.querySelector('.page[lang=en] .sheet:first-child [data-from=experience]');"
         "document.title=a+'|'+n()+'|'+x+'|'+y},1000)},1500))"
     )
-    page = html(tmp_path / "cv.html", "bracket", ["en", "sv"], probe)
-    before, after, sv_first, en_first = title(chrome, page.as_uri() + "#sv", budget=6000).split("|")
-    # Experience once jumped to sheet 2, leaving a third of sheet 1 empty: in Swedish because the role's bottom
+    page = html(tmp_path / "cv.html", "bracket", ["en", "de"], probe)
+    before, after, sv_first, en_first = title(chrome, page.as_uri() + "#de", budget=6000).split("|")
+    # Experience once jumped to sheet 2, leaving a third of sheet 1 empty: in German because the role's bottom
     # padding was counted, in English because a long first bullet could not break across sheets.
-    assert sv_first == en_first == "true", f"Experience not on sheet 1: sv {sv_first}, en {en_first}"
-    assert before.startswith("en-0 sv+")
+    assert sv_first == en_first == "true", f"Experience not on sheet 1: de {de_first}, en {en_first}"
+    assert before.startswith("en-0 de+")
     assert not before.endswith("+0"), before
     assert after.startswith("en+")
     assert not after.startswith("en+0"), after
@@ -136,7 +136,7 @@ def test_one_language_shown_with_a_switch(chrome: Path, tmp_path: Path, theme: s
         "document.title=[...document.querySelectorAll('.page')].filter(v).length+'|'"
         "+v(document.querySelector('.page:not([hidden]) .lang-switch'))+'|'+v(document.querySelector('.page:not([hidden]) a.download'))},1500))"
     )
-    pages, switch, download = title(chrome, html(tmp_path / "cv.html", theme, ["en", "sv"], probe).as_uri()).split("|")
+    pages, switch, download = title(chrome, html(tmp_path / "cv.html", theme, ["en", "de"], probe).as_uri()).split("|")
     assert (pages, switch, download) == ("1", "true", "true")
 
 

@@ -22,18 +22,18 @@ def test_template_fills_in(template: str) -> None:
     # Plain text once got an explicit bold=False, which un-bolded every heading.
     assert not any(r.bold is False for p in main.paragraphs for r in p.runs), "explicit bold=False found"
     # **markup** becomes a bold run without the asterisks.
-    first = next(p for p in main.paragraphs if "shelf allocation engine" in p.text)
+    first = next(p for p in main.paragraphs if "demand forecasting platform" in p.text)
     assert "**" not in first.text
     assert any(
-        (r.bold or r._r.style == "CVStrong") and r.text == "shelf allocation engine" for r in first.runs
+        (r.bold or r._r.style == "CVStrong") and r.text == "demand forecasting platform" for r in first.runs
     )
-    assert "SEP 2025 - PRESENT" in [p.text for p in main.paragraphs]
+    assert "MAR 2025 - PRESENT" in [p.text for p in main.paragraphs]
     everywhere = [*doc.paragraphs, *(p for c in cells(doc.tables) for p in c.paragraphs)]
-    assert any(p.text == "Alex Morgan" for p in everywhere), "name placeholder not filled"
+    assert any(p.text == "Katrin Vogel" for p in everywhere), "name placeholder not filled"
     assert not [p.text for p in everywhere if p.text.startswith("{")], "placeholders left"
     # Optional parts once keyed on common style names (SkillBar, Quote) that other templates also have:
     # the resume.io template crashed and pro restyled its testimonials. Neither opts in.
-    quote = next(p for p in main.paragraphs if p.text.startswith("“It is rare"))
+    quote = next(p for p in main.paragraphs if p.text.startswith("“Katrin turned"))
     assert (quote._p.style == "CVQuote") == (template not in ("default", "pro"))
 
 
@@ -51,7 +51,7 @@ def test_bullets_use_the_template_list(template: str, color: str) -> None:
 
 def test_no_dashes() -> None:
     """Dates were printed "JUN 2024 <em dash> NU": the CV uses "-", never em or en dashes."""
-    found = re.search(".{20}[–—].{20}", docx("bracket", "sv").element.xml)
+    found = re.search(".{20}[–—].{20}", docx("bracket", "de").element.xml)
     assert not found, found[0]
 
 
@@ -84,7 +84,7 @@ def test_bracket_font() -> None:
         s.style_id for s in bracket.styles if s.element.xpath("./w:rPr/w:rFonts[@w:ascii='Montserrat'][@w:asciiTheme]")
     ]
     assert bracket.styles["Normal"].element.xpath("./w:rPr/w:color/@w:val") == ["262626"]
-    embedded = [p.partname for p in docx("bracket", "sv").part.package.iter_parts() if p.partname.endswith(".odttf")]
+    embedded = [p.partname for p in docx("bracket", "de").part.package.iter_parts() if p.partname.endswith(".odttf")]
     assert len(embedded) == 6  # Montserrat's four faces, and Montserrat Bold's two (see test_bold_is_a_real_bold_face)
 
 
