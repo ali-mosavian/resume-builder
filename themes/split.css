@@ -152,7 +152,7 @@ mark { background:var(--accent-tint); color:var(--head); border-radius:3px; padd
 /* ---------- Narrow screens: one column ---------- */
 @media screen and (max-width:1000px) {
   .page { display:block; padding:0 22px; }
-  header { position:static; padding:48px 0 0; }
+  header { position:static; padding:48px 0 56px; }
   .photo { width:96px; height:96px; margin-bottom:20px; }
   .summary { padding-top:48px; }
   h1 { font-size:2.3rem; }
