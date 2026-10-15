@@ -110,11 +110,16 @@ def layout(doc: Doc) -> None:
 
 
 def decorate(doc: Doc) -> None:
-    """The band as a shape behind page 1's header rows; later pages start 12 mm down, as the PDF's do."""
+    """The band as a shape behind page 1's header rows; later pages start 12 mm down, as the PDF's do.
+
+    The band is anchored in a body paragraph before the band's table, not in the first-page header: Word dims header
+    content while the body is edited, which showed the slate grey. Not inside a cell either: Word 2013+ lays a cell's
+    shapes out in the cell, whatever the anchor says."""
     sec = doc.sections[0]
-    first = sec.first_page_header.paragraphs[0]
-    first._p.style = "CVPhoto"
-    rect(first, (0, 0, 210, BAND, SLATE), 1001)
+    sec.first_page_header.paragraphs[0]._p.style = "CVPhoto"
+    anchor = doc.add_paragraph(style="CV Photo")
+    doc.tables[0]._tbl.addprevious(anchor._p)
+    rect(anchor, (0, 0, 210, BAND, SLATE), 1001)
     later = sec.header.paragraphs[0]
     later._p.style = "CVPhoto"
     later.paragraph_format.space_before = Cm(1.2)
