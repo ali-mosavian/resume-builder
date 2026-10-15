@@ -36,7 +36,7 @@ def pdftotext(*args: str | Path) -> str:
 def test_headline_numbers_print_in_full(chrome: Path, tmp_path: Path) -> None:
     """Printing during the headline count-up once put partial numbers ("2+", "7M") in the PDF."""
     printed = pdf(chrome, html(tmp_path / "cv.html", "aurora-v3", ["en"]), budget=300)
-    assert {"20+", "17", "42+"} <= set(pdftotext("-l", "1", printed).split())
+    assert {"15+", "9", "30+"} <= set(pdftotext("-l", "1", printed).split())
 
 
 @pytest.mark.parametrize("theme", sharing("slate.js"))
@@ -45,7 +45,7 @@ def test_paginated_print_keeps_everything(chrome: Path, tmp_path: Path, theme: s
     and the last four vanished from the PDF. Every role and testimonial must reach the paper, on A4."""
     printed = pdf(chrome, html(tmp_path / "cv.html", theme, ["en"]))
     # Raw (content-stream) order: the default reading order once wove sidebar lines into a wrapped role heading
-    # and reported Nordea lost. Raw drops spaces, so compare without whitespace.
+    # and reported a role lost. Raw drops spaces, so compare without whitespace.
     text = re.sub(r"\s", "", pdftotext("-raw", printed))
     cv = data.load(CV, "en")
     names = [*(j["company"] for j in cv["experience"]), *(t["name"] for t in cv["testimonials"])]

@@ -12,10 +12,10 @@ from support import html
 @pytest.mark.parametrize("theme", web.themes())
 def test_page_content(theme: str) -> None:
     page = web.render([data.load(CV, "en")], theme)
-    assert "<strong>store capacity optimization engine</strong>" in page
+    assert "<strong>shelf allocation engine</strong>" in page
     assert "**" not in page
-    assert "reading &amp; learning" in page, "YAML text is not HTML-escaped"
-    # Brief roles are not contiguous (Watty sits between them): the caption must appear once.
+    assert "reading &amp; tinkering" in page, "YAML text is not HTML-escaped"
+    # Brief roles are not contiguous (a full role sits between them): the caption must appear once.
     assert page.count("data-earlier=") == 1, "earlier-roles caption repeated or missing"
 
 
@@ -36,5 +36,5 @@ def test_two_languages(tmp_path: Path) -> None:
 
 def test_download_links() -> None:
     page = web.render([data.load(CV, lang) for lang in ("en", "sv")], "bracket")
-    assert 'href="ali_mosavian-resume-sv.docx" download' in page
+    assert 'href="alex_morgan-resume-sv.docx" download' in page
     assert 'onclick="print()"' not in page

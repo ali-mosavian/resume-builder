@@ -1,8 +1,10 @@
-# Resume
+# Resume builder
 
 A resume builder: write your CV once as YAML, add a photo, and get a web page, PDFs and Word documents in any of thirteen themes. Every output is A4, in as many languages as the YAML holds.
 
-Live example: https://ali-mosavian.github.io/resume/
+`cv/cv.yaml` and `assets/photo.jpg` are a fictional example; the photo is AI-generated.
+
+To keep your own CV in its own repo, add this one as a submodule and build from there; [ali-mosavian/resume](https://github.com/ali-mosavian/resume) does that and publishes to GitHub Pages.
 
 ## Use
 
