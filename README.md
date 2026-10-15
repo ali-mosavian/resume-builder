@@ -80,3 +80,7 @@ uv run isort . && uv run ruff format && uv run ruff check && uv run ty check
 ```
 
 `tools/compare.sh <theme> [lang]` renders a theme's PDF and Word pages side by side, Word as Microsoft Word lays it out. `tools/fonts.py` fetches the themes' fonts into `assets/fonts`.
+
+## License
+
+[PolyForm Noncommercial 1.0.0](LICENSE.md): free for personal and other noncommercial use; commercial use needs my permission.
