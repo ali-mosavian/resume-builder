@@ -124,3 +124,11 @@ def test_split_is_one_column() -> None:
 
 def test_split_photo_is_round() -> None:
     assert 'prst="ellipse"' in docx("split").element.xml
+
+
+def test_split_band_is_not_dimmed() -> None:
+    """Word dims header content while the body is edited: split's slate band, drawn in the first-page header, showed
+    grey in Word. It is anchored in the body instead, where it keeps its colour."""
+    doc = Document(str(TEMPLATES / "split.docx"))
+    assert not doc.sections[0].first_page_header._element.xpath(".//wp:anchor")
+    assert doc.element.body.xpath(".//wp:anchor//a:srgbClr[@val='0F172A']")
