@@ -158,7 +158,7 @@ mark { background:var(--accent-tint); color:var(--head); border-radius:3px; padd
   h1 { font-size:2.3rem; }
   .highlights { grid-template-columns:1fr 1fr; }
   section, aside { margin-bottom:56px; }
-  .experience .item, .education .item { grid-template-columns:1fr; margin:0 0 16px; padding:0; }
+  .experience .item, .education .item { grid-template-columns:1fr; margin:0 0 72px; padding:0; }
   .experience .item > *, .experience .when, .education .item > *, .education .when { grid-column:1; grid-row:auto; }
   .experience .brief[data-earlier]::before { left:0; }
   .filter-pill { max-width:calc(100% - 32px); white-space:normal; }
