@@ -35,7 +35,7 @@ def pdftotext(*args: str | Path) -> str:
 
 def test_headline_numbers_print_in_full(chrome: Path, tmp_path: Path) -> None:
     """Printing during the headline count-up once put partial numbers ("2+", "7M") in the PDF."""
-    printed = pdf(chrome, html(tmp_path / "cv.html", "aurora-v3", ["en"]), budget=300)
+    printed = pdf(chrome, html(tmp_path / "cv.html", "aurora", ["en"]), budget=300)
     assert {"12+", "8", "40+"} <= set(pdftotext("-l", "1", printed).split())
 
 
@@ -91,17 +91,17 @@ def test_language_switch_paginates(chrome: Path, tmp_path: Path) -> None:
         "document.title=a+'|'+n()+'|'+x+'|'+y},1000)},1500))"
     )
     page = html(tmp_path / "cv.html", "bracket", ["en", "de"], probe)
-    before, after, sv_first, en_first = title(chrome, page.as_uri() + "#de", budget=6000).split("|")
-    # Experience once jumped to sheet 2, leaving a third of sheet 1 empty: in German because the role's bottom
+    before, after, de_first, en_first = title(chrome, page.as_uri() + "#de", budget=6000).split("|")
+    # Experience once jumped to sheet 2, leaving a third of sheet 1 empty: in Swedish (where it was found) because the role's bottom
     # padding was counted, in English because a long first bullet could not break across sheets.
-    assert sv_first == en_first == "true", f"Experience not on sheet 1: de {de_first}, en {en_first}"
+    assert de_first == en_first == "true", f"Experience not on sheet 1: de {de_first}, en {en_first}"
     assert before.startswith("en-0 de+")
     assert not before.endswith("+0"), before
     assert after.startswith("en+")
     assert not after.startswith("en+0"), after
 
 
-@pytest.mark.parametrize("theme", sharing("aurora-v3.js"))
+@pytest.mark.parametrize("theme", sharing("aurora.js"))
 def test_expanded_brief_roles_keep_tool_layout(chrome: Path, tmp_path: Path, theme: str) -> None:
     """ "Show details" on earlier roles once turned their tool tags into a plain block (display:block beat flex)."""
     probe = (
@@ -113,7 +113,7 @@ def test_expanded_brief_roles_keep_tool_layout(chrome: Path, tmp_path: Path, the
     assert normal == brief
 
 
-@pytest.mark.parametrize("theme", sorted(set(sharing("aurora-v3.js")) & set(sharing("slate.js"))))
+@pytest.mark.parametrize("theme", sorted(set(sharing("aurora.js")) & set(sharing("slate.js"))))
 def test_skill_filter_after_pagination(chrome: Path, tmp_path: Path, theme: str) -> None:
     """Pagination into sheets replaced the roles the filter had captured: clicking a skill marked nothing on the
     page and the pill counted 0 roles."""

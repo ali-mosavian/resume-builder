@@ -27,10 +27,10 @@ def test_no_dashes() -> None:
 
 def test_two_languages(tmp_path: Path) -> None:
     """One page, both languages: the second starts hidden; the theme script and the language switch are inlined."""
-    page = html(tmp_path / "cv.html", "aurora-v3", ["en", "de"]).read_text(encoding="utf-8")
+    page = html(tmp_path / "cv.html", "aurora", ["en", "de"]).read_text(encoding="utf-8")
     assert re.search(r'<div class="page" lang="de" data-ui="[^"]*" hidden>', page), "second language not hidden"
     assert re.search(r'<div class="page" lang="en" data-ui="[^"]*">', page), "first language hidden"
-    assert page.count("<script>") == len(web.scripts("aurora-v3", multilingual=True))
+    assert page.count("<script>") == len(web.scripts("aurora", multilingual=True))
     assert 'data-aka="GCP"' in page
 
 

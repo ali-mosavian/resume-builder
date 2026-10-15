@@ -2,7 +2,7 @@
    career scrolls on the right; hovering a role lifts it and quiets the rest. Dark slate, Space Grotesk, one teal accent, bold
    text under a yellow marker on screen.
    On paper it is one column on A4: a slate band with the photo and numbers, then the body, then the sidebar's
-   sections, as templates/split.docx lays it out. Interactions from split.js (a link to aurora-v3.js). */
+   sections, as templates/split.docx lays it out. Interactions from split.js (a link to aurora.js). */
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap");
 
 :root {

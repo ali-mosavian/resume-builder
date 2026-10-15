@@ -1,6 +1,6 @@
 /* Constellation: the header is a star chart of the career, drawn from the page itself (constellation.fx.js):
    roles sit on a time axis, skills float above them as stars, linked by where they were used.
-   Night sky above, paper below, on A4 sheets (slate.js). Interactions from constellation.js (= aurora-v3.js). */
+   Night sky above, paper below, on A4 sheets (slate.js). Interactions from constellation.js (= aurora.js). */
 @import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;700&display=swap");
 
 :root {

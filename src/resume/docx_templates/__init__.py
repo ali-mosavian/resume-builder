@@ -37,7 +37,7 @@ from resume.ooxml import shading
 
 
 def names() -> list[str]:
-    """Template names, as their themes are named: module aurora_v2 makes aurora-v2.docx."""
+    """Template names, as their themes are named: module my_theme makes my-theme.docx."""
     return [m.name.replace("_", "-") for m in pkgutil.iter_modules(__path__)]
 
 

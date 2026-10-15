@@ -1,4 +1,4 @@
-// Aurora v3 interactions. Plain DOM, no dependencies; every page (language) is wired the same way.
+// Aurora interactions, shared by the themes that link to this file. Plain DOM, no dependencies; every page (language) is wired the same way.
 (() => {
   const pages = [...document.querySelectorAll(".page")];
   const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
