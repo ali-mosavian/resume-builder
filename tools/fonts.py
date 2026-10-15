@@ -31,6 +31,7 @@ VARIABLE = {
     "Newsreader": ("newsreader", "Newsreader[opsz,wght].ttf", "Newsreader-Italic[opsz,wght].ttf"),
     "Bricolage Grotesque": ("bricolagegrotesque", "BricolageGrotesque[opsz,wdth,wght].ttf", None),
     "Inter Tight": ("intertight", "InterTight[wght].ttf", "InterTight-Italic[wght].ttf"),
+    "Space Grotesk": ("spacegrotesk", "SpaceGrotesk[wght].ttf", None),
 }
 # family -> (directory, {face: file})
 STATIC = {

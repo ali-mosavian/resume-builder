@@ -26,10 +26,10 @@ from resume.docx_templates import finish
 from resume.docx_templates import char_style
 from resume.docx_templates import bullet_lists
 
-FONT = "Inter"
+FONT = "Space Grotesk"
 SLATE, HEAD, INK, BODY, FAINT = "0F172A", "0F172A", "1E293B", "334155", "94A3B8"
 TEAL, TEAL_LIGHT, CHIP, LINE, ON_SLATE, ON_SLATE_2 = "0F766E", "5EEAD4", "E6F2F1", "CBD5E1", "F1F5F9", "CBD5E1"
-LINE_GAP = 1.21  # Inter's line height per em: Word's "multiple" spacing scales it, CSS line-height doesn't
+LINE_GAP = 1.276  # Space Grotesk's line height per em: Word's "multiple" spacing scales it, CSS line-height doesn't
 
 # Page geometry in mm, as themes/split.css prints an A4 sheet.
 HEAD1, HEAD2 = 41, 24  # band rows: photo, name and links; then the headline numbers
