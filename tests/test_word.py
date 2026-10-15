@@ -22,14 +22,14 @@ def test_template_fills_in(template: str) -> None:
     # Plain text once got an explicit bold=False, which un-bolded every heading.
     assert not any(r.bold is False for p in main.paragraphs for r in p.runs), "explicit bold=False found"
     # **markup** becomes a bold run without the asterisks.
-    first = next(p for p in main.paragraphs if "store capacity optimization engine" in p.text)
+    first = next(p for p in main.paragraphs if "shelf allocation engine" in p.text)
     assert "**" not in first.text
     assert any(
-        (r.bold or r._r.style == "CVStrong") and r.text == "store capacity optimization engine" for r in first.runs
+        (r.bold or r._r.style == "CVStrong") and r.text == "shelf allocation engine" for r in first.runs
     )
     assert "SEP 2025 - PRESENT" in [p.text for p in main.paragraphs]
     everywhere = [*doc.paragraphs, *(p for c in cells(doc.tables) for p in c.paragraphs)]
-    assert any(p.text == "Ali Mosavian" for p in everywhere), "name placeholder not filled"
+    assert any(p.text == "Alex Morgan" for p in everywhere), "name placeholder not filled"
     assert not [p.text for p in everywhere if p.text.startswith("{")], "placeholders left"
     # Optional parts once keyed on common style names (SkillBar, Quote) that other templates also have:
     # the resume.io template crashed and pro restyled its testimonials. Neither opts in.

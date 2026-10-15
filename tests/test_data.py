@@ -19,7 +19,7 @@ def test_missing_language_is_an_error(tmp_path: Path) -> None:
 
 @pytest.mark.parametrize("lang", data.langs(CV))
 def test_bullets_end_with_a_full_stop(lang: str) -> None:
-    """A bold edit once quoted only the end of a Swedish bullet, printing a stray ' after Nordea's text."""
+    """A bold edit once quoted only the end of a Swedish bullet, printing a stray ' after the text."""
     for j in data.load(CV, lang)["experience"]:
         for b in j["bullets"]:
             assert b.endswith("."), f"{j['company']}: bullet ends {b[-12:]!r}"
@@ -27,5 +27,5 @@ def test_bullets_end_with_a_full_stop(lang: str) -> None:
 
 @pytest.mark.parametrize("lang", data.langs(CV))
 def test_only_the_latest_role_is_ongoing(lang: str) -> None:
-    """Byggfakta once read "JUN 2024 - NU" long after it ended."""
+    """A finished role once read "JUN 2024 - NU" long after it ended."""
     assert not [j["company"] for j in data.load(CV, lang)["experience"][1:] if j["end"] is None]
