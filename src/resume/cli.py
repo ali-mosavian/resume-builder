@@ -28,7 +28,7 @@ def build(
     template: Annotated[Path, typer.Option(help="A .docx made by `resume template`, or any with its style ids.")] = ROOT
     / "templates"
     / "bracket.docx",
-    cv: Annotated[Path, typer.Option(help="The CV's YAML.")] = ROOT / "cv" / "cv.yaml",
+    cv: Annotated[Path, typer.Option(help="The CV's YAML.")] = ROOT / "example" / "resume.yaml",
 ) -> None:
     """index.html with every language, and per language a PDF of it and a .docx, named by the YAML's `download`."""
     browser = chrome.find()

@@ -7,7 +7,7 @@ location:
   en: Stockholm, Sweden
   sv: Stockholm, Sverige
 born: 1985
-photo: ../assets/photo.jpg
+photo: headshot.jpg
 download: alex_morgan-resume-{lang}
 nationality:
   en: Swedish
